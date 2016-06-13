@@ -87,7 +87,7 @@ function(input, output){
 
 The user interface and the server file interact with each other through **input** and **output** objects. The information in the server file is the recipe for how to construct output objects to display in the ui, and the user's interaction with input objects alters output objects based on the code in the server file. The instructinos for creating input objects are in the ui file. Having your app function as you intend requires careful attention to how your input and output objects relate to each other, i.e. knowing what actions will initiate what sections of code to run at what time. 
 
-![](shiny_files/arrows1.png)
+![](images/arrows1.png)
 The diagram above depicts how input and output objects are referred to within the ui and server files. Input objects are created and named in the ui file with functions like `selectInput()` or `radioButtons()`. They are used within render functions in the server file to create output objects. Output objects are placed in the ui with output functions like `plotOutput()` or `textOutput()`.
 
 ## Input Objects
@@ -180,7 +180,7 @@ output$taxa_plot <- renderPlot({
 
 Within the user interface, you arrange where elements appear by using a page layout. You can organize elements using pre-defined high level layouts such as  `sidebarLayout()`, `splitLayout()`, or `verticalLayout()`, or you can use `fluidRow()` to organize rows of elements within a grid. Elements can be layered on top of each other using `tabsetPanel()`, `navlistPanel()`, or `navbarPage()`. 
 
-![](shiny_files/layout2.png)
+![](images/layout2.png)
 
 The diagram above depicts nested UI elements in the sidebar layout. The red boxes represent input objects and the blue boxes represent output objects. Each object is located within one or more nested **panels**, which are nested within a **layout**. Notice that **tab panels** are nested within the **tabset panel**. Objects and panels that are at the same level of hierarchy need to be separated by commas. Mistakes in usage of commas and parentheses between UI elements is one of the first things to look for when debugging a shiny app! 
 
@@ -299,13 +299,13 @@ navbarPage("csi app",
 
 Input objects that are used in multiple render functions to create different output objects can be created independently as **reactive** objects. This value is then cached to reduce computation required, since only the code to create this object is re-run when input values are updated. For example, in order to display both the plot and the data used in the plot, we had to duplicate portions of code in the `renderPlot()` and `renderDataTable()` functions. 
 
-![](shiny_files/objects-compare.png)
+![](images/objects-compare.png)
 
 The diagram above shows the relationship between input and output objects with (B) and without (A) the use of an intermediary reactive object. The surveys_subset reactive object becomes cached in the app's memory so it does not need to be computed independently in both the plot and data output objects.
 
 Use the function `reactive()` to create reactive objects and use them with function syntax, i.e. with `()`. Reactive objects are not output objects so do not use `output$` in front of their name. 
 
-![](shiny_files/arrows2.png)
+![](images/arrows2.png)
 
 The diagram above depicts the new relationship between input objects and reactive functions to produce reactive objects, which are then used in render functions. 
 
@@ -442,7 +442,7 @@ navbarPage("CSI App",
 
 ```
 
-![](shiny_files/map1.png)
+![](images/map1.png)
 
 Using `addTiles()` displays the default background map tiles. However there are many more options to pick from. There is a list of the free background tiles available and what they look like [here](http://leaflet-extras.github.io/leaflet-providers/preview/index.html) or you can [create your own](http://osm2vectortiles.org/maps/) using data from [OpenStreetMap](http://www.openstreetmap.org/). To use a different background specify which `ProviderTiles` to display. 
 
@@ -461,7 +461,7 @@ tabPanel("Map", leafletOutput("sesync_map"))
 
 ```
 
-![](shiny_files/map2.png)
+![](images/map2.png)
 
 > Add some more layers to the map to show Maryland counties and overlay the pasture NLCD data. 
 
@@ -477,7 +477,7 @@ tabPanel("Map", leafletOutput("sesync_map"))
   })
 ```
 
-![](shiny_files/map3.png)
+![](images/map3.png)
 
 Since drawing maps is computationally intensive, interactivity within the map is typically handed outside of the main render function using a function in the server called `leafletProxy()`, and the static map elements are handled within the first render function. See an example of how to implement this [here](http://www.r-bloggers.com/r-shiny-leaflet-using-observers/) and [here](http://www.r-bloggers.com/climate-projections-by-cities-r-shiny-rcharts-leaflet/.
 
