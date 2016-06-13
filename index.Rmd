@@ -92,14 +92,14 @@ function(input, output){
 
 # Input and Output Objects
 
-The user interface and the server file interact with each other through **input** and **output** objects. The information in the server file is the recipe for how to construct output objects to display in the ui, and the user's interaction with input objects alters output objects based on the code in the server file. The instructinos for creating input objects are in the ui file. Having your app function as you intend requires careful attention to how your input and output objects relate to each other, i.e. knowing what actions will initiate what sections of code to run at what time. 
+The user interface and the server file interact with each other through **input** and **output** objects. The information in the server file is the recipe for how to construct output objects to display in the ui, and the user's interaction with input objects alters output objects based on the code in the server file. The instructions for creating input objects are in the ui file. Having your app function as you intend requires careful attention to how your input and output objects relate to each other, i.e. knowing what actions will initiate what sections of code to run at what time. 
 
 ![](images/arrows1.png)
 The diagram above depicts how input and output objects are referred to within the ui and server files. Input objects are created and named in the ui file with functions like `selectInput()` or `radioButtons()`. They are used within render functions in the server file to create output objects. Output objects are placed in the ui with output functions like `plotOutput()` or `textOutput()`.
 
 ## Input Objects
 
-Input objects collect information from the user and saves it in a list. Input values change whenever a user changes the input. These inputs can be single values, text, vectors, dates, or even files uploaded by the user. The first two arguments for all input widgets are `inputId =` which is for giving the input object a name to refer to in the server file, and `label =` which is for text to display to the user. Other arguments depend on the type of input widget. Input objects are stored in a list and are referred to in the server file with the syntax `input$inputID`. A gallery of input widgets can be found on the RStudio website [here](http://shiny.rstudio.com/gallery/widget-gallery.html).
+Input objects collect information from the user and save it in a list. Input values change whenever a user changes the input. These inputs can be single values, text, vectors, dates, or even files uploaded by the user. The first two arguments for all input widgets are `inputId =` which is for giving the input object a name to refer to in the server file, and `label =` which is for text to display to the user. Other arguments depend on the type of input widget. Input objects are stored in a list and are referred to in the server file with the syntax `input$inputID`. A gallery of input widgets can be found on the RStudio website [here](http://shiny.rstudio.com/gallery/widget-gallery.html).
 
 > Create an input object in the ui to allow users to select one of the four taxa in the portals data set. Use the `selectInput()` function to create an input object called `pick_taxa`. Use the `choices = ` argument to define a vector with the 4 options. 
 
