@@ -61,6 +61,13 @@ function(input, output){}
 
 > Create a new folder in your current working directory with ui and server files, and then copy the data folder into the app folder. In the ui file, create a title for your app and in the server file, read in the 3 csv files. Run your app using the Run App button.
 
+**Put required data in app folder.** Because the Shiny app is going to be using your local R session to run, it will be able to recognize anything that is loaded into your library. However it is good practice for Shiny apps to keep them "self-contained" and to include all of the Data they rely on within the file folder that contains the ui and server files. Create a new copy of the data from the public data folder into your app directory using the following code:
+
+```{r, eval = FALSE}
+system("cp -R /nfs/public-data/ci-spring2016/Data/*.csv Data/")
+```
+
+
 ```{r, eval = FALSE}
 # ui.R
 
@@ -463,40 +470,79 @@ tabPanel("Map", leafletOutput("sesync_map"))
 
 ![](images/map2.png)
 
-> Add some more layers to the map to show Maryland counties and overlay the pasture NLCD data. 
+Leaflet using the [Web Mercator](http://epsg.io/3857) projection. The use of a (pseudo)-conformal projection is useful for "slippy" web map features of panning and zooming since it preserves a north-up orientation. However because of some [mathematical intricacies of Web Mercator](http://www.hydrometronics.com/downloads/Web%20Mercator%20-%20Non-Conformal,%20Non-Mercator%20(notes).pdf), Leaflet will only convert objects to EPSG:3857 if it can. The Leaflet package in R does [not yet have](https://github.com/rstudio/leaflet/issues/233) the capability to handle objects that are not in common projections like WGS84.
+
+In order to plot the `huc_md` object created in the [geospatial lesson](https://SESYNC-ci.github.com/geospatial-packages-in-R-lesson/), we will need to use non-projected coordinates instead of the Alber's equal area projection.
+
+> Read in the counties, watershed boundaries, and NLCD datasets as in the geospatial lesson. Subset the counties to those in MD.
+
+```{r, eval = FALSE}
+library(sp)
+library(rgdal)
+library(rgeos)
+library(raster)
+
+cb_dir <- "/nfs/public-data/census-tiger-2013/cb_2014_us_county_500k"
+
+counties <- readOGR(dsn = file.path(cb_dir, "cb_2014_us_county_500k.shp"),
+                    layer = "cb_2014_us_county_500k", 
+                    stringsAsFactors = FALSE)
+
+huc <- readOGR(dsn = "/nfs/public-data/ci-spring2016/Geodata/huc250k.shp", 
+               layer = "huc250k",
+               stringsAsFactors = FALSE)
+
+nlcd <- raster("/nfs/public-data/ci-spring2016/Geodata/nlcd_agg.grd")
+
+counties_md <- counties[counties$STATEFP == "24", ]  
+```
+
+In order to perform the union and intersection operations but preserve compatability with leaflet, transform the watershed boundaries and maryland counties to unprojected coordinate systems.
+
+```{r, eval = FALSE}
+huc <- spTransform(huc, CRS("+proj=longlat +datum=WGS84"))
+counties_md <- spTransform(counties_md, CRS("+proj=longlat +datum=WGS84"))
+state_md <- gUnaryUnion(counties_md)
+huc_md <- gIntersection(huc, state_md, byid = TRUE, 
+                        id = paste(1:length(huc), huc$HUC_NAME))
+```
+
+Add the watershed boundaries in maryland layer to the map using `addPolygons()`. Overlay the NLCD data using `addRasterImage()`.
 
 ```{r, eval = FALSE}
 # in server
   output$sesync_map <- renderLeaflet({
-    leaflet(counties_md) %>% 
-      setView(lng = -76.505206, lat = 38.9767231, zoom = 14) %>%
+    leaflet(huc_md) %>% 
+      setView(lng = -76.505206, lat = 38.9767231, zoom = 7) %>%
       addProviderTiles("Esri.WorldImagery") %>%
       addMarkers(lng = -76.505206, lat = 38.9767231, popup = "SESYNC") %>%
-      addPolygons(fill = FALSE)   %>%
-      addRasterImage(mask(nlcd, nlcd == 41, maskvalue = FALSE), opacity = 0.5)
+      addPolygons(fill = FALSE)  %>%
+      addRasterImage(nlcd, opacity = 0.5, maxBytes = 10*1024*1024)
+      # addRasterImage(mask(nlcd, nlcd == 41, maskvalue = FALSE), opacity = 0.5)
   })
 ```
 
-![](images/map3.png)
+![](images/map3.png) The values of the `zoom` argument in `setView()` are based on zoom levels in tile management schemes. Get a sense for zoom levels of tiles [here](http://www.maptiler.org/google-maps-coordinates-tile-bounds-projection/)
 
-Since drawing maps is computationally intensive, interactivity within the map is typically handed outside of the main render function using a function in the server called `leafletProxy()`, and the static map elements are handled within the first render function. See an example of how to implement this [here](http://www.r-bloggers.com/r-shiny-leaflet-using-observers/) and [here](http://www.r-bloggers.com/climate-projections-by-cities-r-shiny-rcharts-leaflet/.
+Since drawing maps can be computationally intensive, interactivity within the map is typically handed outside of the main render function using a function in the server called `leafletProxy()`, and the static map elements are handled within the first render function. See an example of how to implement this [here](http://www.r-bloggers.com/r-shiny-leaflet-using-observers/) and [here](http://www.r-bloggers.com/climate-projections-by-cities-r-shiny-rcharts-leaflet/).
 
-We can add some simple interactivity by assigning groups to **layers** and using the `addLayersControl()` function. 
-
+We can add some simple interactivity by assigning groups to **layers** and using the `addLayersControl()` function. See how this works by adding 2 different masks of the nlcd data with an additional argument `group =` in the `addRasterImage()` function. For grouped layers, add a feature to toggle between them with layers control. See documentation on this feature [here](https://rstudio.github.io/leaflet/showhide.html).
 
 ```{r, eval = FALSE}
   output$sesync_map <- renderLeaflet({
-    leaflet(counties_md) %>% 
-      setView(lng = -76.505206, lat = 38.9767231, zoom = 14) %>%
+     leaflet(huc_md) %>% 
+      setView(lng = -76.505206, lat = 38.9767231, zoom = 7) %>%
       addProviderTiles("Esri.WorldImagery") %>%
       addMarkers(lng = -76.505206, lat = 38.9767231, popup = "SESYNC") %>%
-      addPolygons(fill = FALSE)   %>%
-      addRasterImage(mask(nlcd, nlcd == 41, maskvalue = FALSE), opacity = 0.5, group = "Deciduous Forest", colors = "green") %>%
-      addRasterImage(mask(nlcd, nlcd == 81, maskvalue = FALSE), opacity = 0.5, group = "Pasture", colors = "yellow") %>%
-      addLayersControl(baseGroups=c("Deciduous Forest", "Pasture"))
+      addPolygons(fill = FALSE, group = "MD watersheds")   %>%
+      addRasterImage(mask(nlcd, nlcd == 41, maskvalue = FALSE), opacity = 0.5, 
+                     group = "Deciduous Forest", colors = "green") %>%
+      addRasterImage(mask(nlcd, nlcd == 81, maskvalue = FALSE), opacity = 0.5, 
+                     group = "Pasture", colors = "yellow") %>%
+      addLayersControl(baseGroups=c("Deciduous Forest", "Pasture"),
+                       overlayGroups = c("MD watersheds"))
   })
 ```
-
 
 # Additional references
 
