@@ -2,7 +2,7 @@
 title: "Interactive web applications with RShiny"
 author: "Kelly Hondula"
 output:
-  html_document:
+  html_document: 'index.html'
     toc: true
     toc_depth: 2
 ---
