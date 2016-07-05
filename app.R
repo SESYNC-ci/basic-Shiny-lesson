@@ -1,4 +1,5 @@
-
+library(shiny)
+library(leaflet)
 # Read in data
 plots <- read.csv("data/plots.csv", stringsAsFactors = FALSE)
 
@@ -13,18 +14,23 @@ ui <- navbarPage(title = "Hello Shiny!",
                             sidebarPanel(
                               selectInput("pick_species", label = "Pick a species", 
                                           choices = unique(species$species_id)),
+                              sliderInput("slider_months", label = "Month range",
+                                          min = 1, max = 12, value = c(1,12)),
                               downloadButton("download_data", label = "Download")
                             ),
                             mainPanel(plotOutput("species_plot")))
                           ),
                  tabPanel(title = "Data",
-                          dataTableOutput("surveys_subset")))
+                          dataTableOutput("surveys_subset")),
+                 tabPanel(title = "Map", leafletOutput("sesync_map")))
 
 # Server
 server <- function(input, output){
   
   surveys_subset <- reactive({
-    surveys_subset <- subset(surveys, surveys$species_id == input$pick_species)
+    surveys_subset <- subset(surveys, surveys$species_id == input$pick_species &
+                               surveys$month %in%
+                               input$slider_months[1]:input$slider_months[2])
     return(surveys_subset)
   })
   
@@ -44,6 +50,12 @@ server <- function(input, output){
       write.csv(surveys_subset(), file)
     }
   )
+  
+  output$sesync_map <- renderLeaflet({
+    leaflet() %>%
+      addTiles() %>%
+      addMarkers(lng = -76.505206, lat = 38.9767231, popup = "SESYNC")
+  })
 }
 
 # Run app

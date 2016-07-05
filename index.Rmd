@@ -190,6 +190,29 @@ server <- function(input, output){
 
 > **Exercise**: Add a title to the plot that includes the full species name. 
 
+Output objects can react to multiple input objects chosen by the user. 
+
+> Add an additional input widget that allows the user to filter the observations in the surveys data based on a range of consecutive months. 
+
+```{r, eval = FALSE}
+# add to ui
+  sliderInput("slider_months", label = "Month range",
+            min = 1, max = 12, value = c(1,12))
+
+# update renderPlot function
+
+  output$species_plot <- renderPlot({
+    surveys_subset <- subset(surveys, surveys$species_id == input$pick_species &
+                               surveys$month %in%
+                               input$slider_months[1]:input$slider_months[2])
+    barplot(table(surveys_subset$year))
+  })
+
+
+```
+
+> **Challenge**: Use the "date range" input widget to specify a range of specific dates instead of just months. 
+
 # Design and Layout
 
 Within the user interface, arrange where elements appear by using a page layout. You can organize elements using pre-defined high level layouts such as `sidebarLayout()`, `splitLayout()`, or `verticalLayout()`, or using the more general `fluidRow()` to organize rows of elements within a grid. Elements can be layered on top of each other using `tabsetPanel()`, `navlistPanel()`, or `navbarPage()`. 
@@ -215,7 +238,7 @@ fluidPage(
 
 ```
 
-> Reorganize your application using `navbarPage()` for top level navigation and the [sidebar layout](http://shiny.rstudio.com/reference/shiny/latest/sidebarLayout.html). Define a first panel called "Plot" that includes the input widget and plot. Place the input widget in the sidebar and the plot in the main panel. 
+> Reorganize your application using `navbarPage()` for top level navigation and the [sidebar layout](http://shiny.rstudio.com/reference/shiny/latest/sidebarLayout.html). Define a first panel called "Plot" that includes the input widgets and plot. Place the input widget in the sidebar and the plot in the main panel. 
 
 ```{r, eval = FALSE}
 # User interface
@@ -224,7 +247,9 @@ ui <- navbarPage(title = "Hello Shiny!",
                           sidebarLayout(
                             sidebarPanel(
                               selectInput("pick_species", label = "Pick a species", 
-                                          choices = unique(species$species_id))),
+                                          choices = unique(species$species_id)),
+                              sliderInput("slider_months", label = "Month range",
+                                          min = 1, max = 12, value = c(1,12))),
                             mainPanel(plotOutput("species_plot")))
                           ))
 
@@ -236,7 +261,10 @@ ui <- navbarPage(title = "Hello Shiny!",
 
 # within server function
   output$surveys_subset <- renderDataTable({
-    surveys_subset <- subset(surveys, surveys$species_id == input$pick_species)
+    surveys_subset <- subset(surveys, surveys$species_id == input$pick_species &
+                               surveys$month %in%
+                               input$slider_months[1]:input$slider_months[2])
+    surveys_subset
   })
 
 # add inside navbarPage function
@@ -336,13 +364,11 @@ Once you have made an app, there are several ways to share it with others. It is
 ## Share as files
 
 * email or copy ui.R, server.R, and all required data files
-* use functions in the shiny package to run app from files hosted on the web. For example, the files and data for the shiny app we are building are located in a github repo and can be run using `shiny::runGitHub("khondula/csi-app", "khondula")`
+* use functions in the shiny package to run app from files hosted on the web. For example, the files and data for the shiny app we are building are located in a Github repository and can be run from RStudio using the code `shiny::runGitHub("khondula/csi-app", "khondula")`.
 
 ## Share as a website
 
 To share as a webpage it will need to be hosted somewhere, i.e. there needs to be a computer running the R code that powers the app. There is limited free hosting available through RStudio with [shinapps.io](http://www.shinyapps.io/). SESYNC has a shiny server to host apps as well. There is a series of articles on the RStudio website [here](http://shiny.rstudio.com/articles/) about deploying apps. 
-
-* [How do I publish a Shiny app on the SESYNC server](https://collab.sesync.org/sites/support/Frequently%20Asked%20Questions/How%20do%20I%20publish%20a%20Shiny%20app%20on%20the%20SESYNC%20server.aspx)
 
 # Shiny extensions
 
@@ -365,16 +391,18 @@ There are many ways to enhance and extend the functionality and sophistication o
 
 ## Leaflet 
 
-Just like plots, text, and data frames, ui elements created with htmlwidgets are based on the combination of a render function and an output function. For Leaflet, these functions are `renderLeaflet()` and `leafletOutput()`. Leaflet map output objects are defined in the render function and can incorporate input objects. 
+Outside of shiny, you can interact with leaflet objects in RStudio's Viewer pane. 
 
-> Look at the source code for the [Superzip](http://shiny.rstudio.com/gallery/superzip-example.html) Shiny app to find where these functions are used. What is the name of the map output object? 
+```{r, eval = FALSE}
+library(leaflet)
+leaflet() %>% addTiles() 
+```
 
-* [ui.R](https://github.com/rstudio/shiny-examples/blob/master/063-superzip-example/ui.R)
-* [server.R](https://github.com/rstudio/shiny-examples/blob/master/063-superzip-example/server.R)
+Just like plots, text, and data frames, UI elements created with htmlwidgets are based on the combination of a render function and an output function. For Leaflet, these functions are `renderLeaflet()` and `leafletOutput()`. Leaflet map output objects are defined in the render function and can incorporate input objects. 
 
-The code inside the render function describes how to create the leaflet map object based on functions in the leaflet package. It starts with the function `leaflet()` which returns a map object, and then adds to and modifies elements of that object using the pipe operator `%>%`. Elements include background map tiles, markers, polygons, lines, and other geographical features.
+The code inside the render function describes how to create the leaflet map object based on functions in the leaflet package. It starts with the function `leaflet()` which returns a map object, and then adds to and modifies elements of that object using the pipe operator `%>%`. Elements include background map tiles, markers, polygons, lines, and other geographical features. 
 
-> Add a new panel to the navbar called "Map" that contains a Leaflet map object with a marker at SESYNC's location. It may take some time for the map to appear. 
+> Add a new panel to the navbar called "Map" that contains a Leaflet map object with a marker at SESYNC's location. Note that tt may take some time for the map to appear. 
 
 ```{r, eval = FALSE}
 # in server
@@ -384,10 +412,8 @@ The code inside the render function describes how to create the leaflet map obje
       addMarkers(lng = -76.505206, lat = 38.9767231, popup = "SESYNC")
   })
 
-# in ui
-navbarPage("CSI App",
-           tabPanel("Portals" ...), # code truncated here
-           tabPanel("Map", leafletOutput("sesync_map"))
+# in UI
+   tabPanel("Map", leafletOutput("sesync_map"))
 )
 
 ```
@@ -399,14 +425,12 @@ Using `addTiles()` displays the default background map tiles. However there are 
 > Change the background image from the default to Esri World Imagery.
 
 ```{r, eval = FALSE}
-# in server
   output$sesync_map <- renderLeaflet({
     leaflet() %>%
       addProviderTiles("Esri.WorldImagery") %>%
       addMarkers(lng = -76.505206, lat = 38.9767231, popup = "SESYNC")
   })
 
-# in ui
 tabPanel("Map", leafletOutput("sesync_map"))
 
 ```

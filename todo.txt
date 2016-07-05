@@ -2,3 +2,4 @@
 
 + Lesson line 69: need to copy data to local folder. how will workshop participants do this?
 + edited up to line 332. Need to update Sharing your app and shiny extensions (leaflet part)
++ update runGitHub line 336
