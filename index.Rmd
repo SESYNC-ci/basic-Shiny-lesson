@@ -19,22 +19,23 @@ This lesson presents an introduction to creating interactive web applications us
 
 This lesson makes use of several publicly available datasets that have been customized for teaching purposes, including the [Portals teaching database](https://github.com/weecology/portal-teachingdb).
 
-**Download the data used in this lesson** [here](http://sesync.us/fl). Make a folder called "data" in your current working directory, then click "Download all" to download a zip folder of the files into that folder. Unzip the "Files" folder. 
-
 # What is Shiny?
 
 Shiny is a web application framework for R that allows you to create interactive web apps without requiring knowledge of HTML, CSS, or JavaScript. These web apps can be used for exploratory data analysis and visualization, to facilitate remote collaboration, share results, and [much more](http://shiny.rstudio.com/gallery/). 
 
 The `shiny` package includes some built-in examples to demonstrate some of its basic features. When applications are running, they are displayed in a separate browser window or the RStudio Viewer pane. 
 
-> Load the shiny package and run one of the [built-in examples](http://shiny.rstudio.com/tutorial/lesson1/#Go Further):
+> After installing the shiny package, load the shiny package and run one of the [built-in examples](http://shiny.rstudio.com/tutorial/lesson1/#Go Further):
 
 ```{r, eval=FALSE}
+# install.packages("shiny")
 library(shiny)
 runExample("01_hello")
 ```
 
-The example will open in a new browser window (you may need to prevent your broswer from blocking pop-out windows in order to view the app). Notice back in RStudio that a stop sign that appears in the Console window while your app is running. This is because the current R session is busy running your application. Closing the app window does not stop the app from using your R session. Make sure to end the app when you are finished by clicking the stop sign in the header of the Console window.
+The example will open in a new browser window (you may need to prevent your broswer from blocking pop-out windows in order to view the app). Notice back in RStudio that a stop sign that appears in the Console window while your app is running. This is because the current R session is busy running your application. Closing the app window does not stop the app from using your R session. Make sure to end the app when you are finished by clicking the stop sign in the header of the Console window. The Console window prompt `>` should return.
+
+![](images/shiny_stop.png)
 
 ## File structure
 
@@ -49,10 +50,10 @@ The appearance of the web page (the UI) is controlled by the computer running an
 
 When the `shiny` package is installed and loaded, RStudio will identify these file structures and put a green arrow with a **Run App** button when you open a file in the app. Note that the file names must be exactly as specified. 
 
-> Create a file in your working directory called `app.R`. In this file, define objects `ui` and `server` with the assignment operator `<-` and then pass them to the function `shinyApp()`. This is the simplest possible shiny app. 
+> Create a file in your %sandbox% directory (the same location where you have your data folder) called `app.R`. In this file, define objects `ui` and `server` with the assignment operator `<-` and then pass them to the function `shinyApp()`. These are the basic components of a shiny app. 
 
 ```{r, eval = FALSE}
-ui <- navbarPage() 
+ui <- navbarPage(title = "Hello, World!") 
 
 server <- function(input, output){}
 
@@ -67,17 +68,16 @@ Notice the green **Run App** button appear when the file is saved. This button a
 
 Because the Shiny app is going to be using your local R session to run, it will be able to recognize anything that is loaded into your working environment. Shiny apps can also be designed to interact with remote data or shared databases. 
 
-> Modify the `app.R` file to read in 3 csvs from the Portals database at the beginning of the file. 
-> Add a title in the UI. 
+> Modify the `app.R` file to read in 3 csvs from the Portals database at the beginning of the file. Because the app is saved in your %sandbox% directory, you only need to specify the _relative_ path location. 
 
 ```{r, eval = FALSE}
 # Read in data
-plots <- read.csv("data/Files/Data/plots.csv", stringsAsFactors = FALSE)
-species <- read.csv("data/Files/Data/species.csv", stringsAsFactors = FALSE)
-surveys <- read.csv("data/Files/Data/surveys.csv", na.strings = "", stringsAsFactors = FALSE)
+plots <- read.csv("data/plots.csv", stringsAsFactors = FALSE)
+species <- read.csv("data/species.csv", stringsAsFactors = FALSE)
+surveys <- read.csv("data/surveys.csv", na.strings = "", stringsAsFactors = FALSE)
 
 # User interface
-ui <- navbarPage(title = "Hello Shiny!") 
+ui <- navbarPage(title = "Hello, World!") 
 
 # Server
 server <- function(input, output){}
@@ -94,11 +94,15 @@ Having your app function as you intend requires careful attention to how your in
 
 ![](images/arrows1_v2.png)
 
-The diagram above depicts how input and output objects are referred to within the UI and server objects. Input objects are created and named in the UI with functions like `selectInput()` or `radioButtons()`. Those input objects are used within render functions in the server object to create output objects. Output objects are placed in the UI using output functions like `plotOutput()` or `textOutput()`.
+The diagram above depicts how input and output objects are referred to within the UI and server objects:
+
+* Input objects are created and named in the UI with functions like `selectInput()` or `radioButtons()`. 
+* Those input objects are used within render functions in the server object to create output objects. 
+* Output objects are placed in the UI using output functions like `plotOutput()` or `textOutput()`.
 
 ## Input Objects
 
-Input objects collect information from the user and save it into a list called. Input values can change when a user changes the input. These inputs can be many different things: single values, text, vectors, dates, or even files uploaded by the user. 
+Input objects collect information from the user and save it into a list. Input values can change when a user changes the input. These inputs can be many different things: single values, text, vectors, dates, or even files uploaded by the user. 
 
 The first two arguments for all input widgets are:
 
@@ -107,9 +111,9 @@ The first two arguments for all input widgets are:
 
 Other arguments depend on the type of input widget. Input objects are stored in a list and are referred to in the server with the syntax `input$inputID`. 
 
-[Input widgets with sample code](http://shiny.rstudio.com/gallery/widget-gallery.html)
+See a gallery of input widgets with sample code [here](http://shiny.rstudio.com/gallery/widget-gallery.html)
 
-> Customize the UI by adding an input object to allow users to select one of the species in the portals data set. Use the `selectInput()` function to create an input object called `pick_species`. Use the `choices = ` argument to define a vector with the options. Separate functions in the UI with commas. Put this function in a `tabPanel` called Portals.
+> We will now customize the UI by adding an input object to allow users to select one of the species ID in the portals data set. Use the `selectInput()` function to create an input object called `pick_species`. Use the `choices = ` argument to define a vector with the unique values in the species id column. Separate functions in the UI with commas. Put this function in a `tabPanel` called Portals. We will learn about design and layout in a subsequent section.
 
 ```{r, eval = FALSE}
 # User interface
@@ -126,7 +130,7 @@ Input objects are **reactive** which means that an update to this value by a use
 
 * Choices for inputs can be named using a list to match the display name to the value such as `list("Male" = "M", "Female" = "F")`. 
 * [Selectize](http://shiny.rstudio.com/gallery/selectize-vs-select.html) inputs are a useful option for long drop down lists.
-* Always be aware of what the default value is for input objects you create
+* Always be aware of what the default value is for input objects you create.
 
 ## Output objects
 
@@ -138,7 +142,7 @@ output$mydata <- renderTable({})
 output$mymessage <- renderText({})
 ```
 
-> Display the species id as text under the input widget using `renderText` in the server object and `textOutput` in the UI.
+> Display the species id as text under the input widget using `textOutput` in the UI and `renderText` in the server object.
 
 ```{r, eval = FALSE}
 # User interface
@@ -158,7 +162,7 @@ Render functions tell Shiny **how to** build an output object to display in the 
 
 The outputs of render functions are called **observers** because they observe all upstream reactive values for changes. The code inside the body of the render function will run whenever a reactive value inside the code changes, such as when an input object's value is changed in the UI. The input object notifies its observers that it has changed, which causes the output objects to re-render and update the display. 
 
-Use outputId names in quotes to refer to output objects within `*Output()` functions. Other arguments to `*Output()` functions can control their size in the UI as well as add interactivity such as [selecting observations to view data by clicking on a plot](http://shiny.rstudio.com/articles/selecting-rows-of-data.html).
+Use outputId names in quotes to refer to output objects within `*Output()` functions. Other arguments to `*Output()` functions can control their size in the UI as well as add advanced interactivity such as [selecting observations to view data by clicking on a plot](http://shiny.rstudio.com/articles/selecting-rows-of-data.html).
 
 Here are some common pairs of render and output functions:
 
@@ -170,7 +174,7 @@ Here are some common pairs of render and output functions:
 | renderTable() | tableOutput() | static table |
 | renderDataTable() | dataTableOutput() | interactive table |
 
-It is also possible to render reactive input objects using the `renderUI()` and `uiOutput()` functions for situations where you want the type or parameters of an input widget to change based on another input. For an exmaple, see the example "Creating controls on the fly" [here](http://shiny.rstudio.com/articles/dynamic-ui.html).
+Note that it is also possible to render reactive input objects using the `renderUI()` and `uiOutput()` functions for situations where you want the type or parameters of an input widget to change based on another input. For an exmaple, see "Creating controls on the fly" [here](http://shiny.rstudio.com/articles/dynamic-ui.html).
 
 We will now use the input object `pick_species` within a `renderPlot()` function. 
 
@@ -202,7 +206,7 @@ server <- function(input, output){
 
 Output objects can react to multiple input objects chosen by the user. 
 
-> Add an additional input widget that allows the user to filter the survey observations based on a range of consecutive months. 
+> Exercise: Add an additional input widget that allows the user to filter the survey observations based on a range of consecutive months. 
 
 ```{r, eval = FALSE}
 # add to ui
@@ -225,11 +229,13 @@ Output objects can react to multiple input objects chosen by the user.
 
 # Design and Layout
 
-Within the user interface, arrange where elements appear by using a page layout. You can organize elements using pre-defined high level layouts such as `sidebarLayout()`, `splitLayout()`, or `verticalLayout()`, or using the more general `fluidRow()` to organize rows of elements within a grid. Elements can be layered on top of each other using `tabsetPanel()`, `navlistPanel()`, or `navbarPage()`. 
+Within the user interface, arrange where elements appear by using a page layout. You can organize elements using pre-defined high level layouts such as `sidebarLayout()`, `splitLayout()`, or `verticalLayout()`, or using the more general `fluidRow()` (described in depth [here](http://shiny.rstudio.com/articles/layout-guide.html#grid-layouts-in-depth))to organize rows of elements within a grid. Elements can be layered on top of each other using `tabsetPanel()`, `navlistPanel()`, or `navbarPage()`. 
 
 ![](images/navbarPage.png)
 
-The diagram above depicts nested UI elements in the *sidebar layout*. The red boxes represent input objects and the blue boxes represent output objects. Each object is located within one or more nested **panels**, which are nested within a **layout**. Notice that **tab panels** with the sidebar layout's main panel are nested within the **tabset panel**. Objects and panels that are at the same level of hierarchy need to be separated by commas. Mistakes in usage of commas and parentheses between UI elements is one of the first things to look for when debugging a shiny app! 
+The diagram above depicts the nestedness of UI elements in the *sidebar layout*. The red boxes represent input objects and the blue boxes represent output objects. Each object is located within one or more nested **panels**, which are nested within a **layout**. Notice that **tab panels** with the sidebar layout's main panel are nested within the **tabset panel**. Objects and panels that are at the same level of hierarchy need to be separated by commas. 
+
+Mistakes in usage of commas and parentheses between UI elements is one of the first things to look for when debugging a shiny app! 
 
 ## Layout and organization
 
@@ -270,7 +276,7 @@ ui <- navbarPage(title = "Hello Shiny!",
 )
 ```
 
-> Make a second tab panel called "Data" to show a data frame with the surveys data used in the plot that shows in the first panel.
+> Exercise: Make a second tab panel called "Data" to show a data frame with the surveys data used in the plot that shows in the first panel.
 
 ```{r, eval = FALSE}
 
@@ -297,7 +303,7 @@ Along with widgets and output objects, you can add headers, text, images, links,
 
 ```{r}
 shiny::h5("This is a level 5 header")
-shiny::a(href="www.sesync.org", "This is a link")
+shiny::a(href="www.sesync.org", "This syntax renders <aside></aside> a link")
 ```
 
 * In addition to titles for tabs, you can also use [icons](http://shiny.rstudio.com/reference/shiny/latest/icon.html). 
@@ -313,9 +319,9 @@ Input objects that are used in multiple render functions to create different out
 
 ![](images/objects-compare.png)
 
-The diagram above shows the relationship between input and output objects with **(B)** and without **(A)** the use of an intermediary reactive object. The surveys_subset reactive object becomes cached in the app's memory so it does not need to be computed independently in both the plot and data output objects.
+The diagram above shows the relationship between input and output objects with **(B)** and without **(A)** the use of an intermediary reactive object. The surveys_subset reactive object in **(B)** becomes cached in the app's memory so it does not need to be computed independently in both the plot and data output objects.
 
-Use the function `reactive()` to create reactive objects and use them with function syntax, i.e. with `()`. Reactive objects are not output objects so do not use `output$` in front of their name. 
+Use the function `reactive()` to create reactive objects and use them with function syntax, i.e. with `()`. Reactive objects are not output objects so do not use `output$` in front of their name either. 
 
 ![](images/arrows2_v2.png)
 
@@ -386,9 +392,11 @@ Once you have made an app, there are several ways to share it with others. It is
 
 To share as a webpage it will need to be hosted somewhere, i.e. there needs to be a computer running the R code that powers the app. There is limited free hosting available through RStudio with [shinapps.io](http://www.shinyapps.io/). SESYNC has a shiny server to host apps as well. There is a series of articles on the RStudio website [here](http://shiny.rstudio.com/articles/) about deploying apps. 
 
-# Shiny extensions
+# Part II: Shiny extensions
 
-You can enhance and extend the functionality and sophistication of Shiny apps using existing tools and platforms. Javascript visualizations can be used in RShiny with a framework called [htmlwidgets](http://www.htmlwidgets.org/index.html), which lets you access powerful features of tools like Leaflet, [plot.ly](https://plot.ly/r/shiny-tutorial/#plotly-graphs-in-shiny),and d3 within R. Since these frameworks are bridges to, or wrappers, for the original libraries and packages that may have been written in another programming language, deploying them requires becoming familiar with the logic and structure of the output objects being created. The [Leaflet package for R](https://rstudio.github.io/leaflet/) is well-integrated with other R packages like Shiny and sp however it is also useful to refer to the more extensive documentation of its [JavaScript library](http://leafletjs.com/reference.html). 
+You can enhance and extend the functionality and sophistication of Shiny apps using existing tools and platforms. Javascript visualizations can be used in RShiny with a framework called [htmlwidgets](http://www.htmlwidgets.org/index.html), which lets you access powerful features of tools like Leaflet, [plot.ly](https://plot.ly/r/shiny-tutorial/#plotly-graphs-in-shiny),and d3 within R. Since these frameworks are bridges to, or wrappers, for the original libraries and packages that may have been written in another programming language, deploying them requires becoming familiar with the logic and structure of the output objects being created. You can also incorporate Javascript code in apps. Read more about how to create bindings to Javascript libraries [here](http://shiny.rstudio.com/tutorial/js-lesson1/).
+
+The [Leaflet package for R](https://rstudio.github.io/leaflet/) which we will use is well-integrated with other R packages like Shiny and sp however it is also useful to refer to the more extensive documentation of its [JavaScript library](http://leafletjs.com/reference.html). 
 
 **Some shiny extensions**
 
@@ -404,16 +412,17 @@ You can enhance and extend the functionality and sophistication of Shiny apps us
 
 ## Leaflet 
 
-Outside of shiny, you can interact with leaflet objects in RStudio's Viewer pane. Load the `leaflet` package and make a simple interactive map with the following:
+Install and load the `leaflet` package and make a simple interactive map to view within RStudio's Viewer Pane. Learn about how "slippy" or zoomable web maps work on the Mapbox website [here](https://www.mapbox.com/help/how-web-maps-work/).
 
 ```{r, eval = FALSE}
+install.packages("leaflet")
 library(leaflet)
 leaflet() %>% addTiles() 
 ```
 
 Just like plots, text, and data frames, UI elements created with htmlwidgets are based on the combination of a render function and an output function. For Leaflet, these functions are `renderLeaflet()` and `leafletOutput()`. Leaflet map output objects are defined in the render function and can incorporate input objects. 
 
-The code inside the render function describes how to create the leaflet map object based on functions in the leaflet package. It starts with the function `leaflet()` which returns a map object, and then adds to and modifies elements of that object using the pipe operator `%>%`. Elements include background map tiles, markers, polygons, lines, and other geographical features. 
+The code inside the render function describes how to create the leaflet map object based on functions in the leaflet package. It starts with the function `leaflet()` which returns a map object, and then adds to and modifies elements of that object using the [pipe operator](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html) `%>%`. Elements include background map tiles, markers, polygons, lines, and other geographical features. 
 
 > Add a new panel to the navbar called "Map" that contains a Leaflet map object with a marker at SESYNC's location. Note that it may take some time for the map to appear. 
 
@@ -433,9 +442,9 @@ The code inside the render function describes how to create the leaflet map obje
 
 ![](images/map1.png)
 
-Using `addTiles()` displays the default background map tiles. However there are many more options to pick from. There is a list of the free background tiles available and what they look like [here](http://leaflet-extras.github.io/leaflet-providers/preview/index.html) or you can [create your own](http://osm2vectortiles.org/maps/) for example using data from [OpenStreetMap](http://www.openstreetmap.org/). To use a different background specify which `ProviderTiles` to display. 
+Using `addTiles()` displays the default background map tiles. However there are many more options to pick from. There is a list of the free background tiles available and what they look like [here](http://leaflet-extras.github.io/leaflet-providers/preview/index.html). To use a different background specify which `ProviderTiles` to display. (Or if you are ambitious, you can create your own tiles for example using free data from [OpenStreetMap](http://osm2vectortiles.org/maps/).
 
-> Change the background image from the default to Esri's World Imagery.
+> Change the background image from the default to Esri's free World Imagery.
 
 ```{r, eval = FALSE}
   output$sesync_map <- renderLeaflet({
@@ -462,17 +471,18 @@ library(rgdal)
 library(rgeos)
 library(raster)
 
-cb_dir <- "data/Files/Geodata/census-tiger-2013/cb_2014_us_county_500k"
+# make sure you are in your %sandbox% directory!
 
-counties <- readOGR(dsn = file.path(cb_dir, "cb_2014_us_county_500k.shp"),
+counties <- readOGR(dsn = "data/cb_2014_us_county_500k/cb_2014_us_county_500k.shp",
                     layer = "cb_2014_us_county_500k", 
                     stringsAsFactors = FALSE)
 
-huc <- readOGR(dsn = "data/Files/Geodata/huc250k.shp", 
+huc <- readOGR(dsn = "data/huc250k/huc250k.shp", 
                layer = "huc250k",
                stringsAsFactors = FALSE)
 
-nlcd <- raster("data/Files/Geodata/nlcd_agg.grd")
+nlcd <- raster("data/nlcd_agg.grd")
+
 
 counties_md <- counties[counties$STATEFP == "24", ]  
 ```
@@ -557,4 +567,3 @@ We can add some simple interactivity by assigning groups to **layers** and using
 
   * http://daattali.com/shiny/cancer-data/
   * https://uasnap.shinyapps.io/nwtapp/
-  * https://shiny.sesync.org/apps/dtms-demo/network-viz/
