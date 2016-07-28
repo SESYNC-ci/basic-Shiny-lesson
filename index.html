@@ -546,6 +546,16 @@ server &lt;- function(input, output){
 <pre class="r"><code>install.packages(&quot;leaflet&quot;)
 library(leaflet)
 leaflet() %&gt;% addTiles() </code></pre>
+<pre class="r"><code>install.packages(&quot;leaflet&quot;)
+library(leaflet)
+leaflet() %&gt;% addTiles() %&gt;%
+  setView(lng = -76.505206, lat = 38.9767231, zoom = 5) %&gt;%
+  addWMSTiles(
+  &quot;http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi&quot;,
+  layers = &quot;nexrad-n0r-900913&quot;, group = &quot;base_reflect&quot;,
+  options = WMSTileOptions(format = &quot;image/png&quot;, transparent = TRUE),
+  attribution = &quot;Weather data © 2012 IEM Nexrad&quot;
+)</code></pre>
 <p>Just like plots, text, and data frames, UI elements created with htmlwidgets are based on the combination of a render function and an output function. For Leaflet, these functions are <code>renderLeaflet()</code> and <code>leafletOutput()</code>. Leaflet map output objects are defined in the render function and can incorporate input objects.</p>
 <p>The code inside the render function describes how to create the leaflet map object based on functions in the leaflet package. It starts with the function <code>leaflet()</code> which returns a map object, and then adds to and modifies elements of that object using the <a href="https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html">pipe operator</a> <code>%&gt;%</code>. Elements include background map tiles, markers, polygons, lines, and other geographical features.</p>
 <blockquote>
