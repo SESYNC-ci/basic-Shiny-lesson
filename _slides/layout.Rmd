@@ -44,7 +44,7 @@ in1 <- selectInput("pick_species",
                    label = "Pick a species",
                    choices = unique(species[["species_id"]]))
 out2 <- plotOutput("species_plot")
-side <- sidebarPanel("Species", in1)
+side <- sidebarPanel("Options", in1)
 main <- mainPanel(out2)
 tab <- tabPanel("Species",
                 sidebarLayout(side, main))

@@ -13,7 +13,7 @@ This lesson presents an introduction to creating interactive web applications us
 
 ## Data
 
-This lesson makes use of several publicly available datasets that have been customized for teaching purposes, including the [Portals teaching database](https://github.com/weecology/portal-teachingdb).
+This lesson makes use of several publicly available datasets that have been customized for teaching purposes, including the [Portal teaching database](https://github.com/weecology/portal-teachingdb).
 
 <!--split-->
 

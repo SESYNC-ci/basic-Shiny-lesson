@@ -43,11 +43,11 @@ shinyApp(ui = ui, server = server)
 
 ## But, what's going on?
 
-- The UI is always web page whose content is controlled by a running R session.
+- The UI is a web page whose content is controlled by a running R session.
 
 - When you run an app through RStudio, that session is running on your laptop or desktop.
 
-- Your browser opens to a port, say it's port # 1234, on your personal computer acting like a web server, which will be at <http://127.0.0.1:1234>
+- Your browser gets directed to a local port, say it's port 1234, on your personal computer acting like a web server, which will be at <http://127.0.0.1:1234>
 
 - The R session responds when you interact with the web page, processing R commands and updating UI objects according to their result.
 

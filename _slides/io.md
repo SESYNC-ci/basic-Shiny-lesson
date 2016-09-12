@@ -73,7 +73,6 @@ We will learn about design and layout in a subsequent section.
 ## Output objects
 
 Output objects are created through the combination of pairs of `render*()` and `*Output()` functions, in the UI and server respectively.
-The server object defines a list of output objects using render functions with syntax such as:
 
 | Desired UI Object | `render*()`       | `*Output()           |
 |-------------------+-------------------+----------------------|
@@ -83,7 +82,11 @@ The server object defines a list of output objects using render functions with s
 | static table      | renderTable()     | tableOutput()        |
 | interactive table | renderDataTable() | dataTableOutput()    |
 
+The server function adds the output of the `render*()` functions to a list of output objects.
+
 <!--split-->
+
+## Textual Output
 
 Display the species id as text under the input object using `textOutput` in the UI and `renderText` in the server object.
 
@@ -108,7 +111,7 @@ Go ahead and **run the app!**
 
 <aside class="notes" markdown="block">
 
-Render functions tell Shiny **how** to build an output object to display in the user interface.
+Render functions tell Shiny how to build an output object to display in the user interface.
 Output objects can be data frames, plots, images, text, or most anything you can create with R code to be visualized. 
 
 Use `outputId` names in quotes to refer to output objects within `*Output()` functions. Other arguments to `*Output()` functions can control their size in the UI as well as add advanced interactivity such as [selecting observations to view data by clicking on a plot](http://shiny.rstudio.com/articles/selecting-rows-of-data.html).
@@ -118,6 +121,8 @@ Note that it is also possible to render reactive input objects using the `render
 </aside>
 
 <!--split-->
+
+## Graphical Output
 
 In `lesson-6-3.R`, we use the surveys table to plot abundance of the selected species, rather than just printing its id.
 
@@ -155,6 +160,6 @@ ui <- navbarPage(title = "Portal Project", tab)
 
 ## Exercise 1
 
-Use `textOutput()` to add a title above the plot giving the full species name. Hint: Multiple `render*()` functions are allowed in the server function, and make sure to separate UI elements in `tabPanel()` with commas.
+Use `textOutput()` to add a title above the plot giving the full species name. The function `paste()` with argument `collapse = ' '` will convert a data frame row to a text string. Hint: Multiple `render*()` functions are allowed in the server function.
 
 <!--split-->

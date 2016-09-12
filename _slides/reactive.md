@@ -31,7 +31,7 @@ in2 <- sliderInput("slider_months",
                    min = 1,
                    max = 12,
                    value = c(1, 12))
-side <- sidebarPanel("Species", in1, in2)									    
+side <- sidebarPanel(h3("Options", align="center"), in1, in2)									    
 ~~~
 {:.text-document title="lesson-6-4.R"}
 
