@@ -34,7 +34,9 @@ runExample("01_hello")
 ~~~
 {:.input}
 
-![](images/shiny_stop.png)
+<!--split-->
+
+![]({{ site.baseurl }}/images/shiny_stop.png)
 
 Notice back in RStudio that a stop sign appears in the Console window while your app is running. This is because the current R session is busy running your application.
 

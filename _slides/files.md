@@ -74,10 +74,12 @@ shinyApp(ui = ui, server = server)
 ~~~
 {:.text-document title="lesson-6-1.R"}
 
+<!--split-->
+
 Notice the green **Run App** button appear when the file is saved.
 This button also allows you to control whether the app runs in a browser window, in the RStudio Viewer pane, or in an external RStudio window.
 
-![](images/runapp.png)
+![]({{ site.baseurl }}/images/runapp.png)
 
 <aside class="notes" markdown="block">
 

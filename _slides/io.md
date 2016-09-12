@@ -10,7 +10,7 @@ Writing an app requires careful attention to how your input and output objects r
 
 <!--split-->
 
-![](images/arrows1_v2.png)
+![]({{ site.baseurl }}/images/arrows1_v2.png)
 
 This diagrams input and output relationships within the UI and server objects:
 
@@ -158,8 +158,9 @@ ui <- navbarPage(title = "Portal Project", tab)
 ~~~
 {:.text-document title="lesson-6-3.R"}
 
+<!--split-->
+
 ## Exercise 1
 
 Use `textOutput()` to add a title above the plot giving the full species name. The function `paste()` with argument `collapse = ' '` will convert a data frame row to a text string. Hint: Multiple `render*()` functions are allowed in the server function.
 
-<!--split-->

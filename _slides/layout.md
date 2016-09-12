@@ -22,7 +22,7 @@ The folowing UI elements, and more, can be layered on top of each other in eithe
 
 Here is a schematic of nested UI elements inside the `sidebarLayout()`. Red boxes represent input objects and blue boxes represent output objects.
 
-![](images/navbarPage.png)
+![]({{ site.baseurl }}/images/navbarPage.png)
 
 <aside class="notes" markdown="block">
 
@@ -103,6 +103,8 @@ h5("This is a level 5 header")
 a(href="www.sesync.org", "This syntax renders a link")
 ~~~
 {:.input}
+
+<!--split-->
 
 ## Exercise 3
 
