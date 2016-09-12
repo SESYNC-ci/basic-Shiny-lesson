@@ -8,6 +8,8 @@ A particularly useful type of user input is a file, made possible with the `file
 - reates a data frame with column `datapath` giving the path to each uploaded file
 - allows explicity control over permissible data (by specification of MIME type, an internet standard)
 
+<!--split-->
+
 ## Data download
 
 It is also possible to let users download files from a Shiny app, such as a csv file of the currently visible data.

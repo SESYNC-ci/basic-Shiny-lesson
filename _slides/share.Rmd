@@ -14,6 +14,8 @@ There is a series of articles on the RStudio website [here](http://shiny.rstudio
 - email or copy app.R, or ui.R and server.R, and all required data files
 - host the same files and data as a GitHub repository and advertise its accessbility through calls to `shiny::runGitHub("%repo%", "%username%")`
 
+---
+
 ### Share as a website
 
 To share just the UI (i.e. the web page) it will need to be hosted by a computer able to run the R code that powers the app while activing as a public web server. There is limited free hosting available through RStudio with [shinapps.io](http://www.shinyapps.io/). SESYNC maintains a Shiny Apps server for our working group participants, and many other research centers are doing the same.
