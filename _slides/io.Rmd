@@ -28,7 +28,7 @@ These inputs can be many different things: single values, text, vectors, dates, 
 
 The first two arguments for all input objects are:
 
-- `inputId` which is for giving the input object a name to refer to in the server, and 
+- `inputId` (notice the capitalization here!) which is for giving the input object a name to refer to in the server, and 
 - `label` which is for text to display to the user. 
 
 <aside class="notes" markdown="block">
@@ -72,7 +72,7 @@ We will learn about design and layout in a subsequent section.
 
 Output objects are created through the combination of pairs of `render*()` and `*Output()` functions, in the UI and server respectively.
 
-| Desired UI Object | `render*()`       | `*Output()           |
+| Desired UI Object | `render*()`       | `*Output()`           |
 |-------------------+-------------------+----------------------|
 | plot              | renderPlot()      | plotOutput()         |
 | text              | renderPrint()     | verbatimTextOutput() |
