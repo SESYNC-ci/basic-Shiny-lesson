@@ -28,7 +28,7 @@ These inputs can be many different things: single values, text, vectors, dates, 
 
 The first two arguments for all input objects are:
 
-- `inputId` which is for giving the input object a name to refer to in the server, and 
+- `inputId` (notice the capitalization here!) which is for giving the input object a name to refer to in the server, and 
 - `label` which is for text to display to the user. 
 
 <aside class="notes" markdown="block">
