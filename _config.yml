@@ -16,6 +16,13 @@ authors:
 slide_sorter:
   - title
   - intro
+  - files
+  - env
+  - io
+  - layout
+  - reactive
+  - button
+  - share
   
 # Jekyll
 
@@ -26,3 +33,4 @@ exclude:
   - README.md
   - build.R
   - "*.Rproj"
+  - "*.Rmd"
