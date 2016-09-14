@@ -3,4 +3,4 @@
 
 # {{ site.title }}
 
-Instructor: Kelly Hondula
+Lesson {{ site.lesson }} with *Kelly Hondula*
