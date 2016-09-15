@@ -5,7 +5,7 @@
 
 A particularly useful type of user input is a file, made possible with the `fileInput()` function.
 
-- reates a data frame with column `datapath` giving the path to each uploaded file
+- relates a data frame with column `datapath` giving the path to each uploaded file
 - allows explicity control over permissible data (by specification of MIME type, an internet standard)
 
 <!--split-->
