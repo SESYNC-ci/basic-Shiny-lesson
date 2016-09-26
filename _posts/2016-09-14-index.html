@@ -224,7 +224,7 @@ The user’s interaction with input objects alters parameters in the server’s 
 
 <!--split-->
 
-<p><img src="/basic-Shiny-lesson/images/arrows1_v2.png" alt="" /></p>
+<p><img src="/basic-Shiny-lesson/images/arrows3.png" alt="" /></p>
 
 <p>This diagrams input and output relationships within the UI and server objects:</p>
 
@@ -436,12 +436,11 @@ The folowing UI elements, and more, can be layered on top of each other in eithe
 
 <p>Here is a schematic of nested UI elements inside the <code class="highlighter-rouge">sidebarLayout()</code>. Red boxes represent input objects and blue boxes represent output objects.</p>
 
-<p><img src="/basic-Shiny-lesson/images/navbarPage.png" alt="" /></p>
+<p><img src="/basic-Shiny-lesson/images/layout3.png" alt="" /></p>
 
 <aside class="notes">
 
   <p>Each object is located within one or more nested <strong>panels</strong>, which are nested within a <strong>layout</strong>.
-Notice that <strong>tab panels</strong> with the sidebar layout’s main panel are nested within the <strong>tabset panel</strong>.
 Objects and panels that are at the same level of hierarchy need to be separated by commas in calls to parent functions.</p>
 
   <p>Mistakes in usage of commas and parentheses between UI elements is one of the first things to look for when debugging a shiny app!</p>
@@ -628,7 +627,7 @@ The input object notifies its observers that it has changed, which causes the ou
 <p>A particularly useful type of user input is a file, made possible with the <code class="highlighter-rouge">fileInput()</code> function.</p>
 
 <ul>
-  <li>reates a data frame with column <code class="highlighter-rouge">datapath</code> giving the path to each uploaded file</li>
+  <li>relates a data frame with column <code class="highlighter-rouge">datapath</code> giving the path to each uploaded file</li>
   <li>allows explicity control over permissible data (by specification of MIME type, an internet standard)</li>
 </ul>
 
@@ -703,7 +702,7 @@ The input object notifies its observers that it has changed, which causes the ou
 
 <h3 id="share-as-a-website">Share as a website</h3>
 
-<p>To share just the UI (i.e. the web page) it will need to be hosted by a computer able to run the R code that powers the app while activing as a public web server. There is limited free hosting available through RStudio with <a href="http://www.shinyapps.io/">shinapps.io</a>. SESYNC maintains a Shiny Apps server for our working group participants, and many other research centers are doing the same.</p>
+<p>To share just the UI (i.e. the web page) it will need to be hosted by a computer able to run the R code that powers the app while acting as a public web server. There is limited free hosting available through RStudio with <a href="http://www.shinyapps.io/">shinapps.io</a>. SESYNC maintains a Shiny Apps server for our working group participants, and many other research centers are doing the same.</p>
 
 <p class="ToS"><a href="#/slides/share">Top of Section</a></p>
 
