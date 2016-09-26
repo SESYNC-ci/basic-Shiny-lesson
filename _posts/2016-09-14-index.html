@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Interactive Web Applications with RShiny</title>
+  <meta name="description" content="">
+
+  
+  <link rel="stylesheet" href="https://cdn.rawgit.com/sesync-ci/lesson-stylesheets/1.0.1/css/lesson.css">
+  
+  
+</head>
+
+
+  <body>
+
+    <div class="page-content">
+      <div class="wrapper">
+        
+<p><a name="/slides/title"></a></p>
+
+<h1 id="interactive-web-applications-with-rshiny">Interactive Web Applications with RShiny</h1>
+
+<p>Lesson 6 with <em>Kelly Hondula</em></p>
+
+<p class="ToS"><a href="#/slides/title">Top of Section</a></p>
+
+<hr />
+
+<p><a name="/slides/intro"></a></p>
+
+<h2 id="lesson-goals">Lesson Goals</h2>
+
+<p>This lesson presents an introduction to creating interactive web applications using the R <a href="https://cran.r-project.org/web/packages/shiny/index.html">Shiny</a> package. It covers:</p>
+
+<ul>
+  <li>The basic building blocks of a Shiny app</li>
+  <li>How to create interactive elements, including plots</li>
+  <li>How to customize and arrange elements on a page</li>
+</ul>
+
+<!--split-->
+
+<h2 id="data">Data</h2>
+
+<p>This lesson makes use of several publicly available datasets that have been customized for teaching purposes, including the <a href="https://github.com/weecology/portal-teachingdb">Portal teaching database</a>.</p>
+
+<!--split-->
+
+<h2 id="what-is-shiny">What is Shiny?</h2>
+
+<aside class="notes">
+
+  <p>Shiny is a web application framework for R that allows you to create interactive web apps without requiring knowledge of HTML, CSS, or JavaScript. These web apps can be used for exploratory data analysis and visualization, to facilitate remote collaboration, share results, and <a href="http://shiny.rstudio.com/gallery/">much more</a>. The example below, and many <a href="http://shiny.rstudio.com/tutorial/lesson1/#Go Further">additional examples</a>, will open in a new browser window (you may need to prevent your broswer from blocking pop-out windows in order to view the app).</p>
+
+</aside>
+
+<p>The <code class="highlighter-rouge">shiny</code> package includes some built-in examples to demonstrate some of its basic features. When applications are running, they are displayed in a separate browser window or the RStudio Viewer pane.</p>
+
+<div class="language-r input highlighter-rouge"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">shiny</span><span class="p">)</span>
+<span class="n">runExample</span><span class="p">(</span><span class="s2">"01_hello"</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<!--split-->
+
+<p><img src="/basic-Shiny-lesson/images/shiny_stop.png" alt="" /></p>
+
+<p>Notice back in RStudio that a stop sign appears in the Console window while your app is running. This is because the current R session is busy running your application.</p>
+
+<aside class="notes">
+
+  <p>Closing the app window does not stop the app from using your R session. Make sure to end the app when you are finished by clicking the stop sign in the header of the Console window. The Console window prompt <code class="highlighter-rouge">&gt;</code> should return.</p>
+
+</aside>
+
+<p class="ToS"><a href="#/slides/intro">Top of Section</a></p>
+
+<hr />
+
+<p><a name="/slides/files"></a></p>
+
+<h2 id="shiny-components">Shiny components</h2>
+
+<p>Depending on the purpose and computing requirements of any Shiny app, you may set it up to run R code on your computer, a remote server, or in the cloud.
+However all Shiny apps consists of the same two main components:</p>
+
+<ul>
+  <li>
+    <p>The <strong>user interface (UI)</strong> which defines what users will see in the app and its design.</p>
+  </li>
+  <li>
+    <p>The <strong>server</strong> which defines the instructions for how to assemble components of the app like plots and input widgets.</p>
+  </li>
+</ul>
+
+<!--split-->
+
+<p>For big projects, these components may be defined in separate files called <code class="highlighter-rouge">ui.R</code> and <code class="highlighter-rouge">server.R</code> and saved in a folder representing the app.</p>
+
+<div class="language-r input highlighter-rouge"><pre class="highlight"><code><span class="n">dir</span><span class="p">(</span><span class="s2">"my_app"</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<div class="language-r output highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="s2">"ui.R"</span>  <span class="s2">"server.R"</span>  <span class="s2">"data"</span> <span class="s2">"www"</span>
+</code></pre>
+</div>
+
+<!--split-->
+
+<p>For ease of demonstration, we’ll use the alternative approach of defining UI and server objects in a R script representing the app.</p>
+
+<div class="language-r text-document highlighter-rouge" title="my_app.R"><pre class="highlight"><code><span class="c1"># User Interface
+</span><span class="n">ui</span> <span class="o">&lt;-</span> <span class="k">...</span> 
+
+<span class="c1"># Server
+</span><span class="n">server</span> <span class="o">&lt;-</span> <span class="k">...</span>
+
+<span class="c1"># Create the Shiny App
+</span><span class="n">shinyApp</span><span class="p">(</span><span class="n">ui</span> <span class="o">=</span> <span class="n">ui</span><span class="p">,</span> <span class="n">server</span> <span class="o">=</span> <span class="n">server</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<!--split-->
+
+<h2 id="but-whats-going-on">But, what’s going on?</h2>
+
+<ul>
+  <li>
+    <p>The UI is a web page whose content is controlled by a running R session.</p>
+  </li>
+  <li>
+    <p>When you run an app through RStudio, that session is running on your laptop or desktop.</p>
+  </li>
+  <li>
+    <p>Your browser gets directed to a local port, say it’s port 1234, on your personal computer acting like a web server, which will be at <a href="http://127.0.0.1:1234">http://127.0.0.1:1234</a></p>
+  </li>
+  <li>
+    <p>The R session responds when you interact with the web page, processing R commands and updating UI objects according to their result.</p>
+  </li>
+</ul>
+
+<!--split-->
+
+<h2 id="hello-shiny-world">Hello, Shiny World!</h2>
+
+<p>Open <code class="highlighter-rouge">lesson-6-1.R</code> in your handouts repository.
+In this file, define objects <code class="highlighter-rouge">ui</code> and <code class="highlighter-rouge">server</code> with the assignment operator <code class="highlighter-rouge">&lt;-</code> and then pass them to the function <code class="highlighter-rouge">shinyApp()</code>.
+These are the basic components of a shiny app.</p>
+
+<div class="language-r text-document highlighter-rouge" title="lesson-6-1.R"><pre class="highlight"><code><span class="c1"># User Interface
+</span><span class="n">ui</span> <span class="o">&lt;-</span> <span class="n">navbarPage</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">"Hello, Shiny World!"</span><span class="p">)</span>
+
+<span class="c1"># Server
+</span><span class="n">server</span> <span class="o">&lt;-</span> <span class="k">function</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="n">output</span><span class="p">){}</span>
+
+<span class="c1"># Create the Shiny App
+</span><span class="n">shinyApp</span><span class="p">(</span><span class="n">ui</span> <span class="o">=</span> <span class="n">ui</span><span class="p">,</span> <span class="n">server</span> <span class="o">=</span> <span class="n">server</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<!--split-->
+
+<p>Notice the green <strong>Run App</strong> button appear when the file is saved.
+This button also allows you to control whether the app runs in a browser window, in the RStudio Viewer pane, or in an external RStudio window.</p>
+
+<p><img src="/basic-Shiny-lesson/images/runapp.png" alt="" /></p>
+
+<aside class="notes">
+
+  <p>The <code class="highlighter-rouge">shiny</code> package must be installed for RStudio to identify files associated with a Shiny App and put up a green arrow with a <strong>Run App</strong> button.
+Note that the file names must be <code class="highlighter-rouge">ui.R</code> and <code class="highlighter-rouge">server.R</code> if these components are scripted in separate files.</p>
+
+</aside>
+
+<p class="ToS"><a href="#/slides/files">Top of Section</a></p>
+
+<hr />
+
+<p><a name="/slides/env"></a></p>
+
+<h2 id="accessing-data">Accessing data</h2>
+
+<p>Because the Shiny app is going to be using your local R session to run, it will be able to recognize anything that is loaded into your working environment.</p>
+
+<!--split-->
+
+<p>Here, we read in CSV files from the Portal dataset, so it is available to both the ui and server definitions.
+The app script is in the same folder as <code class="highlighter-rouge">data</code>, and you only need to specify the <em>relative</em> file path.</p>
+
+<div class="language-r text-document highlighter-rouge" title="lesson-6-2.R"><pre class="highlight"><code><span class="c1"># Data
+</span><span class="n">species</span> <span class="o">&lt;-</span> <span class="n">read.csv</span><span class="p">(</span><span class="s2">"data/species.csv"</span><span class="p">,</span> <span class="n">stringsAsFactors</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">)</span>
+<span class="n">surveys</span> <span class="o">&lt;-</span> <span class="n">read.csv</span><span class="p">(</span><span class="s2">"data/surveys.csv"</span><span class="p">,</span> <span class="n">na.strings</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span> <span class="n">stringsAsFactors</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">)</span>
+
+<span class="c1"># User Interface
+</span><span class="n">ui</span> <span class="o">&lt;-</span> <span class="k">...</span>
+
+<span class="c1"># Server
+</span><span class="n">server</span> <span class="o">&lt;-</span> <span class="k">...</span>
+
+<span class="c1"># Run app
+</span><span class="n">shinyApp</span><span class="p">(</span><span class="n">ui</span> <span class="o">=</span> <span class="n">ui</span><span class="p">,</span> <span class="n">server</span> <span class="o">=</span> <span class="n">server</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>Shiny apps can also be designed to interact with remote data or shared databases.</p>
+
+<p class="ToS"><a href="#/slides/env">Top of Section</a></p>
+
+<hr />
+
+<p><a name="/slides/io"></a></p>
+
+<h2 id="input-and-output-objects">Input and Output Objects</h2>
+
+<p>The user interface and the server interact with each other through <strong>input</strong> and <strong>output</strong> objects.
+The user’s interaction with input objects alters parameters in the server’s instructions – instructions for creating output objects shown in the UI.</p>
+
+<p>Writing an app requires careful attention to how your input and output objects relate to each other, i.e. knowing what actions will initiate what sections of code to run at what time.</p>
+
+<!--split-->
+
+<p><img src="/basic-Shiny-lesson/images/arrows1_v2.png" alt="" /></p>
+
+<p>This diagrams input and output relationships within the UI and server objects:</p>
+
+<ul>
+  <li>Input objects are created and named in the UI with functions like <code class="highlighter-rouge">selectInput()</code> or <code class="highlighter-rouge">radioButtons()</code>.</li>
+  <li>Data from input objects affects render functions in the server object which create output objects.</li>
+  <li>Output objects are placed in the UI using output functions like <code class="highlighter-rouge">plotOutput()</code> or <code class="highlighter-rouge">textOutput()</code>.</li>
+</ul>
+
+<!--split-->
+
+<h2 id="input-objects">Input Objects</h2>
+
+<p>Input objects collect information from the user and save it into a list.
+Input values can change when a user changes the input.
+These inputs can be many different things: single values, text, vectors, dates, or even files uploaded by the user.</p>
+
+<p>The first two arguments for all input objects are:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">inputId</code> (notice the capitalization here!) which is for giving the input object a name to refer to in the server, and</li>
+  <li><code class="highlighter-rouge">label</code> which is for text to display to the user.</li>
+</ul>
+
+<aside class="notes">
+
+  <p>See a gallery of input objects with sample code <a href="http://shiny.rstudio.com/gallery/widget-gallery.html">here</a></p>
+
+</aside>
+
+<!--split-->
+
+<p>Define the UI by adding an input object that lets users select a species ID from the species table.</p>
+
+<div class="language-r text-document highlighter-rouge" title="lesson-6-2.R"><pre class="highlight"><code><span class="c1"># User Interface
+</span><span class="n">in1</span> <span class="o">&lt;-</span> <span class="n">selectInput</span><span class="p">(</span><span class="s2">"pick_species"</span><span class="p">,</span>
+                   <span class="n">label</span> <span class="o">=</span> <span class="s2">"Pick a species"</span><span class="p">,</span>
+                   <span class="n">choices</span> <span class="o">=</span> <span class="n">unique</span><span class="p">(</span><span class="n">species</span><span class="p">[[</span><span class="s2">"species_id"</span><span class="p">]]))</span>
+<span class="k">...</span>
+<span class="n">tab</span> <span class="o">&lt;-</span> <span class="n">tabPanel</span><span class="p">(</span><span class="s2">"Species"</span><span class="p">,</span> <span class="n">in1</span><span class="p">,</span> <span class="k">...</span><span class="p">)</span>
+<span class="n">ui</span> <span class="o">&lt;-</span> <span class="n">navbarPage</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">"Portal Project"</span><span class="p">,</span> <span class="n">tab</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<aside class="notes">
+
+  <p>Use the <code class="highlighter-rouge">selectInput()</code> function to create an input object called <code class="highlighter-rouge">pick_species</code>.
+Use the <code class="highlighter-rouge">choices = </code> argument to define a vector with the unique values in the species id column.
+Make the input and output objects arguments to the function <code class="highlighter-rouge">tabPanel()</code>, preceded by a title argument.
+We will learn about design and layout in a subsequent section.</p>
+
+  <p><strong>Other notes about input objects</strong></p>
+
+  <ul>
+    <li>Choices for inputs can be named using a list to match the display name to the value such as <code class="highlighter-rouge">list("Male" = "M", "Female" = "F")</code>.</li>
+    <li><a href="http://shiny.rstudio.com/gallery/selectize-vs-select.html">Selectize</a> inputs are a useful option for long drop down lists.</li>
+    <li>Always be aware of what the default value is for input objects you create.</li>
+  </ul>
+
+</aside>
+
+<!--split-->
+
+<h2 id="output-objects">Output objects</h2>
+
+<p>Output objects are created through the combination of pairs of <code class="highlighter-rouge">render*()</code> and <code class="highlighter-rouge">*Output()</code> functions, in the UI and server respectively.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Desired UI Object</th>
+      <th><code class="highlighter-rouge">render*()</code></th>
+      <th><code class="highlighter-rouge">*Output()</code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>plot</td>
+      <td>renderPlot()</td>
+      <td>plotOutput()</td>
+    </tr>
+    <tr>
+      <td>text</td>
+      <td>renderPrint()</td>
+      <td>verbatimTextOutput()</td>
+    </tr>
+    <tr>
+      <td>text</td>
+      <td>renderText()</td>
+      <td>textOutput()</td>
+    </tr>
+    <tr>
+      <td>static table</td>
+      <td>renderTable()</td>
+      <td>tableOutput()</td>
+    </tr>
+    <tr>
+      <td>interactive table</td>
+      <td>renderDataTable()</td>
+      <td>dataTableOutput()</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The server function adds the output of the <code class="highlighter-rouge">render*()</code> functions to a list of output objects.</p>
+
+<!--split-->
+
+<h2 id="textual-output">Textual Output</h2>
+
+<p>Display the species id as text under the input object using <code class="highlighter-rouge">textOutput</code> in the UI and <code class="highlighter-rouge">renderText</code> in the server object.</p>
+
+<div class="language-r text-document highlighter-rouge" title="lesson-6-2.R"><pre class="highlight"><code><span class="c1"># User Interface
+</span><span class="n">in1</span> <span class="o">&lt;-</span> <span class="n">selectInput</span><span class="p">(</span><span class="s2">"pick_species"</span><span class="p">,</span>
+                   <span class="n">label</span> <span class="o">=</span> <span class="s2">"Pick a species"</span><span class="p">,</span>
+                   <span class="n">choices</span> <span class="o">=</span> <span class="n">unique</span><span class="p">(</span><span class="n">species</span><span class="p">[[</span><span class="s2">"species_id"</span><span class="p">]]))</span>
+<span class="n">out1</span> <span class="o">&lt;-</span> <span class="n">textOutput</span><span class="p">(</span><span class="s2">"species_id"</span><span class="p">)</span>
+<span class="n">tab</span> <span class="o">&lt;-</span> <span class="n">tabPanel</span><span class="p">(</span><span class="s2">"Species"</span><span class="p">,</span> <span class="n">in1</span><span class="p">,</span> <span class="n">out1</span><span class="p">)</span>
+<span class="n">ui</span> <span class="o">&lt;-</span> <span class="n">navbarPage</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">"Portal Project"</span><span class="p">,</span> <span class="n">tab</span><span class="p">)</span>
+
+<span class="c1"># Server
+</span><span class="n">server</span> <span class="o">&lt;-</span> <span class="k">function</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">output</span><span class="p">[[</span><span class="s2">"species_id"</span><span class="p">]]</span> <span class="o">&lt;-</span> <span class="n">renderText</span><span class="p">(</span><span class="n">input</span><span class="p">[[</span><span class="s2">"pick_species"</span><span class="p">]])</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>Go ahead and <strong>run the app!</strong></p>
+
+<aside class="notes">
+
+  <p>Render functions tell Shiny how to build an output object to display in the user interface.
+Output objects can be data frames, plots, images, text, or most anything you can create with R code to be visualized.</p>
+
+  <p>Use <code class="highlighter-rouge">outputId</code> names in quotes to refer to output objects within <code class="highlighter-rouge">*Output()</code> functions. Other arguments to <code class="highlighter-rouge">*Output()</code> functions can control their size in the UI as well as add advanced interactivity such as <a href="http://shiny.rstudio.com/articles/selecting-rows-of-data.html">selecting observations to view data by clicking on a plot</a>.</p>
+
+  <p>Note that it is also possible to render reactive input objects using the <code class="highlighter-rouge">renderUI()</code> and <code class="highlighter-rouge">uiOutput()</code> functions for situations where you want the type or parameters of an input object to change based on another input. For an exmaple, see “Creating controls on the fly” <a href="http://shiny.rstudio.com/articles/dynamic-ui.html">here</a>.</p>
+
+</aside>
+
+<!--split-->
+
+<h2 id="graphical-output">Graphical Output</h2>
+
+<p>In <code class="highlighter-rouge">lesson-6-3.R</code>, we use the surveys table to plot abundance of the selected species, rather than just printing its id.</p>
+
+<p>First, the server must filter the survey data based on the selected species, and then create a bar plot <strong>within</strong> the <code class="highlighter-rouge">renderPlot()</code> function.
+Don’t forget to import the necessary libraries.</p>
+
+<div class="language-r text-document highlighter-rouge" title="lesson-6-3.R"><pre class="highlight"><code><span class="n">server</span> <span class="o">&lt;-</span> <span class="k">function</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">output</span><span class="p">[[</span><span class="s2">"species_plot"</span><span class="p">]]</span> <span class="o">&lt;-</span> <span class="n">renderPlot</span><span class="p">(</span>
+    <span class="n">surveys</span> <span class="o">%&gt;%</span>
+    <span class="n">filter</span><span class="p">(</span><span class="n">species_id</span> <span class="o">==</span> <span class="n">input</span><span class="p">[[</span><span class="s2">"pick_species"</span><span class="p">]])</span> <span class="o">%&gt;%</span>
+    <span class="n">ggplot</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">year</span><span class="p">))</span> <span class="o">+</span>
+    <span class="n">geom_bar</span><span class="p">()</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<!--split-->
+
+<p>Second, use the corresponding <code class="highlighter-rouge">plotOutput()</code> function in the UI to display the plot in the app.</p>
+
+<div class="language-r text-document highlighter-rouge" title="lesson-6-3.R"><pre class="highlight"><code><span class="c1"># User Interface
+</span><span class="n">in1</span> <span class="o">&lt;-</span> <span class="n">selectInput</span><span class="p">(</span><span class="s2">"pick_species"</span><span class="p">,</span>
+                   <span class="n">label</span> <span class="o">=</span> <span class="s2">"Pick a species"</span><span class="p">,</span>
+                   <span class="n">choices</span> <span class="o">=</span> <span class="n">unique</span><span class="p">(</span><span class="n">species</span><span class="p">[</span><span class="s2">"species_id"</span><span class="p">]))</span>
+<span class="n">out2</span> <span class="o">&lt;-</span> <span class="n">plotOutput</span><span class="p">(</span><span class="s2">"species_plot"</span><span class="p">)</span>
+<span class="n">tab</span> <span class="o">&lt;-</span> <span class="n">tabPanel</span><span class="p">(</span><span class="s2">"Species"</span><span class="p">,</span> <span class="n">in1</span><span class="p">,</span> <span class="n">out2</span><span class="p">)</span>
+<span class="n">ui</span> <span class="o">&lt;-</span> <span class="n">navbarPage</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">"Portal Project"</span><span class="p">,</span> <span class="n">tab</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<!--split-->
+
+<h2 id="exercise-1">Exercise 1</h2>
+
+<p>Use <code class="highlighter-rouge">textOutput()</code> to add a title above the plot giving the full species name. The function <code class="highlighter-rouge">paste()</code> with argument <code class="highlighter-rouge">collapse = ' '</code> will convert a data frame row to a text string. Hint: Multiple <code class="highlighter-rouge">render*()</code> functions are allowed in the server function.</p>
+
+<p class="ToS"><a href="#/slides/io">Top of Section</a></p>
+
+<hr />
+
+<p><a name="/slides/layout"></a></p>
+
+<h2 id="design-and-layout">Design and Layout</h2>
+
+<p>A suite of <code class="highlighter-rouge">*Layout()</code> functions make for a nicer user interface. You can organize elements using pre-defined high level layouts such as</p>
+
+<ul>
+  <li><code class="highlighter-rouge">sidebarLayout()</code></li>
+  <li><code class="highlighter-rouge">splitLayout()</code></li>
+  <li><code class="highlighter-rouge">verticalLayout()</code></li>
+</ul>
+
+<!--split-->
+
+<p>The more general <code class="highlighter-rouge">fluidRow()</code> allows any <a href="http://shiny.rstudio.com/articles/layout-guide.html#grid-layouts-in-depth">organization of elements within a grid</a>.
+The folowing UI elements, and more, can be layered on top of each other in either a fluid page or pre-defined layouts.</p>
+
+<ul>
+  <li><code class="highlighter-rouge">tabsetPanel()</code></li>
+  <li><code class="highlighter-rouge">navlistPanel()</code></li>
+  <li><code class="highlighter-rouge">navbarPage()</code></li>
+</ul>
+
+<!--split-->
+
+<p>Here is a schematic of nested UI elements inside the <code class="highlighter-rouge">sidebarLayout()</code>. Red boxes represent input objects and blue boxes represent output objects.</p>
+
+<p><img src="/basic-Shiny-lesson/images/navbarPage.png" alt="" /></p>
+
+<aside class="notes">
+
+  <p>Each object is located within one or more nested <strong>panels</strong>, which are nested within a <strong>layout</strong>.
+Notice that <strong>tab panels</strong> with the sidebar layout’s main panel are nested within the <strong>tabset panel</strong>.
+Objects and panels that are at the same level of hierarchy need to be separated by commas in calls to parent functions.</p>
+
+  <p>Mistakes in usage of commas and parentheses between UI elements is one of the first things to look for when debugging a shiny app!</p>
+
+</aside>
+
+<!--split-->
+
+<p>To re-organize the elements of the “Species” tab using a sidebar layout, we modify the UI to specify the sidebar and main elements.</p>
+
+<div class="language-r text-document highlighter-rouge" title="lesson-6-3.R"><pre class="highlight"><code><span class="c1"># User Interface
+</span><span class="n">in1</span> <span class="o">&lt;-</span> <span class="n">selectInput</span><span class="p">(</span><span class="s2">"pick_species"</span><span class="p">,</span>
+                   <span class="n">label</span> <span class="o">=</span> <span class="s2">"Pick a species"</span><span class="p">,</span>
+                   <span class="n">choices</span> <span class="o">=</span> <span class="n">unique</span><span class="p">(</span><span class="n">species</span><span class="p">[[</span><span class="s2">"species_id"</span><span class="p">]]))</span>
+<span class="n">out2</span> <span class="o">&lt;-</span> <span class="n">plotOutput</span><span class="p">(</span><span class="s2">"species_plot"</span><span class="p">)</span>
+<span class="n">side</span> <span class="o">&lt;-</span> <span class="n">sidebarPanel</span><span class="p">(</span><span class="s2">"Options"</span><span class="p">,</span> <span class="n">in1</span><span class="p">)</span>
+<span class="n">main</span> <span class="o">&lt;-</span> <span class="n">mainPanel</span><span class="p">(</span><span class="n">out2</span><span class="p">)</span>
+<span class="n">tab</span> <span class="o">&lt;-</span> <span class="n">tabPanel</span><span class="p">(</span><span class="s2">"Species"</span><span class="p">,</span>
+                <span class="n">sidebarLayout</span><span class="p">(</span><span class="n">side</span><span class="p">,</span> <span class="n">main</span><span class="p">))</span>
+<span class="n">ui</span> <span class="o">&lt;-</span> <span class="n">navbarPage</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">"Portal Project"</span><span class="p">,</span> <span class="n">tab</span><span class="p">)</span>						      
+</code></pre>
+</div>
+
+<!--split-->
+
+<h2 id="exercise-2">Exercise 2</h2>
+
+<p>Include a tabset within the main panel. Call the first element of the tabset “Plot” and show the current plot. Call the second element of the tabset “Data” and show an interactive table with the surveys data used in the plot.</p>
+
+<aside class="notes">
+
+  <p>Notice the many features of the data table output. There are many options that can be controlled within the render function such as pagination and default length. See <a href="http://shiny.rstudio.com/gallery/datatables-options.html">here</a> for examples and how to extend this functionality using JavaScript.</p>
+
+</aside>
+
+<!--split-->
+
+<h2 id="general-layouts">General layouts</h2>
+
+<p>The <code class="highlighter-rouge">fluidPage()</code> layout design consists of rows which contain columns of elements. To use it, first define the width of an element relative to a 12-unit grid within each column using the function <code class="highlighter-rouge">fluidRow()</code> and listing columns in units of 12. The argument <code class="highlighter-rouge">offset</code> can be used to add extra spacing. For example:</p>
+
+<div class="language-r input highlighter-rouge"><pre class="highlight"><code><span class="n">fluidPage</span><span class="p">(</span>
+  <span class="n">fluidRow</span><span class="p">(</span>
+    <span class="n">column</span><span class="p">(</span><span class="m">4</span><span class="p">,</span> <span class="s2">"4"</span><span class="p">),</span>
+    <span class="n">column</span><span class="p">(</span><span class="m">4</span><span class="p">,</span> <span class="n">offset</span> <span class="o">=</span> <span class="m">4</span><span class="p">,</span> <span class="s2">"4 offset 4"</span><span class="p">)</span>      
+  <span class="p">),</span>
+  <span class="n">fluidRow</span><span class="p">(</span>
+    <span class="n">column</span><span class="p">(</span><span class="m">3</span><span class="p">,</span> <span class="n">offset</span> <span class="o">=</span> <span class="m">3</span><span class="p">,</span> <span class="s2">"3 offset 3"</span><span class="p">),</span>
+    <span class="n">column</span><span class="p">(</span><span class="m">3</span><span class="p">,</span> <span class="n">offset</span> <span class="o">=</span> <span class="m">3</span><span class="p">,</span> <span class="s2">"3 offset 3"</span><span class="p">)</span>  
+  <span class="p">))</span>
+</code></pre>
+</div>
+
+<!--split-->
+
+<h2 id="customization">Customization</h2>
+
+<p>Along with input and output objects, you can add headers, text, images, links, and other html objects to the user interface. There are shiny function equivalents for many common html tags such as <code class="highlighter-rouge">h1()</code> through <code class="highlighter-rouge">h6()</code> for headers. You can use the console to see that the return from these functions produce HTML code.</p>
+
+<div class="language-r input highlighter-rouge"><pre class="highlight"><code><span class="n">h5</span><span class="p">(</span><span class="s2">"This is a level 5 header"</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<div class="language-r input highlighter-rouge"><pre class="highlight"><code><span class="n">a</span><span class="p">(</span><span class="n">href</span><span class="o">=</span><span class="s2">"www.sesync.org"</span><span class="p">,</span> <span class="s2">"This syntax renders a link"</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<!--split-->
+
+<h2 id="exercise-3">Exercise 3</h2>
+
+<p>Turn the title of the sidebar into a formatted header. Use the ability of the shiny::builder functions to specify <a href="http://www.w3schools.com/tags/tag_hn.asp">HTML attributes</a> that center the heading.</p>
+
+<!--split-->
+
+<h2 id="some-useful-features-and-resources">Some useful features and resources</h2>
+
+<ul>
+  <li>In addition to titles for tabs, you can also use <a href="http://shiny.rstudio.com/reference/shiny/latest/icon.html">icons</a>.</li>
+  <li>Use the argument <code class="highlighter-rouge">position = "right"</code> in the <code class="highlighter-rouge">sidebarLayout()</code> function if you prefer to have the side panel appear on the right.</li>
+  <li>See <a href="http://shiny.rstudio.com/articles/tag-glossary.html">here</a> for additional html tags you can use.</li>
+  <li>For large blocks of text consider saving the text in a separate markdown, html, or text file and use an <code class="highlighter-rouge">include*</code> function (<a href="http://shiny.rstudio.com/gallery/including-html-text-and-markdown-files.html">example</a>).</li>
+  <li>Add images by saving those files in a folder called <strong>www</strong>. Link to it with <code class="highlighter-rouge">img(src="&lt;file name&gt;")</code></li>
+  <li>Use a shiny theme with the <a href="http://rstudio.github.io/shinythemes/">shinythemes</a> package</li>
+</ul>
+
+<p class="ToS"><a href="#/slides/layout">Top of Section</a></p>
+
+<hr />
+
+<p><a name="/slides/reactive"></a></p>
+
+<h2 id="reactivity">Reactivity</h2>
+
+<p>Input objects are <strong>reactive</strong> which means that an update to this value by a user will notify objects in the server that its value has been changed.</p>
+
+<p>The outputs of render functions are called <strong>observers</strong> because they observe all “upstream” reactive values for changes.</p>
+
+<!--split-->
+
+<h2 id="reactive-objects">Reactive objects</h2>
+
+<p>The code inside the body of <code class="highlighter-rouge">render*()</code> functions will re-run whenever a reactive value inside the code changes, such as when an input object’s value is changed in the UI.
+The input object notifies its observers that it has changed, which causes the output objects to re-render and update the display.</p>
+
+<dl>
+  <dt>Question</dt>
+  <dd>Which element is an <strong>observer</strong> in the app within <code class="highlighter-rouge">lesson-6-3.R</code>.</dd>
+  <dt>Answer</dt>
+  <dd>The object created by <code class="highlighter-rouge">renderPlot()</code> and stored with outputId “species_plot”.</dd>
+</dl>
+
+<!--split-->
+
+<p>In <code class="highlighter-rouge">lesson-6-4.R</code> we’re going to create a new input object in the sidebar panel that constrains the plotted data to a user defined range of months.</p>
+
+<div class="language-r text-document highlighter-rouge" title="lesson-6-4.R"><pre class="highlight"><code><span class="n">in2</span> <span class="o">&lt;-</span> <span class="n">sliderInput</span><span class="p">(</span><span class="s2">"slider_months"</span><span class="p">,</span>
+                   <span class="n">label</span> <span class="o">=</span> <span class="s2">"Month Range"</span><span class="p">,</span>
+                   <span class="n">min</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span>
+                   <span class="n">max</span> <span class="o">=</span> <span class="m">12</span><span class="p">,</span>
+                   <span class="n">value</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">12</span><span class="p">))</span>
+<span class="n">side</span> <span class="o">&lt;-</span> <span class="n">sidebarPanel</span><span class="p">(</span><span class="n">h3</span><span class="p">(</span><span class="s2">"Options"</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s2">"center"</span><span class="p">),</span> <span class="n">in1</span><span class="p">,</span> <span class="n">in2</span><span class="p">)</span>									    
+</code></pre>
+</div>
+
+<!--split-->
+
+<p>To limit surveys to the user specified months, an additional filter is needed that is something like</p>
+
+<div class="language-r input highlighter-rouge"><pre class="highlight"><code><span class="n">filter</span><span class="p">(</span><span class="n">month</span> <span class="o">%</span><span class="k">in</span><span class="o">%</span> <span class="o">%</span><span class="n">reactive_range</span><span class="o">%</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<!--split-->
+
+<p>The way we will define the reactive_range within the server makes it a function, so we must call it when used in the observer definition.</p>
+
+<div class="language-r text-document highlighter-rouge" title="lesson-6-4.R"><pre class="highlight"><code><span class="c1"># Server
+</span><span class="n">server</span> <span class="o">&lt;-</span> <span class="k">function</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span> <span class="p">{</span>
+
+  <span class="n">reactive_range</span> <span class="o">&lt;-</span> <span class="k">...</span>
+
+  <span class="n">output</span><span class="p">[[</span><span class="s2">"species_plot"</span><span class="p">]]</span> <span class="o">&lt;-</span> <span class="n">renderPlot</span><span class="p">(</span>
+    <span class="n">surveys</span> <span class="o">%&gt;%</span>
+    <span class="n">filter</span><span class="p">(</span><span class="n">species_id</span> <span class="o">==</span> <span class="n">input</span><span class="p">[[</span><span class="s2">"pick_species"</span><span class="p">]])</span> <span class="o">%&gt;%</span>
+    <span class="n">filter</span><span class="p">(</span><span class="n">month</span> <span class="o">%</span><span class="k">in</span><span class="o">%</span> <span class="n">reactive_range</span><span class="p">())</span> <span class="o">%&gt;%</span>
+    <span class="n">ggplot</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">year</span><span class="p">))</span> <span class="o">+</span>
+    <span class="n">geom_bar</span><span class="p">()</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<!--split-->
+
+<p>The function <code class="highlighter-rouge">reactive()</code> creates generic objects for use by observers.</p>
+
+<div class="language-r text-document highlighter-rouge" title="lesson-6-4.R"><pre class="highlight"><code><span class="c1"># Server
+</span><span class="n">server</span> <span class="o">&lt;-</span> <span class="k">function</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span> <span class="p">{</span>
+   <span class="n">reactive_range</span> <span class="o">&lt;-</span> <span class="n">reactive</span><span class="p">(</span>
+    <span class="n">seq</span><span class="p">(</span><span class="n">input</span><span class="p">[[</span><span class="s2">"slider_months"</span><span class="p">]][</span><span class="m">1</span><span class="p">],</span>
+        <span class="n">input</span><span class="p">[[</span><span class="s2">"slider_months"</span><span class="p">]][</span><span class="m">2</span><span class="p">])</span>
+    <span class="p">)</span>
+    
+  <span class="n">output</span><span class="p">[[</span><span class="s2">"species_plot"</span><span class="p">]]</span> <span class="o">&lt;-</span> <span class="n">renderPlot</span><span class="p">(</span>
+    <span class="n">surveys</span> <span class="o">%&gt;%</span>
+    <span class="n">filter</span><span class="p">(</span><span class="n">species_id</span> <span class="o">==</span> <span class="n">input</span><span class="p">[[</span><span class="s2">"pick_species"</span><span class="p">]])</span> <span class="o">%&gt;%</span>
+    <span class="n">filter</span><span class="p">(</span><span class="n">month</span> <span class="o">%</span><span class="k">in</span><span class="o">%</span> <span class="n">reactive_range</span><span class="p">())</span> <span class="o">%&gt;%</span>
+    <span class="n">ggplot</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">year</span><span class="p">))</span> <span class="o">+</span>
+    <span class="n">geom_bar</span><span class="p">()</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p class="ToS"><a href="#/slides/reactive">Top of Section</a></p>
+
+<hr />
+
+<p><a name="/slides/button"></a></p>
+
+<h2 id="user-submitted-data">User submitted data</h2>
+
+<p>A particularly useful type of user input is a file, made possible with the <code class="highlighter-rouge">fileInput()</code> function.</p>
+
+<ul>
+  <li>reates a data frame with column <code class="highlighter-rouge">datapath</code> giving the path to each uploaded file</li>
+  <li>allows explicity control over permissible data (by specification of MIME type, an internet standard)</li>
+</ul>
+
+<!--split-->
+
+<h2 id="data-download">Data download</h2>
+
+<p>It is also possible to let users download files from a Shiny app, such as a csv file of the currently visible data.</p>
+
+<p>The <code class="highlighter-rouge">downloadHandler()</code> function, analagous to the <code class="highlighter-rouge">render*()</code> functions that create output objects, requires two arguments:</p>
+
+<ul>
+  <li><strong>filename</strong>, a string or a function that returns a string ending with a file extention</li>
+  <li><strong>content</strong>, a function to generate the content of the file and write it to a temporary file</li>
+</ul>
+
+<div class="language-r text-document highlighter-rouge" title="lesson-6-4.R"><pre class="highlight"><code><span class="c1"># Server
+</span>  <span class="k">...</span>
+  <span class="n">output</span><span class="p">[[</span><span class="s2">"download_data"</span><span class="p">]]</span> <span class="o">&lt;-</span> <span class="n">downloadHandler</span><span class="p">(</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="s2">"species.csv"</span><span class="p">,</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="k">function</span><span class="p">(</span><span class="n">file</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">surveys</span> <span class="o">%&gt;%</span>
+      <span class="n">filter</span><span class="p">(</span><span class="n">species_id</span> <span class="o">==</span> <span class="n">input</span><span class="p">[[</span><span class="s2">"pick_species"</span><span class="p">]])</span> <span class="o">%&gt;%</span>
+      <span class="n">filter</span><span class="p">(</span><span class="n">month</span> <span class="o">%</span><span class="k">in</span><span class="o">%</span> <span class="n">reactive_range</span><span class="p">())</span> <span class="o">%&gt;%</span>
+      <span class="n">write.csv</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<!--split-->
+
+<p>The UI now gets a download button!</p>
+
+<div class="language-r text-document highlighter-rouge" title="lesson-6-4.R"><pre class="highlight"><code><span class="c1"># User Interface
+</span>  <span class="k">...</span>
+  <span class="n">dl</span> <span class="o">&lt;-</span> <span class="n">downloadButton</span><span class="p">(</span><span class="s2">"download_data"</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">"Download"</span><span class="p">)</span>
+  <span class="n">side</span> <span class="o">&lt;-</span> <span class="n">sidebarPanel</span><span class="p">(</span><span class="n">h3</span><span class="p">(</span><span class="s2">"Options"</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s2">"center"</span><span class="p">),</span> <span class="n">in1</span><span class="p">,</span> <span class="n">in2</span><span class="p">,</span> <span class="n">dl</span><span class="p">)</span>
+  <span class="k">...</span>
+</code></pre>
+</div>
+
+<!--split-->
+
+<h2 id="exercise-4">Exercise 4</h2>
+
+<p>Notice the exact same code exists twice within the server function … what a waste of CPU time! Extract the data processing to its own reactive object, which updates when and only when the input objects it references are updated.</p>
+
+<p class="ToS"><a href="#/slides/button">Top of Section</a></p>
+
+<hr />
+
+<p><a name="/slides/share"></a></p>
+
+<h2 id="share-your-app">Share your app</h2>
+
+<p>Once you have made an app, there are several ways to share it with others. It is important to make sure that everything the app needs to run (data and packages) will be loaded into the R session.</p>
+
+<p>There is a series of articles on the RStudio website <a href="http://shiny.rstudio.com/articles/">here</a> about deploying apps.</p>
+
+<!--split-->
+
+<h3 id="share-as-files">Share as files</h3>
+
+<ul>
+  <li>email or copy app.R, or ui.R and server.R, and all required data files</li>
+  <li>host the same files and data as a GitHub repository and advertise its accessbility through calls to <code class="highlighter-rouge">shiny::runGitHub("%repo%", "%username%")</code></li>
+</ul>
+
+<hr />
+
+<h3 id="share-as-a-website">Share as a website</h3>
+
+<p>To share just the UI (i.e. the web page) it will need to be hosted by a computer able to run the R code that powers the app while activing as a public web server. There is limited free hosting available through RStudio with <a href="http://www.shinyapps.io/">shinapps.io</a>. SESYNC maintains a Shiny Apps server for our working group participants, and many other research centers are doing the same.</p>
+
+<p class="ToS"><a href="#/slides/share">Top of Section</a></p>
+
+<hr />
+
+<p><a name="/slides/solutions"></a></p>
+
+<h2 id="solution-1">Solution 1</h2>
+
+<div class="language-r text-document highlighter-rouge" title="lesson-6-3.R"><pre class="highlight"><code><span class="c1"># Libraries
+</span><span class="n">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
+<span class="n">library</span><span class="p">(</span><span class="n">dplyr</span><span class="p">)</span>
+
+<span class="c1"># Data
+</span><span class="n">species</span> <span class="o">&lt;-</span> <span class="n">read.csv</span><span class="p">(</span><span class="s2">"data/species.csv"</span><span class="p">,</span> <span class="n">stringsAsFactors</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">)</span>
+<span class="n">surveys</span> <span class="o">&lt;-</span> <span class="n">read.csv</span><span class="p">(</span><span class="s2">"data/surveys.csv"</span><span class="p">,</span> <span class="n">na.strings</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span> <span class="n">stringsAsFactors</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">)</span>
+
+<span class="c1"># User Interface
+</span><span class="n">in1</span> <span class="o">&lt;-</span> <span class="n">selectInput</span><span class="p">(</span><span class="s2">"pick_species"</span><span class="p">,</span>
+                   <span class="n">label</span> <span class="o">=</span> <span class="s2">"Pick a species"</span><span class="p">,</span>
+                   <span class="n">choices</span> <span class="o">=</span> <span class="n">unique</span><span class="p">(</span><span class="n">species</span><span class="p">[</span><span class="s2">"species_id"</span><span class="p">]))</span>
+<span class="n">out1</span> <span class="o">&lt;-</span> <span class="n">textOutput</span><span class="p">(</span><span class="s2">"species_name"</span><span class="p">)</span>
+<span class="n">out2</span> <span class="o">&lt;-</span> <span class="n">plotOutput</span><span class="p">(</span><span class="s2">"species_plot"</span><span class="p">)</span>
+<span class="n">tab</span> <span class="o">&lt;-</span> <span class="n">tabPanel</span><span class="p">(</span><span class="s2">"Species"</span><span class="p">,</span> <span class="n">in1</span><span class="p">,</span> <span class="n">out1</span><span class="p">,</span> <span class="n">out2</span><span class="p">)</span>
+<span class="n">ui</span> <span class="o">&lt;-</span> <span class="n">navbarPage</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">"Portal Project"</span><span class="p">,</span> <span class="n">tab</span><span class="p">)</span>
+
+<span class="n">server</span> <span class="o">&lt;-</span> <span class="k">function</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">output</span><span class="p">[[</span><span class="s2">"species_name"</span><span class="p">]]</span> <span class="o">&lt;-</span> <span class="n">renderText</span><span class="p">(</span>
+    <span class="n">species</span> <span class="o">%&gt;%</span>
+      <span class="n">filter</span><span class="p">(</span><span class="n">species_id</span> <span class="o">==</span> <span class="n">input</span><span class="p">[[</span><span class="s2">"pick_species"</span><span class="p">]])</span> <span class="o">%&gt;%</span>
+      <span class="n">select</span><span class="p">(</span><span class="n">genus</span><span class="p">,</span> <span class="n">species</span><span class="p">)</span> <span class="o">%&gt;%</span>
+      <span class="n">paste</span><span class="p">(</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">' '</span><span class="p">)</span>
+  <span class="p">)</span>
+  <span class="n">output</span><span class="p">[[</span><span class="s2">"species_plot"</span><span class="p">]]</span> <span class="o">&lt;-</span> <span class="n">renderPlot</span><span class="p">(</span>
+    <span class="n">surveys</span> <span class="o">%&gt;%</span>
+      <span class="n">filter</span><span class="p">(</span><span class="n">species_id</span> <span class="o">==</span> <span class="n">input</span><span class="p">[[</span><span class="s2">"pick_species"</span><span class="p">]])</span> <span class="o">%&gt;%</span>
+      <span class="n">ggplot</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">year</span><span class="p">))</span> <span class="o">+</span>
+      <span class="n">geom_bar</span><span class="p">()</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1"># Create the Shiny App
+</span><span class="n">shinyApp</span><span class="p">(</span><span class="n">ui</span> <span class="o">=</span> <span class="n">ui</span><span class="p">,</span> <span class="n">server</span> <span class="o">=</span> <span class="n">server</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<aside class="notes">
+
+  <p><a href="#exercise-1">Return</a></p>
+
+</aside>
+
+<!--split-->
+
+<h2 id="solution-2">Solution 2</h2>
+
+<div class="language-r text-document highlighter-rouge" title="lesson-6-3.R"><pre class="highlight"><code><span class="c1"># Libraries
+</span><span class="n">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
+<span class="n">library</span><span class="p">(</span><span class="n">dplyr</span><span class="p">)</span>
+
+<span class="c1"># Data
+</span><span class="n">species</span> <span class="o">&lt;-</span> <span class="n">read.csv</span><span class="p">(</span><span class="s2">"data/species.csv"</span><span class="p">,</span> <span class="n">stringsAsFactors</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">)</span>
+<span class="n">surveys</span> <span class="o">&lt;-</span> <span class="n">read.csv</span><span class="p">(</span><span class="s2">"data/surveys.csv"</span><span class="p">,</span> <span class="n">na.strings</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span> <span class="n">stringsAsFactors</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">)</span>
+
+<span class="c1"># User Interface
+</span><span class="n">in1</span> <span class="o">&lt;-</span> <span class="n">selectInput</span><span class="p">(</span><span class="s2">"pick_species"</span><span class="p">,</span>
+                   <span class="n">label</span> <span class="o">=</span> <span class="s2">"Pick a species"</span><span class="p">,</span>
+                   <span class="n">choices</span> <span class="o">=</span> <span class="n">unique</span><span class="p">(</span><span class="n">species</span><span class="p">[</span><span class="s2">"species_id"</span><span class="p">]))</span>
+<span class="n">side</span> <span class="o">&lt;-</span> <span class="n">sidebarPanel</span><span class="p">(</span><span class="s2">"Options"</span><span class="p">,</span> <span class="n">in1</span><span class="p">)</span>
+<span class="n">out1</span> <span class="o">&lt;-</span> <span class="n">textOutput</span><span class="p">(</span><span class="s2">"species_name"</span><span class="p">)</span>
+<span class="n">tab1</span> <span class="o">&lt;-</span> <span class="n">tabPanel</span><span class="p">(</span><span class="s2">"Plot"</span><span class="p">,</span>
+                 <span class="n">plotOutput</span><span class="p">(</span><span class="s2">"species_plot"</span><span class="p">))</span>
+<span class="n">tab2</span> <span class="o">&lt;-</span> <span class="n">tabPanel</span><span class="p">(</span><span class="s2">"Data"</span><span class="p">,</span>
+                 <span class="n">dataTableOutput</span><span class="p">(</span><span class="s2">"species_table"</span><span class="p">))</span>                 
+<span class="n">out2</span> <span class="o">&lt;-</span> <span class="n">tabsetPanel</span><span class="p">(</span><span class="n">tab1</span><span class="p">,</span> <span class="n">tab2</span><span class="p">)</span>
+<span class="n">main</span> <span class="o">&lt;-</span> <span class="n">mainPanel</span><span class="p">(</span><span class="n">out1</span><span class="p">,</span> <span class="n">out2</span><span class="p">)</span>
+<span class="n">tab</span> <span class="o">&lt;-</span> <span class="n">tabPanel</span><span class="p">(</span><span class="s2">"Species"</span><span class="p">,</span>
+                <span class="n">sidebarLayout</span><span class="p">(</span><span class="n">side</span><span class="p">,</span> <span class="n">main</span><span class="p">))</span>
+<span class="n">ui</span> <span class="o">&lt;-</span> <span class="n">navbarPage</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">"Portal Project"</span><span class="p">,</span> <span class="n">tab</span><span class="p">)</span>
+
+<span class="n">server</span> <span class="o">&lt;-</span> <span class="k">function</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">output</span><span class="p">[[</span><span class="s2">"species_name"</span><span class="p">]]</span> <span class="o">&lt;-</span> <span class="n">renderText</span><span class="p">(</span>
+    <span class="n">species</span> <span class="o">%&gt;%</span>
+      <span class="n">filter</span><span class="p">(</span><span class="n">species_id</span> <span class="o">==</span> <span class="n">input</span><span class="p">[[</span><span class="s2">"pick_species"</span><span class="p">]])</span> <span class="o">%&gt;%</span>
+      <span class="n">select</span><span class="p">(</span><span class="n">genus</span><span class="p">,</span> <span class="n">species</span><span class="p">)</span> <span class="o">%&gt;%</span>
+      <span class="n">paste</span><span class="p">(</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">' '</span><span class="p">)</span>
+  <span class="p">)</span>
+  <span class="n">output</span><span class="p">[[</span><span class="s2">"species_plot"</span><span class="p">]]</span> <span class="o">&lt;-</span> <span class="n">renderPlot</span><span class="p">(</span>
+    <span class="n">surveys</span> <span class="o">%&gt;%</span>
+      <span class="n">filter</span><span class="p">(</span><span class="n">species_id</span> <span class="o">==</span> <span class="n">input</span><span class="p">[[</span><span class="s2">"pick_species"</span><span class="p">]])</span> <span class="o">%&gt;%</span>
+      <span class="n">ggplot</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">year</span><span class="p">))</span> <span class="o">+</span>
+      <span class="n">geom_bar</span><span class="p">()</span>
+  <span class="p">)</span>
+  <span class="n">output</span><span class="p">[[</span><span class="s2">"species_table"</span><span class="p">]]</span> <span class="o">&lt;-</span> <span class="n">renderDataTable</span><span class="p">(</span>
+    <span class="n">surveys</span> <span class="o">%&gt;%</span>
+      <span class="n">filter</span><span class="p">(</span><span class="n">species_id</span> <span class="o">==</span> <span class="n">input</span><span class="p">[[</span><span class="s2">"pick_species"</span><span class="p">]])</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1"># Create the Shiny App
+</span><span class="n">shinyApp</span><span class="p">(</span><span class="n">ui</span> <span class="o">=</span> <span class="n">ui</span><span class="p">,</span> <span class="n">server</span> <span class="o">=</span> <span class="n">server</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<aside class="notes">
+
+  <p><a href="#exercise-2">Return</a></p>
+
+</aside>
+
+<!--split-->
+
+<h2 id="solution-3">Solution 3</h2>
+
+<div class="language-r text-document highlighter-rouge" title="lesson-6-3.R"><pre class="highlight"><code><span class="c1"># Libraries
+</span><span class="n">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
+<span class="n">library</span><span class="p">(</span><span class="n">dplyr</span><span class="p">)</span>
+
+<span class="c1"># Data
+</span><span class="n">species</span> <span class="o">&lt;-</span> <span class="n">read.csv</span><span class="p">(</span><span class="s2">"data/species.csv"</span><span class="p">,</span> <span class="n">stringsAsFactors</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">)</span>
+<span class="n">surveys</span> <span class="o">&lt;-</span> <span class="n">read.csv</span><span class="p">(</span><span class="s2">"data/surveys.csv"</span><span class="p">,</span> <span class="n">na.strings</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span> <span class="n">stringsAsFactors</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">)</span>
+
+<span class="c1"># User Interface
+</span><span class="n">in1</span> <span class="o">&lt;-</span> <span class="n">selectInput</span><span class="p">(</span><span class="s2">"pick_species"</span><span class="p">,</span>
+                   <span class="n">label</span> <span class="o">=</span> <span class="s2">"Pick a species"</span><span class="p">,</span>
+                   <span class="n">choices</span> <span class="o">=</span> <span class="n">unique</span><span class="p">(</span><span class="n">species</span><span class="p">[</span><span class="s2">"species_id"</span><span class="p">]))</span>
+<span class="n">side</span> <span class="o">&lt;-</span> <span class="n">sidebarPanel</span><span class="p">(</span><span class="n">h2</span><span class="p">(</span><span class="s2">"Options"</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s2">"center"</span><span class="p">),</span> <span class="n">in1</span><span class="p">)</span>
+<span class="n">out1</span> <span class="o">&lt;-</span> <span class="n">textOutput</span><span class="p">(</span><span class="s2">"species_name"</span><span class="p">)</span>
+<span class="n">tab1</span> <span class="o">&lt;-</span> <span class="n">tabPanel</span><span class="p">(</span><span class="s2">"Plot"</span><span class="p">,</span>
+                 <span class="n">plotOutput</span><span class="p">(</span><span class="s2">"species_plot"</span><span class="p">))</span>
+<span class="n">tab2</span> <span class="o">&lt;-</span> <span class="n">tabPanel</span><span class="p">(</span><span class="s2">"Data"</span><span class="p">,</span>
+                 <span class="n">dataTableOutput</span><span class="p">(</span><span class="s2">"species_table"</span><span class="p">))</span>                 
+<span class="n">out2</span> <span class="o">&lt;-</span> <span class="n">tabsetPanel</span><span class="p">(</span><span class="n">tab1</span><span class="p">,</span> <span class="n">tab2</span><span class="p">)</span>
+<span class="n">main</span> <span class="o">&lt;-</span> <span class="n">mainPanel</span><span class="p">(</span><span class="n">out1</span><span class="p">,</span> <span class="n">out2</span><span class="p">)</span>
+<span class="n">tab</span> <span class="o">&lt;-</span> <span class="n">tabPanel</span><span class="p">(</span><span class="s2">"Species"</span><span class="p">,</span>
+                <span class="n">sidebarLayout</span><span class="p">(</span><span class="n">side</span><span class="p">,</span> <span class="n">main</span><span class="p">))</span>
+<span class="n">ui</span> <span class="o">&lt;-</span> <span class="n">navbarPage</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">"Portal Project"</span><span class="p">,</span> <span class="n">tab</span><span class="p">)</span>
+
+<span class="n">server</span> <span class="o">&lt;-</span> <span class="k">function</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">output</span><span class="p">[[</span><span class="s2">"species_name"</span><span class="p">]]</span> <span class="o">&lt;-</span> <span class="n">renderText</span><span class="p">(</span>
+    <span class="n">species</span> <span class="o">%&gt;%</span>
+      <span class="n">filter</span><span class="p">(</span><span class="n">species_id</span> <span class="o">==</span> <span class="n">input</span><span class="p">[[</span><span class="s2">"pick_species"</span><span class="p">]])</span> <span class="o">%&gt;%</span>
+      <span class="n">select</span><span class="p">(</span><span class="n">genus</span><span class="p">,</span> <span class="n">species</span><span class="p">)</span> <span class="o">%&gt;%</span>
+      <span class="n">paste</span><span class="p">(</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">' '</span><span class="p">)</span>
+  <span class="p">)</span>
+  <span class="n">output</span><span class="p">[[</span><span class="s2">"species_plot"</span><span class="p">]]</span> <span class="o">&lt;-</span> <span class="n">renderPlot</span><span class="p">(</span>
+    <span class="n">surveys</span> <span class="o">%&gt;%</span>
+      <span class="n">filter</span><span class="p">(</span><span class="n">species_id</span> <span class="o">==</span> <span class="n">input</span><span class="p">[[</span><span class="s2">"pick_species"</span><span class="p">]])</span> <span class="o">%&gt;%</span>
+      <span class="n">ggplot</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">year</span><span class="p">))</span> <span class="o">+</span>
+      <span class="n">geom_bar</span><span class="p">()</span>
+  <span class="p">)</span>
+  <span class="n">output</span><span class="p">[[</span><span class="s2">"species_table"</span><span class="p">]]</span> <span class="o">&lt;-</span> <span class="n">renderDataTable</span><span class="p">(</span>
+    <span class="n">surveys</span> <span class="o">%&gt;%</span>
+      <span class="n">filter</span><span class="p">(</span><span class="n">species_id</span> <span class="o">==</span> <span class="n">input</span><span class="p">[[</span><span class="s2">"pick_species"</span><span class="p">]])</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1"># Create the Shiny App
+</span><span class="n">shinyApp</span><span class="p">(</span><span class="n">ui</span> <span class="o">=</span> <span class="n">ui</span><span class="p">,</span> <span class="n">server</span> <span class="o">=</span> <span class="n">server</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<aside class="notes">
+
+  <p><a href="#exercise-3">Return</a></p>
+
+</aside>
+
+<!--split-->
+
+<h2 id="solution-4">Solution 4</h2>
+
+<div class="language-r text-document highlighter-rouge" title="lesson-6-4.R"><pre class="highlight"><code><span class="c1"># Libraries
+</span><span class="n">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
+<span class="n">library</span><span class="p">(</span><span class="n">dplyr</span><span class="p">)</span>
+
+<span class="c1"># Data
+</span><span class="n">species</span> <span class="o">&lt;-</span> <span class="n">read.csv</span><span class="p">(</span><span class="s2">"data/species.csv"</span><span class="p">,</span> <span class="n">stringsAsFactors</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">)</span>
+<span class="n">surveys</span> <span class="o">&lt;-</span> <span class="n">read.csv</span><span class="p">(</span><span class="s2">"data/surveys.csv"</span><span class="p">,</span> <span class="n">na.strings</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span> <span class="n">stringsAsFactors</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">)</span>
+
+<span class="c1"># User Interface
+</span><span class="n">in1</span> <span class="o">&lt;-</span> <span class="n">selectInput</span><span class="p">(</span><span class="s2">"pick_species"</span><span class="p">,</span>
+                   <span class="n">label</span> <span class="o">=</span> <span class="s2">"Pick a Species"</span><span class="p">,</span>
+                   <span class="n">choices</span> <span class="o">=</span> <span class="n">unique</span><span class="p">(</span><span class="n">species</span><span class="p">[[</span><span class="s2">"species_id"</span><span class="p">]]))</span>
+<span class="n">in2</span> <span class="o">&lt;-</span> <span class="n">sliderInput</span><span class="p">(</span><span class="s2">"slider_months"</span><span class="p">,</span>
+                   <span class="n">label</span> <span class="o">=</span> <span class="s2">"Month Range"</span><span class="p">,</span>
+                   <span class="n">min</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span>
+                   <span class="n">max</span> <span class="o">=</span> <span class="m">12</span><span class="p">,</span>
+                   <span class="n">value</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">12</span><span class="p">))</span>
+<span class="n">dl</span> <span class="o">&lt;-</span> <span class="n">downloadButton</span><span class="p">(</span><span class="s2">"download_data"</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">"Download"</span><span class="p">)</span>
+<span class="n">side</span> <span class="o">&lt;-</span> <span class="n">sidebarPanel</span><span class="p">(</span><span class="n">h3</span><span class="p">(</span><span class="s2">"Options"</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s2">"center"</span><span class="p">),</span> <span class="n">in1</span><span class="p">,</span> <span class="n">in2</span><span class="p">,</span> <span class="n">dl</span><span class="p">)</span>
+<span class="n">out2</span> <span class="o">&lt;-</span> <span class="n">plotOutput</span><span class="p">(</span><span class="s2">"species_plot"</span><span class="p">)</span>
+<span class="n">main</span> <span class="o">&lt;-</span> <span class="n">mainPanel</span><span class="p">(</span><span class="n">out2</span><span class="p">)</span>
+<span class="n">tab</span> <span class="o">&lt;-</span> <span class="n">tabPanel</span><span class="p">(</span><span class="s2">"Species"</span><span class="p">,</span>
+<span class="n">sidebarLayout</span><span class="p">(</span><span class="n">side</span><span class="p">,</span> <span class="n">main</span><span class="p">))</span>
+<span class="n">ui</span> <span class="o">&lt;-</span> <span class="n">navbarPage</span><span class="p">(</span><span class="s2">"Portal Project"</span><span class="p">,</span> <span class="n">tab</span><span class="p">)</span>
+
+<span class="c1"># Server
+</span><span class="n">server</span> <span class="o">&lt;-</span> <span class="k">function</span><span class="p">(</span><span class="n">input</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">reactive_range</span> <span class="o">&lt;-</span> <span class="n">reactive</span><span class="p">(</span>
+    <span class="n">seq</span><span class="p">(</span><span class="n">input</span><span class="p">[[</span><span class="s2">"slider_months"</span><span class="p">]][</span><span class="m">1</span><span class="p">],</span>
+        <span class="n">input</span><span class="p">[[</span><span class="s2">"slider_months"</span><span class="p">]][</span><span class="m">2</span><span class="p">])</span>
+  <span class="p">)</span>
+  <span class="n">reactive_data</span> <span class="o">&lt;-</span> <span class="n">reactive</span><span class="p">(</span>
+    <span class="n">surveys</span> <span class="o">%&gt;%</span>
+      <span class="n">filter</span><span class="p">(</span><span class="n">species_id</span> <span class="o">==</span> <span class="n">input</span><span class="p">[[</span><span class="s2">"pick_species"</span><span class="p">]])</span> <span class="o">%&gt;%</span>
+      <span class="n">filter</span><span class="p">(</span><span class="n">month</span> <span class="o">%</span><span class="k">in</span><span class="o">%</span> <span class="n">reactive_range</span><span class="p">())</span>
+  <span class="p">)</span>
+  <span class="n">output</span><span class="p">[[</span><span class="s2">"species_plot"</span><span class="p">]]</span> <span class="o">&lt;-</span> <span class="n">renderPlot</span><span class="p">(</span>
+   <span class="n">reactive_data</span><span class="p">()</span> <span class="o">%&gt;%</span>
+      <span class="n">ggplot</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">year</span><span class="p">))</span> <span class="o">+</span>
+      <span class="n">geom_bar</span><span class="p">()</span>
+  <span class="p">)</span>
+<span class="n">output</span><span class="p">[[</span><span class="s2">"download_data"</span><span class="p">]]</span> <span class="o">&lt;-</span> <span class="n">downloadHandler</span><span class="p">(</span>
+  <span class="n">filename</span> <span class="o">=</span> <span class="s2">"species.csv"</span><span class="p">,</span>
+  <span class="n">content</span> <span class="o">=</span> <span class="k">function</span><span class="p">(</span><span class="n">file</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">reactive_data</span><span class="p">()</span> <span class="o">%&gt;%</span>
+      <span class="n">write.csv</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+  <span class="p">})</span>
+<span class="p">}</span>
+
+<span class="c1"># Create the Shiny App
+</span><span class="n">shinyApp</span><span class="p">(</span><span class="n">ui</span> <span class="o">=</span> <span class="n">ui</span><span class="p">,</span> <span class="n">server</span> <span class="o">=</span> <span class="n">server</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<aside class="notes">
+
+  <p><a href="#exercise-4">Return</a></p>
+
+</aside>
+
+<p class="ToS"><a href="#/slides/solutions">Top of Section</a></p>
+
+<hr />
+
+
+      </div>
+    </div>
+
+  </body>
+
+</html>
