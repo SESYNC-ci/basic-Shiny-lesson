@@ -1,8 +1,30 @@
 # Site
 
+title: "Interactive Web Applications with RShiny"
+handouts:
+ - worksheet-1.R
+ - worksheet-2.R
+ - worksheet-3.R
+ - worksheet-4.R
+tag: v0.0
+lesson: 6
+instructor: Kelly Hondula
+authors:
+ - Kelly Hondula
+ - Ian Carroll
+
 # Slides
 
 slide_sorter:
+  - intro
+  - files
+  - env
+  - io
+  - layout
+  - reactive
+  - button
+  - share
+  - solutions
 
 #####################################
 # Only modify content above or risk #

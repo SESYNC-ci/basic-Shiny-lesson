@@ -9,3 +9,5 @@
 -- a merge conflict with upstream.   --
 -------------------------------------->
 
+[lesson]: http://sesync-ci.github.io/basic-Shiny-lesson
+[slideshow]: http://sesync-ci.github.io/basic-Shiny-lesson/instructor

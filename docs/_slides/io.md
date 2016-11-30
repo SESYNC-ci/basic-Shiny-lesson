@@ -44,7 +44,7 @@ Define the UI by adding an input object that lets users select a species ID from
 
 ~~~r
 # User Interface
-in1 <- selectInput("pick_species",
+in1 <- selectInput(inputID = "pick_species",
                    label = "Pick a species",
                    choices = unique(species[["species_id"]]))
 ...
@@ -93,7 +93,7 @@ Display the species id as text under the input object using `textOutput` in the 
 
 ~~~r
 # User Interface
-in1 <- selectInput("pick_species",
+in1 <- selectInput(inputId = "pick_species",
                    label = "Pick a species",
                    choices = unique(species[["species_id"]]))
 out1 <- textOutput("species_id")
@@ -149,7 +149,7 @@ Second, use the corresponding `plotOutput()` function in the UI to display the p
 
 ~~~r
 # User Interface
-in1 <- selectInput("pick_species",
+in1 <- selectInput(inputId = "pick_species",
                    label = "Pick a species",
                    choices = unique(species["species_id"]))
 out2 <- plotOutput("species_plot")
