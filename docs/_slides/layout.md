@@ -50,7 +50,7 @@ tab <- tabPanel("Species",
                 sidebarLayout(side, main))
 ui <- navbarPage(title = "Portal Project", tab)						      
 ~~~
-{:.text-document title="lesson-6-3.R"}
+{:.text-document title="{{ site.worksheet[3] }}"}
 
 <!--split-->
 

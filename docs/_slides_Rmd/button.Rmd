@@ -19,7 +19,7 @@ The `downloadHandler()` function, analagous to the `render*()` functions that cr
 - **filename**, a string or a function that returns a string ending with a file extention
 - **content**, a function to generate the content of the file and write it to a temporary file
 
-```{r eval=FALSE, title="lesson-6-4.R"}
+```{r eval=FALSE, title="{{ site.worksheet[4] }}"}
 # Server
   ...
   output[["download_data"]] <- downloadHandler(
@@ -38,7 +38,7 @@ The `downloadHandler()` function, analagous to the `render*()` functions that cr
 
 The UI now gets a download button!
 
-```{r eval=FALSE, title="lesson-6-4.R"}
+```{r eval=FALSE, title="{{ site.worksheet[4] }}"}
 # User Interface
   ...
   dl <- downloadButton("download_data", label = "Download")

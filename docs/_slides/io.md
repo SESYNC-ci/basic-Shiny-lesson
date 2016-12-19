@@ -51,7 +51,7 @@ in1 <- selectInput(inputID = "pick_species",
 tab <- tabPanel("Species", in1, ...)
 ui <- navbarPage(title = "Portal Project", tab)
 ~~~
-{:.text-document title="lesson-6-2.R"}
+{:.text-document title="{{ site.worksheet[2] }}"}
 
 <aside class="notes" markdown="block">
 
@@ -105,7 +105,7 @@ server <- function(input, output) {
   output[["species_id"]] <- renderText(input[["pick_species"]])
 }
 ~~~
-{:.text-document title="lesson-6-2.R"}
+{:.text-document title="{{ site.worksheet[2] }}"}
 
 Go ahead and **run the app!**
 
@@ -124,7 +124,7 @@ Note that it is also possible to render reactive input objects using the `render
 
 ## Graphical Output
 
-In `lesson-6-3.R`, we use the surveys table to plot abundance of the selected species, rather than just printing its id.
+In `{{ site.worksheet[3] }}`, we use the surveys table to plot abundance of the selected species, rather than just printing its id.
 
 First, the server must filter the survey data based on the selected species, and then create a bar plot **within** the `renderPlot()` function.
 Don't forget to import the necessary libraries.
@@ -140,7 +140,7 @@ server <- function(input, output) {
   )
 }
 ~~~
-{:.text-document title="lesson-6-3.R"}
+{:.text-document title="{{ site.worksheet[3] }}"}
 
 <!--split-->
 
@@ -156,7 +156,7 @@ out2 <- plotOutput("species_plot")
 tab <- tabPanel("Species", in1, out2)
 ui <- navbarPage(title = "Portal Project", tab)
 ~~~
-{:.text-document title="lesson-6-3.R"}
+{:.text-document title="{{ site.worksheet[3] }}"}
 
 <!--split-->
 

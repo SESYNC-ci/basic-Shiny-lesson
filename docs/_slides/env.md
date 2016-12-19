@@ -25,6 +25,6 @@ server <- ...
 # Run app
 shinyApp(ui = ui, server = server)
 ~~~
-{:.text-document title="lesson-6-2.R"}
+{:.text-document title="{{ site.worksheet[2] }}"}
 
 Shiny apps can also be designed to interact with remote data or shared databases.

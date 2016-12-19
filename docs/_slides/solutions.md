@@ -40,7 +40,7 @@ server <- function(input, output) {
 # Create the Shiny App
 shinyApp(ui = ui, server = server)
 ~~~
-{:.text-document title="lesson-6-3.R"}
+{:.text-document title="{{ site.worksheet[3] }}"}
 
 <aside class="notes" markdown="block">
 
@@ -101,7 +101,7 @@ server <- function(input, output) {
 # Create the Shiny App
 shinyApp(ui = ui, server = server)
 ~~~
-{:.text-document title="lesson-6-3.R"}
+{:.text-document title="{{ site.worksheet[3] }}"}
 
 <aside class="notes" markdown="block">
 
@@ -161,7 +161,7 @@ server <- function(input, output) {
 # Create the Shiny App
 shinyApp(ui = ui, server = server)
 ~~~
-{:.text-document title="lesson-6-3.R"}
+{:.text-document title="{{ site.worksheet[3] }}"}
 
 <aside class="notes" markdown="block">
 
@@ -227,7 +227,7 @@ output[["download_data"]] <- downloadHandler(
 # Create the Shiny App
 shinyApp(ui = ui, server = server)
 ~~~
-{:.text-document title="lesson-6-4.R"}
+{:.text-document title="{{ site.worksheet[4] }}"}
 
 <aside class="notes" markdown="block">
 

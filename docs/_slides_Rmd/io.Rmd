@@ -41,7 +41,7 @@ See a gallery of input objects with sample code [here](http://shiny.rstudio.com/
 
 Define the UI by adding an input object that lets users select a species ID from the species table.
 
-```{r eval=FALSE, title="lesson-6-2.R"}
+```{r eval=FALSE, title="{{ site.worksheet[2] }}"}
 # User Interface
 in1 <- selectInput(inputID = "pick_species",
                    label = "Pick a species",
@@ -88,7 +88,7 @@ The server function adds the output of the `render*()` functions to a list of ou
 
 Display the species id as text under the input object using `textOutput` in the UI and `renderText` in the server object.
 
-```{r eval=FALSE, title="lesson-6-2.R"}
+```{r eval=FALSE, title="{{ site.worksheet[2] }}"}
 # User Interface
 in1 <- selectInput(inputId = "pick_species",
                    label = "Pick a species",
@@ -120,12 +120,12 @@ Note that it is also possible to render reactive input objects using the `render
 
 ## Graphical Output
 
-In `lesson-6-3.R`, we use the surveys table to plot abundance of the selected species, rather than just printing its id.
+In `{{ site.worksheet[3] }}`, we use the surveys table to plot abundance of the selected species, rather than just printing its id.
 
 First, the server must filter the survey data based on the selected species, and then create a bar plot **within** the `renderPlot()` function.
 Don't forget to import the necessary libraries.
 
-```{r eval=FALSE, title="lesson-6-3.R"}
+```{r eval=FALSE, title="{{ site.worksheet[3] }}"}
 server <- function(input, output) {
   output[["species_plot"]] <- renderPlot(
     surveys %>%
@@ -140,7 +140,7 @@ server <- function(input, output) {
 
 Second, use the corresponding `plotOutput()` function in the UI to display the plot in the app. 
 
-```{r eval=FALSE, title="lesson-6-3.R"}
+```{r eval=FALSE, title="{{ site.worksheet[3] }}"}
 # User Interface
 in1 <- selectInput(inputId = "pick_species",
                    label = "Pick a species",

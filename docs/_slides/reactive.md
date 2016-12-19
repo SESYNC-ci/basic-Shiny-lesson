@@ -15,14 +15,14 @@ The code inside the body of `render*()` functions will re-run whenever a reactiv
 The input object notifies its observers that it has changed, which causes the output objects to re-render and update the display. 
 
 Question
-: Which element is an **observer** in the app within `lesson-6-3.R`.
+: Which element is an **observer** in the app within `{{ site.worksheet[3] }}`.
 
 Answer
 : The object created by `renderPlot()` and stored with outputId "species_plot".
 
 <!--split-->
 
-In `lesson-6-4.R` we're going to create a new input object in the sidebar panel that constrains the plotted data to a user defined range of months.
+In `{{ site.worksheet[4] }}` we're going to create a new input object in the sidebar panel that constrains the plotted data to a user defined range of months.
 
 
 ~~~r
@@ -33,7 +33,7 @@ in2 <- sliderInput("slider_months",
                    value = c(1, 12))
 side <- sidebarPanel(h3("Options", align="center"), in1, in2)									    
 ~~~
-{:.text-document title="lesson-6-4.R"}
+{:.text-document title="{{ site.worksheet[4] }}"}
 
 <!--split-->
 
@@ -65,7 +65,7 @@ server <- function(input, output) {
   )
 }
 ~~~
-{:.text-document title="lesson-6-4.R"}
+{:.text-document title="{{ site.worksheet[4] }}"}
 
 <!--split-->
 
@@ -89,4 +89,4 @@ server <- function(input, output) {
   )
 }
 ~~~
-{:.text-document title="lesson-6-4.R"}
+{:.text-document title="{{ site.worksheet[4] }}"}

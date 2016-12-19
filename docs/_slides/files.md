@@ -57,7 +57,7 @@ shinyApp(ui = ui, server = server)
 
 ## Hello, Shiny World!
 
-Open `lesson-6-1.R` in your handouts repository.
+Open `{{ site.worksheet[1] }}` in your handouts repository.
 In this file, define objects `ui` and `server` with the assignment operator `<-` and then pass them to the function `shinyApp()`.
 These are the basic components of a shiny app.
 
@@ -72,7 +72,7 @@ server <- function(input, output){}
 # Create the Shiny App
 shinyApp(ui = ui, server = server)
 ~~~
-{:.text-document title="lesson-6-1.R"}
+{:.text-document title="{{ site.worksheet[1] }}"}
 
 <!--split-->
 

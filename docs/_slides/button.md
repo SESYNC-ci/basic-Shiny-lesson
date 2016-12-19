@@ -34,7 +34,7 @@ The `downloadHandler()` function, analagous to the `render*()` functions that cr
   )
 }
 ~~~
-{:.text-document title="lesson-6-4.R"}
+{:.text-document title="{{ site.worksheet[4] }}"}
 
 <!--split-->
 
@@ -48,7 +48,7 @@ The UI now gets a download button!
   side <- sidebarPanel(h3("Options", align="center"), in1, in2, dl)
   ...
 ~~~
-{:.text-document title="lesson-6-4.R"}
+{:.text-document title="{{ site.worksheet[4] }}"}
 
 <!--split-->
 

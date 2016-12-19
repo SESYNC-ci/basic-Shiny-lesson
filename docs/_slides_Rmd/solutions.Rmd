@@ -3,7 +3,7 @@
 
 ## Solution 1
 
-```{r eval=FALSE, title="lesson-6-3.R"}
+```{r eval=FALSE, title="{{ site.worksheet[3] }}"}
 # Libraries
 library(ggplot2)
 library(dplyr)
@@ -51,7 +51,7 @@ shinyApp(ui = ui, server = server)
 
 ## Solution 2
 
-```{r eval=FALSE, title="lesson-6-3.R"}
+```{r eval=FALSE, title="{{ site.worksheet[3] }}"}
 # Libraries
 library(ggplot2)
 library(dplyr)
@@ -109,7 +109,7 @@ shinyApp(ui = ui, server = server)
 
 ## Solution 3
 
-```{r eval=FALSE, title="lesson-6-3.R"}
+```{r eval=FALSE, title="{{ site.worksheet[3] }}"}
 # Libraries
 library(ggplot2)
 library(dplyr)
@@ -167,7 +167,7 @@ shinyApp(ui = ui, server = server)
 
 ## Solution 4
 
-```{r eval=FALSE, title="lesson-6-4.R"}
+```{r eval=FALSE, title="{{ site.worksheet[4] }}"}
 # Libraries
 library(ggplot2)
 library(dplyr)
