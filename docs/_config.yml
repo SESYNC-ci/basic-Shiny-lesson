@@ -1,13 +1,13 @@
 # Lesson
 
-title: "Interactive Web Applications with RShiny"
+title: Interactive Web Applications with Shiny
 handouts:
  - worksheet-1.R
  - worksheet-2.R
  - worksheet-3.R
  - worksheet-4.R
 tag: v0.0
-lesson: 6
+lesson: 8
 instructor: Kelly Hondula
 authors:
  - Kelly Hondula
@@ -34,7 +34,7 @@ slide_sorter:
 # Style
 
 styleurl: https://cdn.rawgit.com/sesync-ci/lesson-style/1.1/docs
-reveal: https://cdn.rawgit.com/hakimel/reveal.js/3.3.0
+reveal: https://cdn.rawgit.com/hakimel/reveal.js/3.5.0
 
 # Jekyll
 
