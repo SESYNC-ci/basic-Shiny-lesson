@@ -1,6 +1,10 @@
 ---
 ---
 
+## Solutions
+
+===
+
 ## Solution 1
 
 
@@ -10,28 +14,29 @@ library(ggplot2)
 library(dplyr)
 
 # Data
-species <- read.csv("data/species.csv", stringsAsFactors = FALSE)
-surveys <- read.csv("data/surveys.csv", na.strings = "", stringsAsFactors = FALSE)
+species <- read.csv('data/species.csv', stringsAsFactors = FALSE)
+animals <- read.csv('data/animals.csv', na.strings = '', stringsAsFactors = FALSE)
 
 # User Interface
-in1 <- selectInput("pick_species",
-                   label = "Pick a species",
-                   choices = unique(species["species_id"]))
-out1 <- textOutput("species_name")
-out2 <- plotOutput("species_plot")
-tab <- tabPanel("Species", in1, out1, out2)
-ui <- navbarPage(title = "Portal Project", tab)
+in1 <- selectInput('pick_species',
+                   label = 'Pick a species',
+                   choices = unique(species[['id']]))
+out1 <- textOutput('species_name')
+out2 <- plotOutput('species_plot')
+tab <- tabPanel(title = 'Species',
+                in1, out1, out2)
+ui <- navbarPage(title = 'Portal Project', tab)
 
 server <- function(input, output) {
-  output[["species_name"]] <- renderText(
+  output[['species_name']] <- renderText(
     species %>%
-      filter(species_id == input[["pick_species"]]) %>%
+      filter(species_id == input[['pick_species']]) %>%
       select(genus, species) %>%
       paste(collapse = ' ')
   )
-  output[["species_plot"]] <- renderPlot(
-    surveys %>%
-      filter(species_id == input[["pick_species"]]) %>%
+  output[['species_plot']] <- renderPlot(
+    animals %>%
+      filter(species_id == input[['pick_species']]) %>%
       ggplot(aes(year)) +
       geom_bar()
   )
@@ -40,16 +45,12 @@ server <- function(input, output) {
 # Create the Shiny App
 shinyApp(ui = ui, server = server)
 ~~~
-{:.text-document title="{{ site.worksheet[3] }}"}
-
-<aside class="notes" markdown="block">
+{:.text-document title="{{ site.handouts[2] }}"}
 
 [Return](#exercise-1)
+{:.notes}
 
-</aside>
-
-<!--split-->
-
+===
 
 ## Solution 2
 
@@ -60,56 +61,53 @@ library(ggplot2)
 library(dplyr)
 
 # Data
-species <- read.csv("data/species.csv", stringsAsFactors = FALSE)
-surveys <- read.csv("data/surveys.csv", na.strings = "", stringsAsFactors = FALSE)
+species <- read.csv('data/species.csv', stringsAsFactors = FALSE)
+animals <- read.csv('data/animals.csv', na.strings = '', stringsAsFactors = FALSE)
 
 # User Interface
-in1 <- selectInput("pick_species",
-                   label = "Pick a species",
-                   choices = unique(species["species_id"]))
-side <- sidebarPanel("Options", in1)
-out1 <- textOutput("species_name")
-tab1 <- tabPanel("Plot",
-                 plotOutput("species_plot"))
-tab2 <- tabPanel("Data",
-                 dataTableOutput("species_table"))                 
-out2 <- tabsetPanel(tab1, tab2)
-main <- mainPanel(out1, out2)
-tab <- tabPanel("Species",
+in1 <- selectInput('pick_species',
+                   label = 'Pick a species',
+                   choices = unique(species[['id']]))
+side <- sidebarPanel('Options', in1)
+out1 <- textOutput('species_name')
+out2 <- tabPanel(title = 'Plot',
+                 plotOutput('species_plot'))
+out3 <- tabPanel(title = 'Data',
+                 dataTableOutput('species_table'))                 
+main <- mainPanel(out1,
+                  tabsetPanel(out1, out2))
+tab <- tabPanel(title = 'Species',
                 sidebarLayout(side, main))
-ui <- navbarPage(title = "Portal Project", tab)
+ui <- navbarPage(title = 'Portal Project', tab)
 
 server <- function(input, output) {
-  output[["species_name"]] <- renderText(
+  output[['species_name']] <- renderText(
     species %>%
-      filter(species_id == input[["pick_species"]]) %>%
+      filter(species_id == input[['pick_species']]) %>%
       select(genus, species) %>%
       paste(collapse = ' ')
   )
-  output[["species_plot"]] <- renderPlot(
-    surveys %>%
-      filter(species_id == input[["pick_species"]]) %>%
+  output[['species_plot']] <- renderPlot(
+    animals %>%
+      filter(species_id == input[['pick_species']]) %>%
       ggplot(aes(year)) +
       geom_bar()
   )
-  output[["species_table"]] <- renderDataTable(
-    surveys %>%
-      filter(species_id == input[["pick_species"]])
+  output[['species_table']] <- renderDataTable(
+    animals %>%
+      filter(species_id == input[['pick_species']])
   )
 }
 
 # Create the Shiny App
 shinyApp(ui = ui, server = server)
 ~~~
-{:.text-document title="{{ site.worksheet[3] }}"}
-
-<aside class="notes" markdown="block">
+{:.text-document title="{{ site.handouts[2] }}"}
 
 [Return](#exercise-2)
+{:.notes}
 
-</aside>
-
-<!--split-->
+===
 
 ## Solution 3
 
@@ -120,56 +118,54 @@ library(ggplot2)
 library(dplyr)
 
 # Data
-species <- read.csv("data/species.csv", stringsAsFactors = FALSE)
-surveys <- read.csv("data/surveys.csv", na.strings = "", stringsAsFactors = FALSE)
+species <- read.csv('data/species.csv', stringsAsFactors = FALSE)
+animals <- read.csv('data/animals.csv', na.strings = '', stringsAsFactors = FALSE)
 
 # User Interface
-in1 <- selectInput("pick_species",
-                   label = "Pick a species",
-                   choices = unique(species["species_id"]))
-side <- sidebarPanel(h2("Options", align="center"), in1)
-out1 <- textOutput("species_name")
-tab1 <- tabPanel("Plot",
-                 plotOutput("species_plot"))
-tab2 <- tabPanel("Data",
-                 dataTableOutput("species_table"))                 
-out2 <- tabsetPanel(tab1, tab2)
-main <- mainPanel(out1, out2)
-tab <- tabPanel("Species",
+in1 <- selectInput('pick_species',
+                   label = 'Pick a species',
+                   choices = unique(species[['id']]))
+img <- img(src = 'image-filename.png', alt = 'short image description')                   
+side <- sidebarPanel(img, 'Options', in1)
+out1 <- textOutput('species_name')
+out2 <- tabPanel('Plot',
+                 plotOutput('species_plot'))
+out3 <- tabPanel('Data',
+                 dataTableOutput('species_table'))                 
+main <- mainPanel(out1,
+                  tabsetPanel(out2, out3))
+tab <- tabPanel(title = 'Species',
                 sidebarLayout(side, main))
-ui <- navbarPage(title = "Portal Project", tab)
+ui <- navbarPage(title = 'Portal Project', tab)
 
 server <- function(input, output) {
-  output[["species_name"]] <- renderText(
+  output[['species_name']] <- renderText(
     species %>%
-      filter(species_id == input[["pick_species"]]) %>%
+      filter(species_id == input[['pick_species']]) %>%
       select(genus, species) %>%
       paste(collapse = ' ')
   )
-  output[["species_plot"]] <- renderPlot(
-    surveys %>%
-      filter(species_id == input[["pick_species"]]) %>%
+  output[['species_plot']] <- renderPlot(
+    animals %>%
+      filter(species_id == input[['pick_species']]) %>%
       ggplot(aes(year)) +
       geom_bar()
   )
-  output[["species_table"]] <- renderDataTable(
-    surveys %>%
-      filter(species_id == input[["pick_species"]])
+  output[['species_table']] <- renderDataTable(
+    animals %>%
+      filter(species_id == input[['pick_species']])
   )
 }
 
 # Create the Shiny App
 shinyApp(ui = ui, server = server)
 ~~~
-{:.text-document title="{{ site.worksheet[3] }}"}
-
-<aside class="notes" markdown="block">
+{:.text-document title="{{ site.handouts[2] }}"}
 
 [Return](#exercise-3)
+{:.notes}
 
-</aside>
-
-<!--split-->
+===
 
 ## Solution 4
 
@@ -180,57 +176,46 @@ library(ggplot2)
 library(dplyr)
 
 # Data
-species <- read.csv("data/species.csv", stringsAsFactors = FALSE)
-surveys <- read.csv("data/surveys.csv", na.strings = "", stringsAsFactors = FALSE)
+species <- read.csv('data/species.csv', stringsAsFactors = FALSE)
+animals <- read.csv('data/animals.csv', na.strings = '', stringsAsFactors = FALSE)
 
 # User Interface
-in1 <- selectInput("pick_species",
-                   label = "Pick a Species",
-                   choices = unique(species[["species_id"]]))
-in2 <- sliderInput("slider_months",
-                   label = "Month Range",
-                   min = 1,
-                   max = 12,
-                   value = c(1, 12))
-dl <- downloadButton("download_data", label = "Download")
-side <- sidebarPanel(h3("Options", align="center"), in1, in2, dl)
-out2 <- plotOutput("species_plot")
-main <- mainPanel(out2)
-tab <- tabPanel("Species",
-sidebarLayout(side, main))
-ui <- navbarPage("Portal Project", tab)
+in1 <- selectInput('pick_species',
+                   label = 'Pick a species',
+                   choices = unique(species[['id']]))
+img <- img(src = 'image-filename.png', alt = 'short image description')
+side <- sidebarPanel(img, 'Options', in1)
+out1 <- textOutput('species_name')
+out2 <- tabPanel('Plot',
+                 plotOutput('species_plot'))
+out3 <- tabPanel('Data',
+                 dataTableOutput('species_table'))                 
+main <- mainPanel(out1,
+                  tabsetPanel(out2, out3))
+tab <- tabPanel(title = 'Species',
+                sidebarLayout(side, main))
+ui <- navbarPage(title = 'Portal Project', tab)
 
 # Server
 server <- function(input, output) {
-  reactive_range <- reactive(
-    seq(input[["slider_months"]][1],
-        input[["slider_months"]][2])
-  )
-  reactive_data <- reactive(
-    surveys %>%
-      filter(species_id == input[["pick_species"]]) %>%
-      filter(month %in% reactive_range())
-  )
-  output[["species_plot"]] <- renderPlot(
-   reactive_data() %>%
-      ggplot(aes(year)) +
-      geom_bar()
-  )
-output[["download_data"]] <- downloadHandler(
-  filename = "species.csv",
-  content = function(file) {
-    reactive_data() %>%
-      write.csv(file)
-  })
+    reactive_data_frame <- reactive({
+        months <- seq(input[['slider_months']][1],
+                      input[['slider_months']][2])
+        animals %>%
+            filter(species_id == input[['pick_species']]) %>%
+            filter(month %in% months)
+    })
+    output[['species_plot']] <- renderPlot(
+        ggplot(reactive_data_frame(), aes(year)) +
+            geom_bar()
+    )
+    output[['species_table']] <- renderDataTable(reactive_data_frame())
 }
 
 # Create the Shiny App
 shinyApp(ui = ui, server = server)
 ~~~
-{:.text-document title="{{ site.worksheet[4] }}"}
-
-<aside class="notes" markdown="block">
+{:.text-document title="{{ site.handouts[3] }}"}
 
 [Return](#exercise-4)
-
-</aside>
+{:.notes}

@@ -5,7 +5,7 @@
 
 Because the Shiny app is going to be using your local R session to run, it will be able to recognize anything that is loaded into your working environment.
 
-<!--split-->
+===
 
 Here, we read in CSV files from the Portal dataset, so it is available to both the ui and server definitions.
 The app script is in the same folder as `data`, and you only need to specify the _relative_ file path.
@@ -13,8 +13,8 @@ The app script is in the same folder as `data`, and you only need to specify the
 
 ~~~r
 # Data
-species <- read.csv("data/species.csv", stringsAsFactors = FALSE)
-surveys <- read.csv("data/surveys.csv", na.strings = "", stringsAsFactors = FALSE)
+species <- read.csv('data/species.csv', stringsAsFactors = FALSE)
+animals <- read.csv('data/animals.csv', na.strings = '', stringsAsFactors = FALSE)
 
 # User Interface
 ui <- ...
@@ -25,6 +25,6 @@ server <- ...
 # Run app
 shinyApp(ui = ui, server = server)
 ~~~
-{:.text-document title="{{ site.worksheet[2] }}"}
+{:.text-document title="{{ site.handouts[1] }}"}
 
 Shiny apps can also be designed to interact with remote data or shared databases.

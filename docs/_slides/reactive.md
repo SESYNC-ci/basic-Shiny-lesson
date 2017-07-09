@@ -7,86 +7,99 @@ Input objects are **reactive** which means that an update to this value by a use
 
 The outputs of render functions are called **observers** because they observe all "upstream" reactive values for changes.
 
-<!--split-->
+===
 
 ## Reactive objects
 
-The code inside the body of `render*()` functions will re-run whenever a reactive value inside the code changes, such as when an input object's value is changed in the UI.
-The input object notifies its observers that it has changed, which causes the output objects to re-render and update the display. 
+The code inside the body of `render*()` functions will re-run whenever a reactive value (e.g. an input objet) inside the code is changed by the user. When any observer is re-rendered, the UI is notified that it has to update.
 
 Question
-: Which element is an **observer** in the app within `{{ site.worksheet[3] }}`.
+: Which element is an **observer** in the app within `{{ site.handouts[2] }}`.
 
 Answer
 : The object created by `renderPlot()` and stored with outputId "species_plot".
 
-<!--split-->
+===
 
-In `{{ site.worksheet[4] }}` we're going to create a new input object in the sidebar panel that constrains the plotted data to a user defined range of months.
+In `{{ site.handouts[3] }}` we're going to create a new input object in the sidebar panel that constrains the plotted data to a user defined range of months.
 
 
 ~~~r
-in2 <- sliderInput("slider_months",
-                   label = "Month Range",
+in2 <- sliderInput('slider_months',
+                   label = 'Month Range',
                    min = 1,
                    max = 12,
                    value = c(1, 12))
-side <- sidebarPanel(h3("Options", align="center"), in1, in2)									    
+side <- sidebarPanel('Options', in1, in2)									    
 ~~~
-{:.text-document title="{{ site.worksheet[4] }}"}
+{:.text-document title="{{ site.handouts[3] }}"}
 
-<!--split-->
+===
 
-To limit surveys to the user specified months, an additional filter is needed that is something like
+To limit animals to the user specified months, an additional filter is needed within the `renderPlot()` function like
 
 
 ~~~r
-filter(month %in% %reactive_range%)
+filter(month %in% ...)
 ~~~
 {:.input}
 
-<!--split-->
+In order for `filter()` to dynamically respond to the slider, whatever replaces `...` must react to the slider.
 
-The way we will define the reactive_range within the server makes it a function, so we must call it when used in the observer definition.
+===
+
+Shiny provides the `reactive()` function for such times when an appropriate `*Input()` object isn't available. The value returned by `reactive()` will also be a function.
 
 
 ~~~r
-# Server
-server <- function(input, output) {
-
-  reactive_range <- ...
-
-  output[["species_plot"]] <- renderPlot(
-    surveys %>%
-    filter(species_id == input[["pick_species"]]) %>%
-    filter(month %in% reactive_range()) %>%
-    ggplot(aes(year)) +
-    geom_bar()
-  )
-}
+filter(month %in% reactive_seq())
 ~~~
-{:.text-document title="{{ site.worksheet[4] }}"}
+{:.input}
 
-<!--split-->
+===
 
-The function `reactive()` creates generic objects for use by observers.
+The `%in%` test within `filter()` needs a sequence, so we wrap `seq` in `reactive` to generate a function that takes no direct input.
 
 
 ~~~r
-# Server
-server <- function(input, output) {
-   reactive_range <- reactive(
-    seq(input[["slider_months"]][1],
-        input[["slider_months"]][2])
+reactive_seq <- reactive(
+    seq(input[['slider_months']][1],
+        input[['slider_months']][2])
     )
-    
-  output[["species_plot"]] <- renderPlot(
-    surveys %>%
-    filter(species_id == input[["pick_species"]]) %>%
-    filter(month %in% reactive_range()) %>%
-    ggplot(aes(year)) +
-    geom_bar()
-  )
+~~~
+{:.text-document title="{{ site.handouts[3] }}"}
+
+===
+
+The `reactive_seq` can now be embedded in the `renderPlot()` and `renderDataTable()` functions.
+
+
+~~~r
+# Server
+server <- function(input, output) {
+
+    reactive_seq <- reactive(
+        seq(input[['slider_months']][1],
+            input[['slider_months']][2])
+    )
+    output[['species_plot']] <- renderPlot(
+        animals %>%
+            filter(species_id == input[['pick_species']]) %>%
+            filter(month %in% reactive_seq()) %>%
+        ggplot(aes(year)) +
+            geom_bar()
+    )
+    output[['species_table']] <- renderDataTable(
+        animals %>%
+            filter(species_id == input[['pick_species']]) %>%
+            filter(month %in% reqctive_seq())
+    )
 }
 ~~~
-{:.text-document title="{{ site.worksheet[4] }}"}
+{:.text-document title="{{ site.handouts[3] }}"}
+
+===
+
+## Exercise 4
+
+Notice the exact same code exists twice within the server function, once for `renderPlot()` and once for `renderDataTable`. Replace `reactive_seq` with a new `reactive_data_frame` that returns the filtered `data.frame`. Bask in the knowledge of how much CPU time you'll save.

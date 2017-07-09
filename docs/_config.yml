@@ -22,7 +22,7 @@ slide_sorter:
   - io
   - layout
   - reactive
-  - button
+#  - button
   - share
   - solutions
 

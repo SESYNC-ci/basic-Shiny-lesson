@@ -8,7 +8,7 @@ A particularly useful type of user input is a file, made possible with the `file
 - relates a data frame with column `datapath` giving the path to each uploaded file
 - allows explicity control over permissible data (by specification of MIME type, an internet standard)
 
-<!--split-->
+===
 
 ## Data download
 
@@ -26,7 +26,7 @@ The `downloadHandler()` function, analagous to the `render*()` functions that cr
   output[["download_data"]] <- downloadHandler(
     filename = "species.csv",
     content = function(file) {
-      surveys %>%
+      animals %>%
       filter(species_id == input[["pick_species"]]) %>%
       filter(month %in% reactive_range()) %>%
       write.csv(file)
@@ -34,9 +34,9 @@ The `downloadHandler()` function, analagous to the `render*()` functions that cr
   )
 }
 ~~~
-{:.text-document title="{{ site.worksheet[4] }}"}
+{:.text-document title="{{ site.handouts[3] }}"}
 
-<!--split-->
+===
 
 The UI now gets a download button!
 
@@ -48,9 +48,9 @@ The UI now gets a download button!
   side <- sidebarPanel(h3("Options", align="center"), in1, in2, dl)
   ...
 ~~~
-{:.text-document title="{{ site.worksheet[4] }}"}
+{:.text-document title="{{ site.handouts[3] }}"}
 
-<!--split-->
+===
 
 ## Exercise 4
 

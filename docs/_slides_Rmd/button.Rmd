@@ -8,7 +8,7 @@ A particularly useful type of user input is a file, made possible with the `file
 - relates a data frame with column `datapath` giving the path to each uploaded file
 - allows explicity control over permissible data (by specification of MIME type, an internet standard)
 
-<!--split-->
+===
 
 ## Data download
 
@@ -19,34 +19,34 @@ The `downloadHandler()` function, analagous to the `render*()` functions that cr
 - **filename**, a string or a function that returns a string ending with a file extention
 - **content**, a function to generate the content of the file and write it to a temporary file
 
-```{r eval=FALSE, title="{{ site.worksheet[4] }}"}
+```{r eval=FALSE, title='{{ site.handouts[3] }}'}
 # Server
   ...
-  output[["download_data"]] <- downloadHandler(
-    filename = "species.csv",
+  output[['download_data']] <- downloadHandler(
+    filename = 'species.csv',
     content = function(file) {
-      surveys %>%
-      filter(species_id == input[["pick_species"]]) %>%
-      filter(month %in% reactive_range()) %>%
+      animals %>%
+      filter(species_id == input[['pick_species']]) %>%
+      filter(month %in% reactive_seq()) %>%
       write.csv(file)
     }
   )
 }
 ```
 
-<!--split-->
+===
 
 The UI now gets a download button!
 
-```{r eval=FALSE, title="{{ site.worksheet[4] }}"}
+```{r eval=FALSE, title='{{ site.handouts[3] }}'}
 # User Interface
   ...
-  dl <- downloadButton("download_data", label = "Download")
-  side <- sidebarPanel(h3("Options", align="center"), in1, in2, dl)
+  dl <- downloadButton('download_data', label = 'Download')
+  side <- sidebarPanel('Options', in1, in2, dl)
   ...
 ```
 
-<!--split-->
+===
 
 ## Exercise 4
 

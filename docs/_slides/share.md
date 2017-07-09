@@ -7,12 +7,12 @@ Once you have made an app, there are several ways to share it with others. It is
 
 There is a series of articles on the RStudio website [here](http://shiny.rstudio.com/articles/) about deploying apps.
 
-<!--split-->
+===
 
 ### Share as files
 
 - email or copy app.R, or ui.R and server.R, and all required data files
-- host the same files and data as a GitHub repository and advertise its accessbility through calls to `shiny::runGitHub("%repo%", "%username%")`
+- host the same files and data as a GitHub repository and advertise its accessbility through calls to `shiny::runGitHub('%repo%', '%username%')`
 
 ---
 

@@ -3,20 +3,20 @@ library(...)
 library(...)
 
 # Data
-species <- read.csv("data/species.csv", stringsAsFactors = FALSE)
-surveys <- read.csv("data/surveys.csv", na.strings = "", stringsAsFactors = FALSE)
+species <- read.csv('data/species.csv', stringsAsFactors = FALSE)
+surveys <- read.csv('data/animals.csv', na.strings = '', stringsAsFactors = FALSE)
 
 # User Interface
-in1 <- selectInput(inputId = "pick_species",
-                   label = "Pick a species",
-                   choices = unique(species[["species_id"]]))
+in1 <- selectInput(inputId = 'pick_species',
+                   label = 'Pick a species',
+                   choices = unique(species[['id']]))
 ...
-tab <- tabPanel("Species", in1, ...)
-ui <- navbarPage(title = "Portal Project", tab)
+tab <- tabPanel(title = 'Species', in1, ...)
+ui <- navbarPage(title = 'Portal Project', tab)
 
 # Server
 server <- function(input, output) {
-  output[["species_plot"]] <- renderPlot(
+  output[['species_plot']] <- renderPlot(
     ...
   )
 }
