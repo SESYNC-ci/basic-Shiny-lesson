@@ -11,6 +11,7 @@ Writing an app requires careful attention to how your input and output objects r
 ===
 
 ![]({{ site.baseurl }}/images/arrows3.png)
+{:.captioned}
 
 This diagrams input and output relationships within the UI and server objects:
 

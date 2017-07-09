@@ -23,6 +23,7 @@ The folowing UI elements, and more, can be layered on top of each other in eithe
 Here is a schematic of nested UI elements inside the `sidebarLayout()`. Red boxes represent input objects and blue boxes represent output objects.
 
 ![]({{ site.baseurl }}/images/layout3.png)
+{:.captioned}
 
 Each object is located within one or more nested **panels**, which are nested within a **layout**.
 Objects and panels that are at the same level of hierarchy need to be separated by commas in calls to parent functions.
@@ -88,24 +89,20 @@ fluidPage(
 Along with input and output objects, you can add headers, text, images, links, and other html objects to the user interface using "builder" functions. There are shiny function equivalents for many common html tags such as `h1()` through `h6()` for headers. You can use the console to see that the return from these functions produce HTML code.
 
 
+
+
 ~~~r
 h5('This is a level 5 header')
 ~~~
-{:.input}
-~~~
-Error in h5("This is a level 5 header"): could not find function "h5"
-~~~
-{:.output}
+
+<!--html_preserve--><h5>This is a level 5 header</h5><!--/html_preserve-->
 
 
 ~~~r
 a(href='www.sesync.org', 'This syntax renders a link')
 ~~~
-{:.input}
-~~~
-Error in a(href = "www.sesync.org", "This syntax renders a link"): could not find function "a"
-~~~
-{:.output}
+
+<!--html_preserve--><a href="www.sesync.org">This syntax renders a link</a><!--/html_preserve-->
 
 ===
 
