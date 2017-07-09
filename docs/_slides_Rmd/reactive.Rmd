@@ -13,6 +13,8 @@ The outputs of render functions are called **observers** because they observe al
 
 The code inside the body of `render*()` functions will re-run whenever a reactive value (e.g. an input objet) inside the code is changed by the user. When any observer is re-rendered, the UI is notified that it has to update.
 
+===
+
 Question
 : Which element is an **observer** in the app within `{{ site.handouts[2] }}`.
 

@@ -14,7 +14,7 @@ There is a series of articles on the RStudio website [here](http://shiny.rstudio
 - email or copy app.R, or ui.R and server.R, and all required data files
 - host the same files and data as a GitHub repository and advertise its accessbility through calls to `shiny::runGitHub('%repo%', '%username%')`
 
----
+===
 
 ### Share as a website
 

@@ -10,7 +10,7 @@ Writing an app requires careful attention to how your input and output objects r
 
 ===
 
-![]({{ site.baseurl }}/images/arrows3.png)
+![]({{ site.baseurl }}/images/arrows3.png){:width="70%"}
 {:.captioned}
 
 This diagrams input and output relationships within the UI and server objects:
