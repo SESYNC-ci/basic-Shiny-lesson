@@ -23,6 +23,7 @@ The folowing UI elements, and more, can be layered on top of each other in eithe
 Here is a schematic of nested UI elements inside the `sidebarLayout()`. Red boxes represent input objects and blue boxes represent output objects.
 
 ![]({{ site.baseurl }}/images/layout3.png)
+{:.captioned}
 
 Each object is located within one or more nested **panels**, which are nested within a **layout**.
 Objects and panels that are at the same level of hierarchy need to be separated by commas in calls to parent functions.

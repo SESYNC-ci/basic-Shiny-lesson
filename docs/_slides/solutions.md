@@ -75,7 +75,7 @@ out2 <- tabPanel(title = 'Plot',
 out3 <- tabPanel(title = 'Data',
                  dataTableOutput('species_table'))                 
 main <- mainPanel(out1,
-                  tabsetPanel(out1, out2))
+                  tabsetPanel(out2, out3))
 tab <- tabPanel(title = 'Species',
                 sidebarLayout(side, main))
 ui <- navbarPage(title = 'Portal Project', tab)
