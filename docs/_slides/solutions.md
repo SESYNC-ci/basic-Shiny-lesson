@@ -30,7 +30,7 @@ ui <- navbarPage(title = 'Portal Project', tab)
 server <- function(input, output) {
   output[['species_name']] <- renderText(
     species %>%
-      filter(species_id == input[['pick_species']]) %>%
+      filter(id == input[['pick_species']]) %>%
       select(genus, species) %>%
       paste(collapse = ' ')
   )
@@ -83,7 +83,7 @@ ui <- navbarPage(title = 'Portal Project', tab)
 server <- function(input, output) {
   output[['species_name']] <- renderText(
     species %>%
-      filter(species_id == input[['pick_species']]) %>%
+      filter(id == input[['pick_species']]) %>%
       select(genus, species) %>%
       paste(collapse = ' ')
   )
@@ -141,7 +141,7 @@ ui <- navbarPage(title = 'Portal Project', tab)
 server <- function(input, output) {
   output[['species_name']] <- renderText(
     species %>%
-      filter(species_id == input[['pick_species']]) %>%
+      filter(id == input[['pick_species']]) %>%
       select(genus, species) %>%
       paste(collapse = ' ')
   )
@@ -205,6 +205,12 @@ server <- function(input, output) {
             filter(species_id == input[['pick_species']]) %>%
             filter(month %in% months)
     })
+    output[['species_name']] <- renderText(
+        species %>%
+            filter(id == input[['pick_species']]) %>%
+            select(genus, species) %>%
+            paste(collapse = ' ')
+    )
     output[['species_plot']] <- renderPlot(
         ggplot(reactive_data_frame(), aes(year)) +
             geom_bar()
