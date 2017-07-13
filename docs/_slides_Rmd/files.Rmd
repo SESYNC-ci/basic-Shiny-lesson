@@ -26,15 +26,14 @@ However all Shiny apps consists of the same two main components:
 
 For big projects, the UI and server components may be defined in separate files called `ui.R` and `server.R` and saved in a folder representing the app.
 
-~~~r
-dir('my_app')
+~~~
+my_app
+├── ui.R
+├── server.R
+├── www
+└── data
 ~~~
 {:.input}
-
-~~~r
-[1] "ui.R"  "server.R"  "data" "www"
-~~~
-{:.output}
 
 ===
 
