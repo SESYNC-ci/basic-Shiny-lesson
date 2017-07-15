@@ -97,7 +97,7 @@ h5('This is a level 5 header')
 {:.output}
 
 ~~~r
-a(href='www.sesync.org', 'This syntax renders a link')
+a(href = 'www.sesync.org', 'This syntax renders a link')
 ~~~
 {:.input}
 

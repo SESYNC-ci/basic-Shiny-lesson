@@ -89,14 +89,6 @@ Render the species ID as text using `renderText()` in the server function, ident
 
 
 ~~~r
-# User Interface
-in1 <- selectInput(inputId = 'pick_species',
-                   label = 'Pick a species',
-                   choices = unique(species[['id']]))
-...
-tab <- tabPanel(title = 'Species', in1, ...)
-ui <- navbarPage(title = 'Portal Project', tab)
-
 # Server
 server <- function(input, output) {
   output[['species_id']] <- renderText(input[['pick_species']])
@@ -106,7 +98,7 @@ server <- function(input, output) {
 
 ===
 
-Display the species ID as text under the input object using `textOutput` in the UI.
+Display the species ID as text in the user interface's `tabPanel` as a `textOutput` object.
 
 
 ~~~r
@@ -117,15 +109,33 @@ in1 <- selectInput(inputId = 'pick_species',
 out1 <- textOutput('species_id')
 tab <- tabPanel(title = 'Species', in1, out1)
 ui <- navbarPage(title = 'Portal Project', tab)
+~~~
+{:.text-document title="{{ site.handouts[1] }}"}
+
+===
+
+Here is the complete `{{ site.handouts[1] }}`. Go ahead and **run the app!**
+
+
+~~~r
+# Data
+species <- read.csv('data/species.csv', stringsAsFactors = FALSE)
+animals <- read.csv('data/animals.csv', na.strings = '', stringsAsFactors = FALSE)
+
+# User Interface
+in1 <- selectInput(inputId = 'pick_species',
+                   label = 'Pick a species',
+		   choices = unique(species[['id']]))
+out1 <- textOutput('species_id')
+tab <- tabPanel(title = 'Species', in1, out1)
+ui <- navbarPage(title = 'Portal Project', tab)
 
 # Server
 server <- function(input, output) {
   output[['species_id']] <- renderText(input[['pick_species']])
-}
+  }
 ~~~
 {:.text-document title="{{ site.handouts[1] }}"}
-
-Go ahead and **run the app!**
 
 Render functions tell Shiny how to build an output object to display in the user interface.
 Output objects can be data frames, plots, images, text, or most anything you can create with R code to be visualized. 
@@ -147,6 +157,7 @@ First, the server must filter the survey data based on the selected species, and
 
 
 ~~~r
+# Server
 server <- function(input, output) {
   output[['species_id']] <- renderText(input[['pick_species']])
   output[['species_plot']] <- renderPlot(

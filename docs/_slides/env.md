@@ -15,15 +15,6 @@ The app script is in the same folder as `data`, and you only need to specify the
 # Data
 species <- read.csv('data/species.csv', stringsAsFactors = FALSE)
 animals <- read.csv('data/animals.csv', na.strings = '', stringsAsFactors = FALSE)
-
-# User Interface
-ui <- ...
-
-# Server
-server <- ...
-
-# Run app
-shinyApp(ui = ui, server = server)
 ~~~
 {:.text-document title="{{ site.handouts[1] }}"}
 

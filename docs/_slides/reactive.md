@@ -19,7 +19,7 @@ Question
 : Which element is an **observer** in the app within `{{ site.handouts[2] }}`.
 
 Answer
-: The object created by `renderPlot()` and stored with outputId "species_plot".
+: {:.fragment} The object created by `renderPlot()` and stored with outputId "species_plot".
 
 ===
 

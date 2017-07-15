@@ -86,14 +86,6 @@ The server function adds the result of each `render*()` function to a list of ou
 Render the species ID as text using `renderText()` in the server function, identifying the output as `species_id`.
 
 ```{r eval=FALSE, title='{{ site.handouts[1] }}'}
-# User Interface
-in1 <- selectInput(inputId = 'pick_species',
-                   label = 'Pick a species',
-                   choices = unique(species[['id']]))
-...
-tab <- tabPanel(title = 'Species', in1, ...)
-ui <- navbarPage(title = 'Portal Project', tab)
-
 # Server
 server <- function(input, output) {
   output[['species_id']] <- renderText(input[['pick_species']])
@@ -102,7 +94,7 @@ server <- function(input, output) {
 
 ===
 
-Display the species ID as text under the input object using `textOutput` in the UI.
+Display the species ID as text in the user interface's `tabPanel` as a `textOutput` object.
 
 ```{r eval=FALSE, title='{{ site.handouts[1] }}'}
 # User Interface
@@ -112,14 +104,30 @@ in1 <- selectInput(inputId = 'pick_species',
 out1 <- textOutput('species_id')
 tab <- tabPanel(title = 'Species', in1, out1)
 ui <- navbarPage(title = 'Portal Project', tab)
+```
+
+===
+
+Here is the complete `{{ site.handouts[1] }}`. Go ahead and **run the app!**
+
+```{r eval=FALSE, title='{{ site.handouts[1] }}'}
+# Data
+species <- read.csv('data/species.csv', stringsAsFactors = FALSE)
+animals <- read.csv('data/animals.csv', na.strings = '', stringsAsFactors = FALSE)
+
+# User Interface
+in1 <- selectInput(inputId = 'pick_species',
+                   label = 'Pick a species',
+		   choices = unique(species[['id']]))
+out1 <- textOutput('species_id')
+tab <- tabPanel(title = 'Species', in1, out1)
+ui <- navbarPage(title = 'Portal Project', tab)
 
 # Server
 server <- function(input, output) {
   output[['species_id']] <- renderText(input[['pick_species']])
-}
+  }
 ```
-
-Go ahead and **run the app!**
 
 Render functions tell Shiny how to build an output object to display in the user interface.
 Output objects can be data frames, plots, images, text, or most anything you can create with R code to be visualized. 
@@ -140,6 +148,7 @@ In `{{ site.handouts[2] }}`, we use the animals table to plot abundance of the s
 First, the server must filter the survey data based on the selected species, and then create a bar plot **within** the `renderPlot()` function. Don't forget to import the necessary libraries.
 
 ```{r eval=FALSE, title='{{ site.handouts[2] }}'}
+# Server
 server <- function(input, output) {
   output[['species_id']] <- renderText(input[['pick_species']])
   output[['species_plot']] <- renderPlot(
