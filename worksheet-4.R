@@ -15,7 +15,9 @@ in2 <- ...('slider_months',
                    ...,
 		   ...,
 		   ...)
-side <- sidebarPanel('Options', ...)
+img <- img(src = 'image-filename.png', alt = 'short image description')
+side <- sidebarPanel(img, 'Options', ...)
+out1 <- textOutput('species_label')
 out2 <- plotOutput('species_plot')
 main <- mainPanel(out2)
 tab <- tabPanel(title = 'Species',
@@ -29,7 +31,12 @@ server <- function(input, output) {
       ...
       ...
   )
-  
+  output[['species_label']] <- renderText(
+    species %>%
+      filter(id == input[['pick_species']]) %>%
+      select(genus, species) %>%
+      paste(collapse = ' ')
+  )
   output[['species_plot']] <- renderPlot(
     animals %>%
       filter(id == input[['pick_species']]) %>%
@@ -37,7 +44,6 @@ server <- function(input, output) {
     ggplot(aes(year)) +
       geom_bar()
   )
-
  ... <- renderDataTable(
     ...
     ...

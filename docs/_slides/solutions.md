@@ -21,14 +21,14 @@ animals <- read.csv('data/animals.csv', na.strings = '', stringsAsFactors = FALS
 in1 <- selectInput('pick_species',
                    label = 'Pick a species',
                    choices = unique(species[['id']]))
-out1 <- textOutput('species_name')
+out1 <- textOutput('species_label')
 out2 <- plotOutput('species_plot')
 tab <- tabPanel(title = 'Species',
                 in1, out1, out2)
 ui <- navbarPage(title = 'Portal Project', tab)
 
 server <- function(input, output) {
-  output[['species_name']] <- renderText(
+  output[['species_label']] <- renderText(
     species %>%
       filter(id == input[['pick_species']]) %>%
       select(genus, species) %>%
@@ -69,7 +69,7 @@ in1 <- selectInput('pick_species',
                    label = 'Pick a species',
                    choices = unique(species[['id']]))
 side <- sidebarPanel('Options', in1)
-out1 <- textOutput('species_name')
+out1 <- textOutput('species_label')
 out2 <- tabPanel(title = 'Plot',
                  plotOutput('species_plot'))
 out3 <- tabPanel(title = 'Data',
@@ -81,7 +81,7 @@ tab <- tabPanel(title = 'Species',
 ui <- navbarPage(title = 'Portal Project', tab)
 
 server <- function(input, output) {
-  output[['species_name']] <- renderText(
+  output[['species_label']] <- renderText(
     species %>%
       filter(id == input[['pick_species']]) %>%
       select(genus, species) %>%
@@ -127,7 +127,7 @@ in1 <- selectInput('pick_species',
                    choices = unique(species[['id']]))
 img <- img(src = 'image-filename.png', alt = 'short image description')                   
 side <- sidebarPanel(img, 'Options', in1)
-out1 <- textOutput('species_name')
+out1 <- textOutput('species_label')
 out2 <- tabPanel('Plot',
                  plotOutput('species_plot'))
 out3 <- tabPanel('Data',
@@ -139,7 +139,7 @@ tab <- tabPanel(title = 'Species',
 ui <- navbarPage(title = 'Portal Project', tab)
 
 server <- function(input, output) {
-  output[['species_name']] <- renderText(
+  output[['species_label']] <- renderText(
     species %>%
       filter(id == input[['pick_species']]) %>%
       select(genus, species) %>%
@@ -190,7 +190,7 @@ in2 <- sliderInput('slider_months',
                    max = 12,
                    value = c(1, 12))
 side <- sidebarPanel(img, 'Options', in1, in2)									    
-out1 <- textOutput('species_name')
+out1 <- textOutput('species_label')
 out2 <- tabPanel('Plot',
                  plotOutput('species_plot'))
 out3 <- tabPanel('Data',
@@ -210,7 +210,7 @@ server <- function(input, output) {
       filter(species_id == input[['pick_species']]) %>%
       filter(month %in% months)
   })
-  output[['species_name']] <- renderText(
+  output[['species_label']] <- renderText(
     species %>%
       filter(id == input[['pick_species']]) %>%
       select(genus, species) %>%

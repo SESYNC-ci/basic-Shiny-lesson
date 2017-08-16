@@ -85,13 +85,13 @@ The server function adds the result of each `render*()` function to a list of ou
 
 ## Textual Output
 
-Render the species ID as text using `renderText()` in the server function, identifying the output as `species_id`.
+Render the species ID as text using `renderText()` in the server function, identifying the output as `species_label`.
 
 
 ~~~r
 # Server
 server <- function(input, output) {
-  output[['species_id']] <- renderText(input[['pick_species']])
+  output[['species_label']] <- renderText(input[['pick_species']])
 }
 ~~~
 {:.text-document title="{{ site.handouts[1] }}"}
@@ -106,7 +106,7 @@ Display the species ID as text in the user interface's `tabPanel` as a `textOutp
 in1 <- selectInput(inputId = 'pick_species',
                    label = 'Pick a species',
                    choices = unique(species[['id']]))
-out1 <- textOutput('species_id')
+out1 <- textOutput('species_label')
 tab <- tabPanel(title = 'Species', in1, out1)
 ui <- navbarPage(title = 'Portal Project', tab)
 ~~~
@@ -126,13 +126,13 @@ animals <- read.csv('data/animals.csv', na.strings = '', stringsAsFactors = FALS
 in1 <- selectInput(inputId = 'pick_species',
                    label = 'Pick a species',
 		   choices = unique(species[['id']]))
-out1 <- textOutput('species_id')
+out1 <- textOutput('species_label')
 tab <- tabPanel(title = 'Species', in1, out1)
 ui <- navbarPage(title = 'Portal Project', tab)
 
 # Server
 server <- function(input, output) {
-  output[['species_id']] <- renderText(input[['pick_species']])
+  output[['species_label']] <- renderText(input[['pick_species']])
   }
 ~~~
 {:.text-document title="{{ site.handouts[1] }}"}
@@ -159,7 +159,7 @@ First, the server must filter the survey data based on the selected species, and
 ~~~r
 # Server
 server <- function(input, output) {
-  output[['species_id']] <- renderText(input[['pick_species']])
+  output[['species_label']] <- renderText(input[['pick_species']])
   output[['species_plot']] <- renderPlot(
     animals %>%
       filter(species_id == input[['pick_species']]) %>%
@@ -180,7 +180,7 @@ Second, use the corresponding `plotOutput()` function in the UI to display the p
 in1 <- selectInput(inputId = 'pick_species',
                    label = 'Pick a species',
                    choices = unique(species[['id']]))
-out1 <- textOutput('species_id')
+out1 <- textOutput('species_label')
 out2 <- plotOutput('species_plot')
 tab <- tabPanel('Species', in1, out1, out2)
 ui <- navbarPage(title = 'Portal Project', tab)
@@ -191,7 +191,7 @@ ui <- navbarPage(title = 'Portal Project', tab)
 
 ## Exercise 1
 
-Change `out1` to have an `outputId` of "species_name" and modify the `renderText()` function to print the genus and species above the plot, rather than the species ID. Hint: The function `paste()` with argument `collapse = ' '` will convert a data frame row to a text string.
+Modify the call to `renderText()`, used to create `output[['species_label']]`, to produce a label with the genus and species above the plot, rather than the species ID. Hint: The function `paste()` with argument `collapse = ' '` will convert a data frame row to a text string.
 
 [View solution](#solution-1)
 {:.notes}

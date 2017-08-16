@@ -40,7 +40,7 @@ To re-organize the elements of the "Species" tab using a sidebar layout, we modi
 in1 <- selectInput('pick_species',
                    label = 'Pick a species',
                    choices = unique(species[['id']]))
-out1 <- plotOutput('species_name')
+out1 <- textOutput('species_label')
 out2 <- plotOutput('species_plot')
 side <- sidebarPanel('Options', in1)
 main <- mainPanel(out1, out2)

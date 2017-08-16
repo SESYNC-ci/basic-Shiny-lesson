@@ -32,7 +32,8 @@ in2 <- sliderInput('slider_months',
                    min = 1,
                    max = 12,
                    value = c(1, 12))
-side <- sidebarPanel('Options', in1, in2)									    
+img <- img(src = 'image-filename.png', alt = 'short image description')
+side <- sidebarPanel(img, 'Options', in1, in2)									    
 ~~~
 {:.text-document title="{{ site.handouts[3] }}"}
 
@@ -83,6 +84,12 @@ server <- function(input, output) {
     reactive_seq <- reactive(
         seq(input[['slider_months']][1],
             input[['slider_months']][2])
+    )
+    output[['species_label']] <- renderText(
+      species %>%
+        filter(id == input[['pick_species']]) %>%
+        select(genus, species) %>%
+        paste(collapse = ' ')
     )
     output[['species_plot']] <- renderPlot(
         animals %>%
