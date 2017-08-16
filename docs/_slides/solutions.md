@@ -183,12 +183,12 @@ animals <- read.csv('data/animals.csv', na.strings = '', stringsAsFactors = FALS
 in1 <- selectInput('pick_species',
                    label = 'Pick a species',
                    choices = unique(species[['id']]))
-img <- img(src = 'image-filename.png', alt = 'short image description')
 in2 <- sliderInput('slider_months',
                    label = 'Month Range',
                    min = 1,
                    max = 12,
                    value = c(1, 12))
+img <- img(src = 'image-filename.png', alt = 'short image description')
 side <- sidebarPanel(img, 'Options', in1, in2)									    
 out1 <- textOutput('species_label')
 out2 <- tabPanel('Plot',
