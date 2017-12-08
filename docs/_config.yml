@@ -6,6 +6,9 @@ handouts:
  - worksheet-2.R
  - worksheet-3.R
  - worksheet-4.R
+ - data/species.csv
+ - data/animals.csv
+ - data/README.md
 tag: v0.1
 lesson: 8
 instructor: Kelly Hondula
