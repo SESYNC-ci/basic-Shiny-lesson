@@ -10,4 +10,4 @@
 -------------------------------------->
 
 [lesson]: http://sesync-ci.github.io/basic-Shiny-lesson
-[slideshow]: http://sesync-ci.github.io/basic-Shiny-lesson/instructor
+[slideshow]: http://sesync-ci.github.io/basic-Shiny-lesson/slides
