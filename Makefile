@@ -26,7 +26,8 @@ slides: $(SLIDES:%=docs/_slides/%.md) | .git/refs/remotes/upstream
 .git/refs/remotes/upstream:
 	git remote add upstream "git@github.com:sesync-ci/lesson-style.git"
 	git fetch upstream
-	git branch --track upstream upstream/master
+	git checkout -b upstream upstream/master
+	git checkout master
 
 # cannot use a pattern as the next three targets, because
 # the targets are only a subset of docs/_slides/%.md
@@ -47,7 +48,6 @@ lesson: slides
 	git fetch upstream master:upstream
 	git merge --no-edit upstream
 	git push
-	ln *.Rproj handouts.Rproj && zip -FSr handouts handouts.Rproj $(HANDOUTS) && rm handouts.Rproj
 
 # make target "course" copies lesson handouts to the handouts repository
 # adding a lesson number to any "worksheet"
@@ -65,3 +65,7 @@ $(DATA): ../%: %
 # command line parameter for DATE
 archive:
 	@curl "https://sesync-ci.github.io/$${PWD##*/}/course/archive.html" -o docs/_posts/$(DATE)-index.html
+
+# create binary for GitHub release
+release:
+	ln *.Rproj handouts.Rproj && zip -FSr handouts handouts.Rproj $(HANDOUTS) && rm handouts.Rproj
