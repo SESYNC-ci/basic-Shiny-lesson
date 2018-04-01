@@ -47,6 +47,7 @@ shinyApp(ui = ui, server = server)
 ~~~
 {:.text-document title="{{ site.handouts[2] }}"}
 
+
 [Return](#exercise-1)
 {:.notes}
 
@@ -103,6 +104,7 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ~~~
 {:.text-document title="{{ site.handouts[2] }}"}
+
 
 [Return](#exercise-2)
 {:.notes}
@@ -161,6 +163,7 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ~~~
 {:.text-document title="{{ site.handouts[2] }}"}
+
 
 [Return](#exercise-3)
 {:.notes}
@@ -227,6 +230,7 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ~~~
 {:.text-document title="{{ site.handouts[3] }}"}
+
 
 [Return](#exercise-4)
 {:.notes}

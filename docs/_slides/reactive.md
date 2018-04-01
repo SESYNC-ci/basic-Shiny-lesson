@@ -37,6 +37,7 @@ side <- sidebarPanel(img, 'Options', in1, in2)
 ~~~
 {:.text-document title="{{ site.handouts[3] }}"}
 
+
 ===
 
 To limit animals to the user specified months, an additional filter is needed within the `renderPlot()` function like
@@ -46,6 +47,7 @@ To limit animals to the user specified months, an additional filter is needed wi
 filter(month %in% ...)
 ~~~
 {:.input}
+
 
 In order for `filter()` to dynamically respond to the slider, whatever replaces `...` must react to the slider.
 
@@ -59,6 +61,7 @@ filter(month %in% reactive_seq())
 ~~~
 {:.input}
 
+
 ===
 
 The `%in%` test within `filter()` needs a sequence, so we wrap `seq` in `reactive` to generate a function that takes no direct input.
@@ -71,6 +74,7 @@ reactive_seq <- reactive(
     )
 ~~~
 {:.text-document title="{{ site.handouts[3] }}"}
+
 
 ===
 
@@ -106,6 +110,7 @@ server <- function(input, output) {
 }
 ~~~
 {:.text-document title="{{ site.handouts[3] }}"}
+
 
 ===
 

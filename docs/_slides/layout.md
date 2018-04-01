@@ -51,6 +51,7 @@ ui <- navbarPage(title = 'Portal Project', tab)
 ~~~
 {:.text-document title="{{ site.handouts[2] }}"}
 
+
 ===
 
 ## Exercise 2
@@ -82,6 +83,7 @@ fluidPage(
   ))
 ~~~
 {:.input}
+
 
 ===
 

@@ -18,4 +18,5 @@ animals <- read.csv('data/animals.csv', na.strings = '', stringsAsFactors = FALS
 ~~~
 {:.text-document title="{{ site.handouts[1] }}"}
 
+
 Shiny apps can also be designed to interact with remote data or shared databases.

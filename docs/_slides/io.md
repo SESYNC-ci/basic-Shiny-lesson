@@ -51,6 +51,7 @@ ui <- navbarPage(title = 'Portal Project', tab)
 ~~~
 {:.text-document title="{{ site.handouts[1] }}"}
 
+
 Use the `selectInput()` function to create an input object called `pick_species`.
 Use the `choices = ` argument to define a vector with the unique values in the species id column.
 Make the input object an argument to the function `tabPanel()`, preceded by a title argument.
@@ -96,6 +97,7 @@ server <- function(input, output) {
 ~~~
 {:.text-document title="{{ site.handouts[1] }}"}
 
+
 ===
 
 Display the species ID as text in the user interface's `tabPanel` as a `textOutput` object.
@@ -111,6 +113,7 @@ tab <- tabPanel(title = 'Species', in1, out1)
 ui <- navbarPage(title = 'Portal Project', tab)
 ~~~
 {:.text-document title="{{ site.handouts[1] }}"}
+
 
 ===
 
@@ -136,6 +139,7 @@ server <- function(input, output) {
   }
 ~~~
 {:.text-document title="{{ site.handouts[1] }}"}
+
 
 Render functions tell Shiny how to build an output object to display in the user interface.
 Output objects can be data frames, plots, images, text, or most anything you can create with R code to be visualized. 
@@ -169,6 +173,7 @@ server <- function(input, output) {
 }
 ~~~
 {:.text-document title="{{ site.handouts[2] }}"}
+
 
 ===
 

@@ -52,6 +52,7 @@ shinyApp(ui = ui, server = server)
 ~~~
 {:.text-document title="my_app.R"}
 
+
 ===
 
 ## Hello, Shiny World!
@@ -70,6 +71,7 @@ server <- function(input, output){}
 shinyApp(ui = ui, server = server)
 ~~~
 {:.text-document title="{{ site.handouts[0] }}"}
+
 
 ===
 
