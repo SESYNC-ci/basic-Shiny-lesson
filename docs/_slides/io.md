@@ -40,6 +40,7 @@ See a gallery of input objects with sample code [here](http://shiny.rstudio.com/
 Define the UI by adding an input object that lets users select a species ID from the species table.
 
 
+
 ~~~r
 # User Interface
 in1 <- selectInput(inputId = 'pick_species',
@@ -49,7 +50,7 @@ in1 <- selectInput(inputId = 'pick_species',
 tab <- tabPanel(title = 'Species', in1, ...)
 ui <- navbarPage(title = 'Portal Project', tab)
 ~~~
-{:.text-document title="{{ site.handouts[1] }}"}
+{:.text-document .no-eval title="{{ site.handouts[1] }}"}
 
 
 Use the `selectInput()` function to create an input object called `pick_species`.
@@ -89,18 +90,20 @@ The server function adds the result of each `render*()` function to a list of ou
 Render the species ID as text using `renderText()` in the server function, identifying the output as `species_label`.
 
 
+
 ~~~r
 # Server
 server <- function(input, output) {
   output[['species_label']] <- renderText(input[['pick_species']])
 }
 ~~~
-{:.text-document title="{{ site.handouts[1] }}"}
+{:.text-document .no-eval title="{{ site.handouts[1] }}"}
 
 
 ===
 
 Display the species ID as text in the user interface's `tabPanel` as a `textOutput` object.
+
 
 
 ~~~r
@@ -112,12 +115,13 @@ out1 <- textOutput('species_label')
 tab <- tabPanel(title = 'Species', in1, out1)
 ui <- navbarPage(title = 'Portal Project', tab)
 ~~~
-{:.text-document title="{{ site.handouts[1] }}"}
+{:.text-document .no-eval title="{{ site.handouts[1] }}"}
 
 
 ===
 
 Here is the complete `{{ site.handouts[1] }}`. Go ahead and **run the app!**
+
 
 
 ~~~r
@@ -138,7 +142,7 @@ server <- function(input, output) {
   output[['species_label']] <- renderText(input[['pick_species']])
   }
 ~~~
-{:.text-document title="{{ site.handouts[1] }}"}
+{:.text-document .no-eval title="{{ site.handouts[1] }}"}
 
 
 Render functions tell Shiny how to build an output object to display in the user interface.
@@ -160,6 +164,7 @@ In `{{ site.handouts[2] }}`, we use the animals table to plot abundance of the s
 First, the server must filter the survey data based on the selected species, and then create a bar plot **within** the `renderPlot()` function. Don't forget to import the necessary libraries.
 
 
+
 ~~~r
 # Server
 server <- function(input, output) {
@@ -172,12 +177,13 @@ server <- function(input, output) {
   )
 }
 ~~~
-{:.text-document title="{{ site.handouts[2] }}"}
+{:.text-document .no-eval title="{{ site.handouts[2] }}"}
 
 
 ===
 
 Second, use the corresponding `plotOutput()` function in the UI to display the plot in the app. 
+
 
 
 ~~~r
@@ -190,7 +196,8 @@ out2 <- plotOutput('species_plot')
 tab <- tabPanel('Species', in1, out1, out2)
 ui <- navbarPage(title = 'Portal Project', tab)
 ~~~
-{:.text-document title="{{ site.handouts[2] }}"}
+{:.text-document .no-eval title="{{ site.handouts[2] }}"}
+
 
 ===
 

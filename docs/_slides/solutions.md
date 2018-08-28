@@ -8,6 +8,7 @@
 ## Solution 1
 
 
+
 ~~~r
 # Libraries
 library(ggplot2)
@@ -45,7 +46,7 @@ server <- function(input, output) {
 # Create the Shiny App
 shinyApp(ui = ui, server = server)
 ~~~
-{:.text-document title="{{ site.handouts[2] }}"}
+{:.text-document .no-eval title="{{ site.handouts[2] }}"}
 
 
 [Return](#exercise-1)
@@ -54,6 +55,7 @@ shinyApp(ui = ui, server = server)
 ===
 
 ## Solution 2
+
 
 
 ~~~r
@@ -103,7 +105,7 @@ server <- function(input, output) {
 # Create the Shiny App
 shinyApp(ui = ui, server = server)
 ~~~
-{:.text-document title="{{ site.handouts[2] }}"}
+{:.text-document .no-eval title="{{ site.handouts[2] }}"}
 
 
 [Return](#exercise-2)
@@ -112,6 +114,7 @@ shinyApp(ui = ui, server = server)
 ===
 
 ## Solution 3
+
 
 
 ~~~r
@@ -162,7 +165,7 @@ server <- function(input, output) {
 # Create the Shiny App
 shinyApp(ui = ui, server = server)
 ~~~
-{:.text-document title="{{ site.handouts[2] }}"}
+{:.text-document .no-eval title="{{ site.handouts[2] }}"}
 
 
 [Return](#exercise-3)
@@ -171,6 +174,7 @@ shinyApp(ui = ui, server = server)
 ===
 
 ## Solution 4
+
 
 
 ~~~r
@@ -229,7 +233,7 @@ server <- function(input, output) {
 # Create the Shiny App
 shinyApp(ui = ui, server = server)
 ~~~
-{:.text-document title="{{ site.handouts[3] }}"}
+{:.text-document .no-eval title="{{ site.handouts[3] }}"}
 
 
 [Return](#exercise-4)

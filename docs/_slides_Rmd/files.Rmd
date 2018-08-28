@@ -33,7 +33,7 @@ my_app
 ├── www
 └── data
 ~~~
-{:.input}
+{:.text-document.no-eval title="App Folder"}
 
 ===
 

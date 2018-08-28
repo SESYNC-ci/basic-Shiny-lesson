@@ -36,6 +36,7 @@ Mistakes in usage of commas and parentheses between UI elements is one of the fi
 To re-organize the elements of the "Species" tab using a sidebar layout, we modify the UI to specify the sidebar and main elements.
 
 
+
 ~~~r
 # User Interface
 in1 <- selectInput('pick_species',
@@ -49,7 +50,7 @@ tab <- tabPanel('Species',
                 sidebarLayout(side, main))
 ui <- navbarPage(title = 'Portal Project', tab)						      
 ~~~
-{:.text-document title="{{ site.handouts[2] }}"}
+{:.text-document .no-eval title="{{ site.handouts[2] }}"}
 
 
 ===
@@ -71,18 +72,19 @@ Notice the many features of the data table output. There are many options that c
 The `fluidPage()` layout design consists of rows which contain columns of elements. To use it, first define the width of an element relative to a 12-unit grid within each column using the function `fluidRow()` and listing columns in units of 12. The argument `offset` can be used to add extra spacing. For example:
 
 
+
 ~~~r
-fluidPage(
-  fluidRow(
-    column(4, '4'),
-    column(4, offset = 4, '4 offset 4')      
-  ),
-  fluidRow(
-    column(3, offset = 3, '3 offset 3'),
-    column(3, offset = 3, '3 offset 3')  
-  ))
+> fluidPage(
++   fluidRow(
++     column(4, '4'),
++     column(4, offset = 4, '4 offset 4')      
++   ),
++   fluidRow(
++     column(3, offset = 3, '3 offset 3'),
++     column(3, offset = 3, '3 offset 3')  
++   ))
 ~~~
-{:.input}
+{:.input title="Console"}
 
 
 ===

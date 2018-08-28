@@ -25,11 +25,12 @@ Shiny is a web application framework for R that allows you to create interactive
 The `shiny` package includes some built-in examples to demonstrate some of its basic features. When applications are running, they are displayed in a separate browser window or the RStudio Viewer pane. 
 
 
+
 ~~~r
-library(shiny)
-runExample('01_hello')
+> library(shiny)
+> runExample('01_hello')
 ~~~
-{:.input}
+{:.input title="Console"}
 
 
 ===

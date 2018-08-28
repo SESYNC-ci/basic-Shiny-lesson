@@ -11,12 +11,13 @@ Here, we read in CSV files from the Portal dataset, so it is available to both t
 The app script is in the same folder as `data`, and you only need to specify the _relative_ file path.
 
 
+
 ~~~r
 # Data
 species <- read.csv('data/species.csv', stringsAsFactors = FALSE)
 animals <- read.csv('data/animals.csv', na.strings = '', stringsAsFactors = FALSE)
 ~~~
-{:.text-document title="{{ site.handouts[1] }}"}
+{:.text-document .no-eval title="{{ site.handouts[1] }}"}
 
 
 Shiny apps can also be designed to interact with remote data or shared databases.

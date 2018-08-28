@@ -33,11 +33,12 @@ my_app
 ├── www
 └── data
 ~~~
-{:.input}
+{:.text-document.no-eval title="App Folder"}
 
 ===
 
 For ease of demonstration, we'll use the alternative approach of defining UI and server objects in a R script representing the app.
+
 
 
 ~~~r
@@ -50,7 +51,7 @@ server <- ...
 # Create the Shiny App
 shinyApp(ui = ui, server = server)
 ~~~
-{:.text-document title="my_app.R"}
+{:.text-document .no-eval title="my_app.R"}
 
 
 ===
@@ -58,6 +59,7 @@ shinyApp(ui = ui, server = server)
 ## Hello, Shiny World!
 
 Open `{{ site.handouts[0] }}` in your handouts repository. In this file, define objects `ui` and `server` with the assignment operator `<-` and then pass them to the function `shinyApp()`. These are the basic components of a shiny app.
+
 
 
 ~~~r
@@ -70,7 +72,7 @@ server <- function(input, output){}
 # Create the Shiny App
 shinyApp(ui = ui, server = server)
 ~~~
-{:.text-document title="{{ site.handouts[0] }}"}
+{:.text-document .no-eval title="{{ site.handouts[0] }}"}
 
 
 ===

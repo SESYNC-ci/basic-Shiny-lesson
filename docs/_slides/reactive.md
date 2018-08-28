@@ -26,6 +26,7 @@ Answer
 In `{{ site.handouts[3] }}` we're going to create a new input object in the sidebar panel that constrains the plotted data to a user defined range of months.
 
 
+
 ~~~r
 in2 <- sliderInput('slider_months',
                    label = 'Month Range',
@@ -35,7 +36,7 @@ in2 <- sliderInput('slider_months',
 img <- img(src = 'image-filename.png', alt = 'short image description')
 side <- sidebarPanel(img, 'Options', in1, in2)									    
 ~~~
-{:.text-document title="{{ site.handouts[3] }}"}
+{:.text-document .no-eval title="{{ site.handouts[3] }}"}
 
 
 ===
@@ -43,10 +44,11 @@ side <- sidebarPanel(img, 'Options', in1, in2)
 To limit animals to the user specified months, an additional filter is needed within the `renderPlot()` function like
 
 
+
 ~~~r
-filter(month %in% ...)
+> filter(month %in% ...)
 ~~~
-{:.input}
+{:.input title="Console"}
 
 
 In order for `filter()` to dynamically respond to the slider, whatever replaces `...` must react to the slider.
@@ -56,15 +58,17 @@ In order for `filter()` to dynamically respond to the slider, whatever replaces 
 Shiny provides the `reactive()` function for such times when an appropriate `*Input()` object isn't available. The value returned by `reactive()` will also be a function.
 
 
+
 ~~~r
-filter(month %in% reactive_seq())
+> filter(month %in% reactive_seq())
 ~~~
-{:.input}
+{:.input title="Console"}
 
 
 ===
 
 The `%in%` test within `filter()` needs a sequence, so we wrap `seq` in `reactive` to generate a function that takes no direct input.
+
 
 
 ~~~r
@@ -73,12 +77,13 @@ reactive_seq <- reactive(
         input[['slider_months']][2])
     )
 ~~~
-{:.text-document title="{{ site.handouts[3] }}"}
+{:.text-document .no-eval title="{{ site.handouts[3] }}"}
 
 
 ===
 
 The `reactive_seq` can now be embedded in the `renderPlot()` and `renderDataTable()` functions.
+
 
 
 ~~~r
@@ -109,7 +114,7 @@ server <- function(input, output) {
     )
 }
 ~~~
-{:.text-document title="{{ site.handouts[3] }}"}
+{:.text-document .no-eval title="{{ site.handouts[3] }}"}
 
 
 ===
