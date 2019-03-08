@@ -210,7 +210,7 @@ ui <- navbarPage(title = 'Portal Project', tab)
 
 # Server
 server <- function(input, output) {
-  reactive_data_frame <- reactive({
+  selected_animals <- reactive({
     months <- seq(input[['slider_months']][1],
                   input[['slider_months']][2])
     animals %>%
@@ -224,10 +224,10 @@ server <- function(input, output) {
       paste(collapse = ' ')
   )
   output[['species_plot']] <- renderPlot(
-    ggplot(reactive_data_frame(), aes(year)) +
+    ggplot(selected_animals(), aes(year)) +
       geom_bar()
   )
-  output[['species_table']] <- renderDataTable(reactive_data_frame())
+  output[['species_table']] <- renderDataTable(selected_animals())
 }
 
 # Create the Shiny App

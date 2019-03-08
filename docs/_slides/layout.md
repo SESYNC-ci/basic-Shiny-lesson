@@ -93,23 +93,27 @@ The `fluidPage()` layout design consists of rows which contain columns of elemen
 
 Along with input and output objects, you can add headers, text, images, links, and other html objects to the user interface using "builder" functions. There are shiny function equivalents for many common html tags such as `h1()` through `h6()` for headers. You can use the console to see that the return from these functions produce HTML code.
 
+
+
 ~~~r
-h5('This is a level 5 header')
+> h5('This is a level 5 header')
 ~~~
-{:.input}
+{:.input title="Console"}
 
 ~~~
 <h5>This is a level 5 header</h5>
 ~~~
 {:.output}
 
+
+
 ~~~r
-a(href = 'www.sesync.org', 'This syntax renders a link')
+> a(href = 'https://www.sesync.org', 'This renders a link')
 ~~~
-{:.input}
+{:.input title="Console"}
 
 ~~~
-<a href="www.sesync.org">This syntax renders a link</a>
+<a href="https://www.sesync.org">This renders a link</a>
 ~~~
 {:.output}
 

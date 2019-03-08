@@ -55,24 +55,24 @@ In order for `filter()` to dynamically respond to the slider, whatever replaces 
 
 ===
 
-Shiny provides the `reactive()` function for such times when an appropriate `*Input()` object isn't available. The value returned by `reactive()` will also be a function.
+Shiny provides a function factory called `reactive()`, which creates functions that behave like the elements in the `input` list. We'll use it to create the function `slider_months()` to dynamically update the filter.
 
 
 
 ~~~r
-> filter(month %in% reactive_seq())
+> filter(month %in% slider_months())
 ~~~
 {:.input title="Console"}
 
 
 ===
 
-The `%in%` test within `filter()` needs a sequence, so we wrap `seq` in `reactive` to generate a function that takes no direct input.
+The `%in%` test within `filter()` needs a sequence, so we wrap `seq` in `reactive` to generate a function that responds to a user input.
 
 
 
 ~~~r
-reactive_seq <- reactive(
+slider_months <- reactive(
     seq(input[['slider_months']][1],
         input[['slider_months']][2])
     )
@@ -82,7 +82,7 @@ reactive_seq <- reactive(
 
 ===
 
-The `reactive_seq` can now be embedded in the `renderPlot()` and `renderDataTable()` functions.
+The `slider_months` can now be embedded in the `renderPlot()` and `renderDataTable()` functions.
 
 
 
@@ -90,7 +90,7 @@ The `reactive_seq` can now be embedded in the `renderPlot()` and `renderDataTabl
 # Server
 server <- function(input, output) {
 
-    reactive_seq <- reactive(
+    slider_months <- reactive(
         seq(input[['slider_months']][1],
             input[['slider_months']][2])
     )
@@ -103,14 +103,14 @@ server <- function(input, output) {
     output[['species_plot']] <- renderPlot(
         animals %>%
             filter(species_id == input[['pick_species']]) %>%
-            filter(month %in% reactive_seq()) %>%
+            filter(month %in% slider_months()) %>%
         ggplot(aes(year)) +
             geom_bar()
     )
     output[['species_table']] <- renderDataTable(
         animals %>%
             filter(species_id == input[['pick_species']]) %>%
-            filter(month %in% reqctive_seq())
+            filter(month %in% slider_months())
     )
 }
 ~~~
@@ -121,4 +121,4 @@ server <- function(input, output) {
 
 ## Exercise 4
 
-Notice the exact same code exists twice within the server function, once for `renderPlot()` and once for `renderDataTable`. Replace `reactive_seq` with a new `reactive_data_frame` that returns the filtered `data.frame`. Bask in the knowledge of how much CPU time you'll save.
+Notice the exact same code exists twice within the server function, once for `renderPlot()` and once for `renderDataTable`. The server has no way to identify an intermediate result, the filtered data frame, that it could reuse. Replace `slider_months` with a new `selection_animals()` function that returns the needed `data.frame`. Bask in the knowledge of how much CPU time you'll save.

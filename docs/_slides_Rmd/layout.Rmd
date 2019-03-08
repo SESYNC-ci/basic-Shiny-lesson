@@ -86,23 +86,19 @@ fluidPage(
 
 Along with input and output objects, you can add headers, text, images, links, and other html objects to the user interface using "builder" functions. There are shiny function equivalents for many common html tags such as `h1()` through `h6()` for headers. You can use the console to see that the return from these functions produce HTML code.
 
-~~~r
+```{r, eval=FALSE}
 h5('This is a level 5 header')
-~~~
-{:.input}
-
+```
 ~~~
 <h5>This is a level 5 header</h5>
 ~~~
 {:.output}
 
-~~~r
-a(href = 'www.sesync.org', 'This syntax renders a link')
+```{r, eval=FALSE}
+a(href = 'https://www.sesync.org', 'This renders a link')
+```
 ~~~
-{:.input}
-
-~~~
-<a href="www.sesync.org">This syntax renders a link</a>
+<a href="https://www.sesync.org">This renders a link</a>
 ~~~
 {:.output}
 
