@@ -5,7 +5,7 @@
 
 Once you have made an app, there are several ways to share it with others. It is important to make sure that everything the app needs to run (data and packages) will be loaded into the R session. 
 
-There is a series of articles on the RStudio website [here](http://shiny.rstudio.com/articles/) about deploying apps.
+There is a series of articles on the RStudio website [about deploying apps](http://shiny.rstudio.com/articles/#deployment).
 
 ===
 
