@@ -3,15 +3,19 @@
 
 ## Reactivity
 
-Input objects are **reactive** which means that an update to this value by a user will notify objects in the server that its value has been changed.
+Input objects are **reactive** which means that an update to this value by a
+user will notify objects in the server that its value has been changed.
 
-The outputs of render functions are called **observers** because they observe all "upstream" reactive values for changes.
+The outputs of render functions are called **observers** because they observe
+all "upstream" reactive values for relevant changes.
 
 ===
 
-## Reactive objects
+## Reactive Objects
 
-The code inside the body of `render*()` functions will re-run whenever a reactive value (e.g. an input objet) inside the code is changed by the user. When any observer is re-rendered, the UI is notified that it has to update.
+The code inside the body of `render*()` functions will re-run whenever a
+reactive value (e.g. an input objet) inside the code is changed by the user.
+When any observer is re-rendered, the UI is notified that it has to update.
 
 ===
 
@@ -23,66 +27,82 @@ Answer
 
 ===
 
-In `{{ site.handouts[3] }}` we're going to create a new input object in the sidebar panel that constrains the plotted data to a user defined range of months.
+The app in `{{ site.handouts[3] }}` will have a new input object in the sidebar
+panel, a slider that constrains the plotted data to a user defined range of
+months.
 
 
 
 ~~~r
-in2 <- sliderInput('slider_months',
-                   label = 'Month Range',
-                   min = 1,
-                   max = 12,
-                   value = c(1, 12))
-img <- img(src = 'image-filename.png', alt = 'short image description')
-side <- sidebarPanel(img, 'Options', in1, in2)									    
+in2 <- sliderInput(
+  inputId = 'slider_months',
+  label = 'Month Range',
+  min = 1,
+  max = 12,
+  value = c(1, 12))
+side <- sidebarPanel(
+  'Options', in1, in2)
 ~~~
 {:.text-document .no-eval title="{{ site.handouts[3] }}"}
 
 
 ===
 
-To limit animals to the user specified months, an additional filter is needed within the `renderPlot()` function like
+The goal is to limit animals records to the user's input by adding an additional
+filter within the `renderPlot()` function.
 
 
 
 ~~~r
-> filter(month %in% ...)
+filter(month %in% ...)
 ~~~
-{:.input title="Console"}
+{:.text-document .no-eval title="{{ site.handouts[3] }}"}
 
 
-In order for `filter()` to dynamically respond to the slider, whatever replaces `...` must react to the slider.
+In order for `filter()` to dynamically respond to the slider, whatever replaces
+`...` must react to the slider.
 
 ===
 
-Shiny provides a function factory called `reactive()`, which creates functions that behave like the elements in the `input` list. We'll use it to create the function `slider_months()` to dynamically update the filter.
+Shiny provides a function factory called `reactive()`, which creates functions
+that behave like the elements in the `input` list--they are reactive. We'll use
+it to create the function `slider_months()` to dynamically update the filter.
 
 
 
 ~~~r
-> filter(month %in% slider_months())
-~~~
-{:.input title="Console"}
-
-
-===
-
-The `%in%` test within `filter()` needs a sequence, so we wrap `seq` in `reactive` to generate a function that responds to a user input.
-
-
-
-~~~r
-slider_months <- reactive(
-    seq(input[['slider_months']][1],
-        input[['slider_months']][2])
-    )
+slider_months <- reactive({
+    ...
+    ...
+  })
+...
+filter(month %in% slider_months())
 ~~~
 {:.text-document .no-eval title="{{ site.handouts[3] }}"}
 
 
 ===
 
-The `slider_months` can now be embedded in the `renderPlot()` and `renderDataTable()` functions.
+The `%in%` test within `filter()` needs a sequence, so we wrap `seq` in
+`reactive` to generate a function that responds to a user input.
+
+
+
+~~~r
+slider_months <- reactive({
+  seq(input[['slider_months']][1],
+    input[['slider_months']][2])
+  })
+~~~
+{:.text-document .no-eval title="{{ site.handouts[3] }}"}
+
+
+===
+
+The `slider_months` can now be embedded in the `renderPlot()` and
+`renderDataTable()` functions.
+
+===
 
 
 
@@ -90,28 +110,28 @@ The `slider_months` can now be embedded in the `renderPlot()` and `renderDataTab
 # Server
 server <- function(input, output) {
 
-    slider_months <- reactive(
-        seq(input[['slider_months']][1],
-            input[['slider_months']][2])
-    )
-    output[['species_label']] <- renderText(
-      species %>%
-        filter(id == input[['pick_species']]) %>%
-        select(genus, species) %>%
-        paste(collapse = ' ')
-    )
-    output[['species_plot']] <- renderPlot(
-        animals %>%
-            filter(species_id == input[['pick_species']]) %>%
-            filter(month %in% slider_months()) %>%
-        ggplot(aes(year)) +
-            geom_bar()
-    )
-    output[['species_table']] <- renderDataTable(
-        animals %>%
-            filter(species_id == input[['pick_species']]) %>%
-            filter(month %in% slider_months())
-    )
+  slider_months <- reactive({
+    seq(input[['slider_months']][1],
+      input[['slider_months']][2])
+    })
+  output[['species_label']] <- renderText({
+    species %>%
+      filter(id == input[['pick_species']]) %>%
+      select(genus, species) %>%
+      paste(collapse = ' ')
+    })
+  output[['species_plot']] <- renderPlot({
+    df <- animals %>%
+      filter(species_id == input[['pick_species']]) %>%
+      filter(month %in% slider_months()) %>%
+    ggplot(df, aes(year)) +
+      geom_bar()
+    })
+  output[['species_table']] <- renderDataTable({
+    animals %>%
+      filter(species_id == input[['pick_species']]) %>%
+      filter(month %in% slider_months())
+    })
 }
 ~~~
 {:.text-document .no-eval title="{{ site.handouts[3] }}"}
@@ -121,4 +141,8 @@ server <- function(input, output) {
 
 ## Exercise 4
 
-Notice the exact same code exists twice within the server function, once for `renderPlot()` and once for `renderDataTable`. The server has no way to identify an intermediate result, the filtered data frame, that it could reuse. Replace `slider_months` with a new `selection_animals()` function that returns the needed `data.frame`. Bask in the knowledge of how much CPU time you'll save.
+Notice the exact same code exists twice within the server function, once for
+`renderPlot()` and once for `renderDataTable`. The server has no way to identify
+an intermediate result, the filtered data frame, that it could reuse. Replace
+`slider_months()` with a new `selection_animals()` function that returns the
+needed `data.frame`. Bask in the knowledge of how much CPU time you'll save.

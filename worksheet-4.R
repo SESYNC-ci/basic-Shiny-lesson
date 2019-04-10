@@ -3,20 +3,25 @@ library(ggplot2)
 library(dplyr)
 
 # Data
-species <- read.csv('data/species.csv', stringsAsFactors = FALSE)
-animals <- read.csv('data/animals.csv', na.strings = '', stringsAsFactors = FALSE)
+species <- read.csv('data/species.csv',
+  stringsAsFactors = FALSE)
+animals <- read.csv('data/animals.csv',
+  na.strings = '',
+  stringsAsFactors = FALSE)
 
 # User Interface
-in1 <- selectInput(inputId = 'pick_species',
-                   label = 'Pick a Species',
-                   choices = unique(species[['id']]))
-in2 <- ...('slider_months',
-                   ...,
-                   ...,
-		   ...,
-		   ...)
-img <- img(src = 'image-filename.png', alt = 'short image description')
-side <- sidebarPanel(img, 'Options', ...)
+in1 <- selectInput(
+  inputId = 'pick_species',
+  label = 'Pick a Species',
+  choices = unique(species[['id']]))
+in2 <- ...(
+  ... = 'slider_months',
+  ...,
+  ...,
+  ...,
+  ...)
+side <- sidebarPanel(
+  'Options', ...)
 out1 <- textOutput('species_label')
 out2 <- plotOutput('species_plot')
 main <- mainPanel(out2)
@@ -27,28 +32,28 @@ ui <- navbarPage('Portal Project', tab)
 # Server
 server <- function(input, output) {
 
-  ... <- reactive(
-      ...
-      ...
-  )
+  slider_months <- reactive({
+    ...
+    ...
+  })
   output[['species_label']] <- renderText(
     species %>%
       filter(id == input[['pick_species']]) %>%
       select(genus, species) %>%
       paste(collapse = ' ')
   )
-  output[['species_plot']] <- renderPlot(
-    animals %>%
+  output[['species_plot']] <- renderPlot({
+    df <- animals %>%
       filter(id == input[['pick_species']]) %>%
-      ...
-    ggplot(aes(year)) +
+      filter(month %in% ...)
+    ggplot(df, aes(year)) +
       geom_bar()
-  )
- ... <- renderDataTable(
+  })
+ ... <- renderDataTable({
     ...
     ...
     ...
- )
+ })
 }
 
 # Create the Shiny App

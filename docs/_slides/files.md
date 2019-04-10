@@ -1,7 +1,7 @@
 ---
 ---
 
-## Shiny components
+## Shiny Components
 
 Depending on the purpose and computing requirements of any Shiny app, you may set it up to run R code on your computer, a remote server, or in the cloud.
 However all Shiny apps consists of the same two main components:
@@ -12,13 +12,16 @@ However all Shiny apps consists of the same two main components:
 
 ===
 
-## Who or what is "Listening" on 127.0.0.1?
+## Who (or what) is "Listening"?
 
-- 127.0.0.1 is the IP address your laptop uses for itself (it's the same as 'localhost').
+The terms "client" and "server" show up a lot in discussing Shiny. The client is the web browser. The server is a running program that is waiting to process requests sent by the client. For development, one computer runs both the client and the server.
+{:.notes}
 
-- Your laptop is hosting a web page (the UI) whose content is controlled by a running R session.
+- 127.0.0.1 is the IP address your computer uses for itself (it's the same as 'localhost').
 
-- When you run an app through RStudio, that R session is also running the server on your laptop.
+- Your computer is hosting a web page (the UI) whose content is controlled by a running R session.
+
+- When you run an app through RStudio, that R session is also running the server on your computer.
 
 - The server responds when you interact with the web page, processing R commands and updating UI objects accordingly.
 
@@ -64,10 +67,10 @@ Open `{{ site.handouts[0] }}` in your handouts repository. In this file, define 
 
 ~~~r
 # User Interface
-ui <- navbarPage(title = 'Hello, Shiny World!')
+ui <- navbarPage(title = 'Hello, World!')
 
 # Server
-server <- function(input, output){}
+server <- function(input, output) {}
 
 # Create the Shiny App
 shinyApp(ui = ui, server = server)

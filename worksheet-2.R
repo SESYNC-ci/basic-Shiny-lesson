@@ -1,18 +1,27 @@
 # Data
-species <- ...('data/species.csv', stringsAsFactors = FALSE)
-... <- read.csv(..., na.strings = '', stringsAsFactors = FALSE)
+species <- ...('data/species.csv',
+  stringsAsFactors = FALSE)
+... <- read.csv(...,
+  na.strings = '',
+  stringsAsFactors = FALSE)
 
 # User Interface
-in1 <- selectInput(...,
-                   label = 'Pick a species',
-                   choices = ...)
+in1 <- selectInput(
+  ...,
+  label = 'Pick a species',
+  choices = ...)
 ...
-tab <- ...
-ui <- navbarPage(title = 'Portal Project', ...)
+tab1 <- ...(
+  ...
+  ...)
+ui <- navbarPage(
+  title = 'Portal Project',
+  ...)
 
 # Server
 server <- function(...) {
-  ... <- ...(input[[...]])
+  ... <- ...(
+    input[[...]])
 }
 
 # Create the Shiny App
