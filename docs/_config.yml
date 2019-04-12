@@ -6,10 +6,11 @@ handouts:
  - worksheet-2.R
  - worksheet-3.R
  - worksheet-4.R
+ - www
  - data/species.csv
  - data/animals.csv
  - data/README.md
-tag: v0.4
+tag: v0.5
 lesson: 8
 instructor: Kelly Hondula
 authors:
@@ -27,7 +28,7 @@ slide_sorter:
   - reactive
 #  - button
   - share
-  - solutions
+  - exercises
 
 #####################################
 # Only modify content above or risk #

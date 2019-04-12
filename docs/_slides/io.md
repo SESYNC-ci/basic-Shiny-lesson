@@ -1,7 +1,7 @@
 ---
 ---
 
-## \*Input/\*Output Objects
+## Input/Output Objects
 
 The user interface and the server interact with each other through **input** and
 **output** objects. The user's interaction with input objects alters parameters
@@ -17,7 +17,7 @@ code to run when.
 
 This diagrams input and output relationships within the UI and server objects:
 
-![]({{ site.baseurl }}/images/arrows3.png){:width="70%"}
+![]({{ site.baseurl }}/images/arrows3.png){:.nobox}
 {:.captioned}
 
 ===
@@ -52,8 +52,7 @@ The first two arguments for all input objects are:
 
 ===
 
-Define the UI by adding an input object that lets users select a species ID from
-the species table.
+Create an input object to let users select a species ID from the species table.
 
 
 
@@ -63,6 +62,17 @@ in1 <- selectInput(
   inputId = 'pick_species',
   label = 'Pick a species',
   choices = unique(species[['id']]))
+~~~
+{:.text-document .no-eval title="{{ site.handouts[1] }}"}
+
+
+===
+
+Add the input to the `tabPanel()` in the `ui`. There's more to come for that panel!
+
+
+
+~~~r
 ...
 tab1 <- tabPanel(
   title = 'Species',
@@ -120,8 +130,9 @@ identifying the output as `species_label`.
 ~~~r
 # Server
 server <- function(input, output) {
-  output[['species_label']] <- renderText(
-    input[['pick_species']])
+  output[['species_label']] <- renderText({
+    input[['pick_species']]
+  })
 }
 ~~~
 {:.text-document .no-eval title="{{ site.handouts[1] }}"}
@@ -135,27 +146,18 @@ Display the species ID as text in the user interface's `tabPanel` as a
 
 
 ~~~r
-# User Interface
-in1 <- selectInput(
-  inputId = 'pick_species',
-  label = 'Pick a species',
-  choices = unique(species[['id']]))
 out1 <- textOutput('species_label')
 tab1 <- tabPanel(
   title = 'Species',
   in1, out1)
-ui <- navbarPage(
-  title = 'Portal Project',
-  tab1)
 ~~~
 {:.text-document .no-eval title="{{ site.handouts[1] }}"}
 
 
 ===
 
-Now the `{{ site.handouts[1] }}` file is a complete app, so go ahead and **runApp**!
-
-
+Now the `{{ site.handouts[1] }}` file is a complete app, so go ahead and
+**runApp**!
 
 Render functions tell Shiny how to build an output object to display in the user
 interface. Output objects can be data frames, plots, images, text, or most
@@ -188,18 +190,21 @@ then create a bar plot **within** the `renderPlot()` function. Don't forget to
 import the necessary libraries.
 {:.notes}
 
+===
+
 
 
 ~~~r
 # Server
 server <- function(input, output) {
-  output[['species_label']] <- renderText(
-    input[['pick_species']])
+  output[['species_label']] <- renderText({
+    input[['pick_species']]
+  })
   output[['species_plot']] <- renderPlot({
-    animals %>%
-      filter(species_id == input[['pick_species']]) %>%
-      ggplot(aes(year)) +
-        geom_bar()
+    df <- animals %>%
+      filter(species_id == input[['pick_species']])
+    ggplot(df, aes(year)) +
+      geom_bar()
   })
 }
 ~~~
@@ -208,16 +213,12 @@ server <- function(input, output) {
 
 ===
 
-Second, use the corresponding `plotOutput()` function in the UI to display the plot in the app. 
+Second, use the corresponding `plotOutput()` function in the UI to display the
+plot in the app.
 
 
 
 ~~~r
-# User Interface
-in1 <- selectInput(
-  inputId = 'pick_species',
-  label = 'Pick a species',
-  choices = unique(species[['id']]))
 out1 <- textOutput('species_label')
 out2 <- plotOutput('species_plot')
 tab1 <- tabPanel(
@@ -229,15 +230,3 @@ ui <- navbarPage(
 ~~~
 {:.text-document .no-eval title="{{ site.handouts[2] }}"}
 
-
-===
-
-## Exercise 1
-
-Modify the call to `renderText()`, used to create `output[['species_label']]`,
-to produce a label with the genus and species above the plot, rather than the
-species ID. Hint: The function `paste()` with argument `collapse = ' '` will
-convert a data frame row to a text string.
-
-[View solution](#solution-1)
-{:.notes}

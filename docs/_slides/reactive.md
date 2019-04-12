@@ -20,10 +20,11 @@ When any observer is re-rendered, the UI is notified that it has to update.
 ===
 
 Question
-: Which element is an **observer** in the app within `{{ site.handouts[2] }}`.
+: Which element is an **observer** in the app within `{{ site.handouts[2] }}`?
 
 Answer
-: {:.fragment} The object created by `renderPlot()` and stored with outputId "species_plot".
+: {:.fragment} The object created by `renderPlot()` and stored with outputId
+  "species_plot".
 
 ===
 
@@ -37,11 +38,9 @@ months.
 in2 <- sliderInput(
   inputId = 'slider_months',
   label = 'Month Range',
-  min = 1,
-  max = 12,
+  min = 1, max = 12,
   value = c(1, 12))
-side <- sidebarPanel(
-  'Options', in1, in2)
+side <- sidebarPanel('Options', in1, in2)
 ~~~
 {:.text-document .no-eval title="{{ site.handouts[3] }}"}
 
@@ -64,9 +63,9 @@ In order for `filter()` to dynamically respond to the slider, whatever replaces
 
 ===
 
-Shiny provides a function factory called `reactive()`, which creates functions
-that behave like the elements in the `input` list--they are reactive. We'll use
-it to create the function `slider_months()` to dynamically update the filter.
+Shiny provides a function factory called `reactive()`. It returns a function
+that behaves like elements in the `input` list--they are reactive. We'll use it
+to create the function `slider_months()` to dynamically update the filter.
 
 
 
@@ -75,8 +74,6 @@ slider_months <- reactive({
     ...
     ...
   })
-...
-filter(month %in% slider_months())
 ~~~
 {:.text-document .no-eval title="{{ site.handouts[3] }}"}
 
@@ -92,57 +89,58 @@ The `%in%` test within `filter()` needs a sequence, so we wrap `seq` in
 slider_months <- reactive({
   seq(input[['slider_months']][1],
     input[['slider_months']][2])
-  })
+})
 ~~~
 {:.text-document .no-eval title="{{ site.handouts[3] }}"}
 
 
 ===
 
-The `slider_months` can now be embedded in the `renderPlot()` and
-`renderDataTable()` functions.
-
-===
+Make sure that `slider_months()` is "called", i.e. has parentheses, within the
+`renderPlot()` function.
 
 
 
 ~~~r
-# Server
-server <- function(input, output) {
-
-  slider_months <- reactive({
-    seq(input[['slider_months']][1],
-      input[['slider_months']][2])
-    })
-  output[['species_label']] <- renderText({
-    species %>%
-      filter(id == input[['pick_species']]) %>%
-      select(genus, species) %>%
-      paste(collapse = ' ')
-    })
-  output[['species_plot']] <- renderPlot({
-    df <- animals %>%
-      filter(species_id == input[['pick_species']]) %>%
-      filter(month %in% slider_months()) %>%
-    ggplot(df, aes(year)) +
-      geom_bar()
-    })
-  output[['species_table']] <- renderDataTable({
-    animals %>%
-      filter(species_id == input[['pick_species']]) %>%
-      filter(month %in% slider_months())
-    })
-}
+output[['species_plot']] <- renderPlot({
+  df <- animals %>%
+    filter(species_id == input[['pick_species']]) %>%
+    filter(month %in% slider_months()) %>%
+  ggplot(df, aes(year)) +
+    geom_bar()
+})
 ~~~
 {:.text-document .no-eval title="{{ site.handouts[3] }}"}
 
 
 ===
 
-## Exercise 4
+The new reactive can be used in multiple observers, which is easier than
+repeating the `seq` definition again, both for you to code and for the server to
+process.
 
-Notice the exact same code exists twice within the server function, once for
-`renderPlot()` and once for `renderDataTable`. The server has no way to identify
-an intermediate result, the filtered data frame, that it could reuse. Replace
-`slider_months()` with a new `selection_animals()` function that returns the
-needed `data.frame`. Bask in the knowledge of how much CPU time you'll save.
+
+
+~~~r
+output[['species_table']] <- renderDataTable({
+  df <- animals %>%
+    filter(species_id == input[['pick_species']]) %>%
+    filter(month %in% slider_months())
+  df
+})
+~~~
+{:.text-document .no-eval title="{{ site.handouts[3] }}"}
+
+
+===
+
+Don't forget to add a corresponding `dataTableOutput()` to the user interface.
+
+
+
+~~~r
+out3 <- dataTableOutput('species_table')
+main <- mainPanel(out1, out2, out3)
+~~~
+{:.text-document .no-eval title="{{ site.handouts[3] }}"}
+

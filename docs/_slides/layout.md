@@ -32,54 +32,25 @@ and parentheses between UI elements is one of the first things to look for when
 debugging a shiny app!
 {:.notes}
 
-![]({{ site.baseurl }}/images/layout3.png){:width="70%"}
+![]({{ site.baseurl }}/images/layout3.png){:.nobox}
 {:.captioned}
 
 ===
 
-To re-organize the elements of the "Species" tab using a sidebar layout, we modify the UI to specify the sidebar and main elements.
+To re-organize the elements of the "Species" tab using a sidebar layout, we
+modify the UI to specify the sidebar and main elements.
 
 
 
 ~~~r
-# User Interface
-in1 <- selectInput(
-  inputId = 'pick_species',
-  label = 'Pick a species',
-  choices = unique(species[['id']]))
-out1 <- textOutput('species_label')
-out2 <- plotOutput('species_plot')
-side <- sidebarPanel(
-  title = 'Options',
-  in1)
+side <- sidebarPanel('Options', in1)
 main <- mainPanel(out1, out2)
 tab1 <- tabPanel(
   title = 'Species',
   sidebarLayout(side, main))
-ui <- navbarPage(
-  title = 'Portal Project',
-  tab1)
 ~~~
 {:.text-document .no-eval title="{{ site.handouts[2] }}"}
 
-
-===
-
-## Exercise 2
-
-Include a `tabsetPanel()` nested within the main panel. Call the first element
-of the tabset "Plot" and show the current plot. Call the second element of the
-tabset "Data" and show a `dataTableOutput()` with the animals data used in the
-plot.
-
-[View solution](#solution-2)
-{:.notes}
-
-Notice the many features of the data table output. There are many options that
-can be controlled within the render function such as pagination and default
-length. See [here](http://shiny.rstudio.com/gallery/datatables-options.html) for
-examples and how to extend this functionality using JavaScript.
-{:.notes}
 
 ===
 
@@ -120,17 +91,20 @@ are shiny function equivalents for many common html tags such as `h1()` through
 `h6()` for headers. You can use the console to see that the return from these
 functions produce HTML code.
 
+===
+
 
 
 ~~~r
-> h5('This is a level 5 header')
+> h5('This is a level 5 header.')
 ~~~
 {:.input title="Console"}
 
 ~~~
-<h5>This is a level 5 header</h5>
+<h5>This is a level 5 header.</h5>
 ~~~
 {:.output}
+
 
 
 
@@ -144,18 +118,6 @@ functions produce HTML code.
 <a href="https://www.sesync.org">This renders a link</a>
 ~~~
 {:.output}
-
-===
-
-## Exercise 3
-
-Use the `img` builder function to add a logo, photo, or other image to your app.
-The help under `?img` states that HTML attributes come from named arguments to
-`img`, and the ["img" HTML tag](https://www.w3schools.com/tags/tag_img.asp)
-requires two. You'll need to save the image file in a subfolder called "www".
-
-[View solution](#solution-3)
-{:.notes}
 
 ===
 

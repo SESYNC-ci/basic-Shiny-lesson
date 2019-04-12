@@ -1,4 +1,4 @@
-# Libraries
+# Packages
 library(...)
 library(...)
 
@@ -25,8 +25,9 @@ ui <- navbarPage(
 
 # Server
 server <- function(input, output) {
-  output[['species_label']] <- renderText(
-    input[['pick_species']])
+  output[['species_label']] <- renderText({
+    input[['pick_species']]
+  })
   output[['species_plot']] <- renderPlot({
     ...
     ...
@@ -36,4 +37,5 @@ server <- function(input, output) {
 }
 
 # Create the Shiny App
+addResourcePath('images', 'www/images')
 shinyApp(ui = ui, server = server)

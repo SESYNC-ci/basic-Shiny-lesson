@@ -20,8 +20,9 @@ ui <- navbarPage(
 
 # Server
 server <- function(...) {
-  ... <- ...(
-    input[[...]])
+  ... <- ...({
+    input[[...]]
+  })
 }
 
 # Create the Shiny App

@@ -2,7 +2,7 @@
 ... <- ...(title = 'Hello, Shiny World!')
 
 # Server
-... <- function(...){}
+... <- function(...) {}
 
 # Create the Shiny App
 shinyApp(...)

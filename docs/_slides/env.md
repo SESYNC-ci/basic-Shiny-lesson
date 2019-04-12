@@ -27,5 +27,5 @@ animals <- read.csv('data/animals.csv',
 {:.text-document .no-eval title="{{ site.handouts[1] }}"}
 
 
-Shiny apps can also be designed to interact with remote data or shared databases.
+Shiny apps can also be designed to interact with remote data or database servers.
 {:.notes}
