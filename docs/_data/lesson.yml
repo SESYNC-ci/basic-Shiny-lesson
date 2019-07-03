@@ -1,0 +1,26 @@
+title: Interactive Web Applications with Shiny
+handouts:
+ - worksheet-1.R
+ - worksheet-2.R
+ - worksheet-3.R
+ - worksheet-4.R
+ - www
+ - data/species.csv
+ - data/animals.csv
+ - data/README.md
+tag: v0.5
+lesson: 8
+instructor: Kelly Hondula
+authors:
+ - Kelly Hondula
+ - Ian Carroll
+sorter:
+  - intro
+  - files
+  - env
+  - io
+  - layout
+  - reactive
+#  - button
+  - share
+  - exercises

@@ -17,7 +17,7 @@ code to run when.
 
 This diagrams input and output relationships within the UI and server objects:
 
-![]({{ site.baseurl }}/images/arrows3.png){:.nobox}
+![]({% include asset.html path="images/arrows3.png" %}){:.nobox}
 {:.captioned}
 
 ===
@@ -63,7 +63,7 @@ in1 <- selectInput(
   label = 'Pick a species',
   choices = unique(species[['id']]))
 ~~~
-{:.text-document .no-eval title="{{ site.handouts[1] }}"}
+{:title="{{ site.data.lesson.handouts[1] }}" .no-eval .text-document}
 
 
 ===
@@ -81,7 +81,7 @@ ui <- navbarPage(
   title = 'Portal Project',
   tab1)
 ~~~
-{:.text-document .no-eval title="{{ site.handouts[1] }}"}
+{:title="{{ site.data.lesson.handouts[1] }}" .no-eval .text-document}
 
 
 Use the `selectInput()` function to create an input object called
@@ -135,7 +135,7 @@ server <- function(input, output) {
   })
 }
 ~~~
-{:.text-document .no-eval title="{{ site.handouts[1] }}"}
+{:title="{{ site.data.lesson.handouts[1] }}" .no-eval .text-document}
 
 
 ===
@@ -151,12 +151,12 @@ tab1 <- tabPanel(
   title = 'Species',
   in1, out1)
 ~~~
-{:.text-document .no-eval title="{{ site.handouts[1] }}"}
+{:title="{{ site.data.lesson.handouts[1] }}" .no-eval .text-document}
 
 
 ===
 
-Now the `{{ site.handouts[1] }}` file is a complete app, so go ahead and
+Now the `{{ site.data.lesson.handouts[1] }}` file is a complete app, so go ahead and
 **runApp**!
 
 Render functions tell Shiny how to build an output object to display in the user
@@ -182,7 +182,7 @@ exmaple, see "Creating controls on the fly"
 
 ## Graphical Output
 
-The app in `{{ site.handouts[2] }}`, will use the "animals" table to plot
+The app in `{{ site.data.lesson.handouts[2] }}`, will use the "animals" table to plot
 abundance of the selected species, rather than just printing its id.
 
 First, the server must filter the survey data based on the selected species, and
@@ -208,7 +208,7 @@ server <- function(input, output) {
   })
 }
 ~~~
-{:.text-document .no-eval title="{{ site.handouts[2] }}"}
+{:title="{{ site.data.lesson.handouts[2] }}" .no-eval .text-document}
 
 
 ===
@@ -228,5 +228,5 @@ ui <- navbarPage(
   title = 'Portal Project',
   tab1)
 ~~~
-{:.text-document .no-eval title="{{ site.handouts[2] }}"}
+{:title="{{ site.data.lesson.handouts[2] }}" .no-eval .text-document}
 

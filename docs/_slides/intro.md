@@ -44,7 +44,7 @@ a separate browser window or the RStudio Viewer pane.
 > library(shiny)
 > runExample('01_hello')
 ~~~
-{:.input title="Console"}
+{:title="Console" .no-eval .input}
 
 ```
 

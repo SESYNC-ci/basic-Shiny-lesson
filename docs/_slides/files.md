@@ -62,14 +62,14 @@ server <- ...
 # Create the Shiny App
 shinyApp(ui = ui, server = server)
 ~~~
-{:.text-document .no-eval title="my_app.R"}
+{:title="my_app.R" .no-eval .text-document}
 
 
 ===
 
 ## Hello, World!
 
-Open `{{ site.handouts[0] }}` in your handouts repository. In this file, define
+Open `{{ site.data.lesson.handouts[0] }}` in your handouts repository. In this file, define
 objects `ui` and `server` with the assignment operator `<-` and then pass them
 to the function `shinyApp()`. These are the essential components of a Shiny app.
 
@@ -87,7 +87,7 @@ server <- function(input, output) {}
 # Create the Shiny App
 shinyApp(ui = ui, server = server)
 ~~~
-{:.text-document .no-eval title="{{ site.handouts[0] }}"}
+{:title="{{ site.data.lesson.handouts[0] }}" .no-eval .text-document}
 
 
 ===
@@ -96,7 +96,7 @@ The **Run App** button in the Editor allows you to control whether the app
 runs in a browser window, in the RStudio Viewer pane, or in an external RStudio
 window.
 
-![]({{ site.baseurl }}/images/runapp.png){:.nobox}
+![]({% include asset.html path="images/runapp.png" %}){:.nobox}
 {:.captioned}
 
 The `shiny` package must be installed for RStudio to identify files associated

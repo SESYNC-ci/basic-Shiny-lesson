@@ -24,7 +24,7 @@ animals <- read.csv('data/animals.csv',
   na.strings = '',
   stringsAsFactors = FALSE)
 ~~~
-{:.text-document .no-eval title="{{ site.handouts[1] }}"}
+{:title="{{ site.data.lesson.handouts[1] }}" .no-eval .text-document}
 
 
 Shiny apps can also be designed to interact with remote data or database servers.

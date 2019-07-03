@@ -1,3 +1,6 @@
+---
+---
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -7,11 +10,11 @@
 <title>Interactive Web Applications with Shiny</title>
 <meta name="description" content="Get interactive with the Shiny R package">
 <link rel="canonical" href="http://sesync-ci.github.io/basic-Shiny-lesson/course/archive.html">
-<link rel="stylesheet" href="/basic-Shiny-lesson/css/default.css">
-<link rel="stylesheet" href="/basic-Shiny-lesson/css/static.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sesync-ci/lesson-style@v3.0/docs/assets/css/default.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sesync-ci/lesson-style@v3.0/docs/assets/css/static.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script>
 
-	  <link rel="stylesheet" href="https://cdn.rawgit.com/sesync-ci/lesson-style/v1.2/docs/css/static.css">
+	  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sesync-ci/lesson-style@v1.2/docs/css/static.css">
   </head>
   <body>
 	  <div class="page-content">
@@ -64,7 +67,7 @@
 </span></code></pre>
 </div>
 
-<p class="captioned"><img src="/basic-Shiny-lesson/images/shiny_stop.png" alt="" /></p>
+<p class="captioned"><img src="https://cdn.jsdelivr.net/gh/sesync-ci/basic-Shiny-lesson@v0.5/docs/images/shiny_stop.png" alt="" /></p>
 
 <p>Notice back in RStudio that a stop sign appears in the Console window while your app is running. This is because the current R session is busy running your application.</p>
 
@@ -147,7 +150,7 @@ However all Shiny apps consists of the same two main components:</p>
 
 <p>Notice the green <strong>Run App</strong> button appear when the file is saved. This button also allows you to control whether the app runs in a browser window, in the RStudio Viewer pane, or in an external RStudio window.</p>
 
-<p class="captioned"><img src="/basic-Shiny-lesson/images/runapp.png" alt="" /></p>
+<p class="captioned"><img src="https://cdn.jsdelivr.net/gh/sesync-ci/basic-Shiny-lesson@v0.5/docs/images/runapp.png" alt="" /></p>
 
 <p class="notes">The <code class="highlighter-rouge">shiny</code> package must be installed for RStudio to identify files associated with a Shiny App and put up a green arrow with a <strong>Run App</strong> button. Note that the file names must be <code class="highlighter-rouge">ui.R</code> and <code class="highlighter-rouge">server.R</code> if these components are scripted in separate files.</p>
 
@@ -185,7 +188,7 @@ The user’s interaction with input objects alters parameters in the server’s 
 
 <p>Writing an app requires careful attention to how your input and output objects relate to each other, i.e. knowing what actions will initiate what sections of code to run at what time.</p>
 
-<p class="captioned"><img src="/basic-Shiny-lesson/images/arrows3.png" alt="" width="70%" /></p>
+<p class="captioned"><img src="https://cdn.jsdelivr.net/gh/sesync-ci/basic-Shiny-lesson@v0.5/docs/images/arrows3.png" alt="" width="70%" /></p>
 
 <p>This diagrams input and output relationships within the UI and server objects:</p>
 
@@ -394,7 +397,7 @@ The folowing UI elements, and more, can be layered on top of each other in eithe
 
 <p class="notes">Here is a schematic of nested UI elements inside the <code class="highlighter-rouge">sidebarLayout()</code>. Red boxes represent input objects and blue boxes represent output objects.</p>
 
-<p class="captioned"><img src="/basic-Shiny-lesson/images/layout3.png" alt="" width="70%" /></p>
+<p class="captioned"><img src="https://cdn.jsdelivr.net/gh/sesync-ci/basic-Shiny-lesson@v0.5/docs/images/layout3.png" alt="" width="70%" /></p>
 
 <p class="notes">Each object is located within one or more nested <strong>panels</strong>, which are nested within a <strong>layout</strong>.
 Objects and panels that are at the same level of hierarchy need to be separated by commas in calls to parent functions.

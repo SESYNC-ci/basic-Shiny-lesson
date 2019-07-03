@@ -32,7 +32,7 @@ and parentheses between UI elements is one of the first things to look for when
 debugging a shiny app!
 {:.notes}
 
-![]({{ site.baseurl }}/images/layout3.png){:.nobox}
+![]({% include asset.html path="images/layout3.png" %}){:.nobox}
 {:.captioned}
 
 ===
@@ -49,7 +49,7 @@ tab1 <- tabPanel(
   title = 'Species',
   sidebarLayout(side, main))
 ~~~
-{:.text-document .no-eval title="{{ site.handouts[2] }}"}
+{:title="{{ site.data.lesson.handouts[2] }}" .no-eval .text-document}
 
 
 ===
@@ -78,7 +78,7 @@ example:
 +     column(3, offset = 3, '3 offset 3')  
 +   ))
 ~~~
-{:.input title="Console"}
+{:title="Console" .no-eval .input}
 
 
 ===
@@ -98,7 +98,7 @@ functions produce HTML code.
 ~~~r
 > h5('This is a level 5 header.')
 ~~~
-{:.input title="Console"}
+{:title="Console" .no-eval .input}
 
 ~~~
 <h5>This is a level 5 header.</h5>
@@ -112,7 +112,7 @@ functions produce HTML code.
 > a(href = 'https://www.sesync.org',
 +   'This renders a link')
 ~~~
-{:.input title="Console"}
+{:title="Console" .no-eval .input}
 
 ~~~
 <a href="https://www.sesync.org">This renders a link</a>

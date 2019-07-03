@@ -65,13 +65,13 @@ shinyApp(ui = ui, server = server)
 
 ## Hello, World!
 
-Open `{{ site.handouts[0] }}` in your handouts repository. In this file, define
+Open `{{ site.data.lesson.handouts[0] }}` in your handouts repository. In this file, define
 objects `ui` and `server` with the assignment operator `<-` and then pass them
 to the function `shinyApp()`. These are the essential components of a Shiny app.
 
 ===
 
-```{r, eval=FALSE, title='{{ site.handouts[0] }}'}
+```{r, eval=FALSE, handout = 0}
 # User Interface
 ui <- navbarPage(title = 'Hello, World!')
 
@@ -88,7 +88,7 @@ The **Run App** button in the Editor allows you to control whether the app
 runs in a browser window, in the RStudio Viewer pane, or in an external RStudio
 window.
 
-![]({{ site.baseurl }}/images/runapp.png){:.nobox}
+![]({% include asset.html path="images/runapp.png" %}){:.nobox}
 {:.captioned}
 
 The `shiny` package must be installed for RStudio to identify files associated

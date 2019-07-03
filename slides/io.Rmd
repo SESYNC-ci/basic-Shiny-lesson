@@ -17,7 +17,7 @@ code to run when.
 
 This diagrams input and output relationships within the UI and server objects:
 
-![]({{ site.baseurl }}/images/arrows3.png){:.nobox}
+![]({% include asset.html path="images/arrows3.png" %}){:.nobox}
 {:.captioned}
 
 ===
@@ -54,7 +54,7 @@ The first two arguments for all input objects are:
 
 Create an input object to let users select a species ID from the species table.
 
-```{r, eval=FALSE, title='{{ site.handouts[1] }}'}
+```{r, eval=FALSE, handout = 1}
 # User Interface
 in1 <- selectInput(
   inputId = 'pick_species',
@@ -66,7 +66,7 @@ in1 <- selectInput(
 
 Add the input to the `tabPanel()` in the `ui`. There's more to come for that panel!
 
-```{r, eval=FALSE, title='{{ site.handouts[1] }}'}
+```{r, eval=FALSE, handout = 1}
 ...
 tab1 <- tabPanel(
   title = 'Species',
@@ -117,7 +117,7 @@ result of each `render*()` function to a list of output objects.
 Render the species ID as text using `renderText()` in the server function,
 identifying the output as `species_label`.
 
-```{r, eval=FALSE, title='{{ site.handouts[1] }}'}
+```{r, eval=FALSE, handout = 1}
 # Server
 server <- function(input, output) {
   output[['species_label']] <- renderText({
@@ -131,7 +131,7 @@ server <- function(input, output) {
 Display the species ID as text in the user interface's `tabPanel` as a
 `textOutput` object.
 
-```{r, eval=FALSE, title='{{ site.handouts[1] }}'}
+```{r, eval=FALSE, handout = 1}
 out1 <- textOutput('species_label')
 tab1 <- tabPanel(
   title = 'Species',
@@ -140,7 +140,7 @@ tab1 <- tabPanel(
 
 ===
 
-Now the `{{ site.handouts[1] }}` file is a complete app, so go ahead and
+Now the `{{ site.data.lesson.handouts[1] }}` file is a complete app, so go ahead and
 **runApp**!
 
 Render functions tell Shiny how to build an output object to display in the user
@@ -166,7 +166,7 @@ exmaple, see "Creating controls on the fly"
 
 ## Graphical Output
 
-The app in `{{ site.handouts[2] }}`, will use the "animals" table to plot
+The app in `{{ site.data.lesson.handouts[2] }}`, will use the "animals" table to plot
 abundance of the selected species, rather than just printing its id.
 
 First, the server must filter the survey data based on the selected species, and
@@ -176,7 +176,7 @@ import the necessary libraries.
 
 ===
 
-```{r, eval=FALSE, title='{{ site.handouts[2] }}'}
+```{r, eval=FALSE, handout = 2}
 # Server
 server <- function(input, output) {
   output[['species_label']] <- renderText({
@@ -196,7 +196,7 @@ server <- function(input, output) {
 Second, use the corresponding `plotOutput()` function in the UI to display the
 plot in the app.
 
-```{r, eval=FALSE, title='{{ site.handouts[2] }}'}
+```{r, eval=FALSE, handout = 2}
 out1 <- textOutput('species_label')
 out2 <- plotOutput('species_plot')
 tab1 <- tabPanel(

@@ -7,7 +7,7 @@
 
 ### Exercise 1
 
-Starting from {{ site.handouts[1] }}, modify the call to `renderText()` to
+Starting from {{ site.data.lesson.handouts[1] }}, modify the call to `renderText()` to
 create an `output[['species_label']]` with the genus and species name. You can
 find those data in the species table using the same "species_id". Hint: The
 function `paste()` with argument `collapse = ' '` will convert a data frame row
@@ -20,11 +20,11 @@ to a text string.
 
 ### Exercise 2
 
-Modify the app completed in {{ site.handouts[2] }} to include a `tabsetPanel()`
+Modify the app completed in {{ site.data.lesson.handouts[2] }} to include a `tabsetPanel()`
 nested within the main panel. Title the first tab in the tabset "Plot" and show
 the current plot. Title the second tab in the tabset "Data" and show a
 `dataTableOutput()`, which you can borrow from the app completed in {{
-site.handouts[3] }}.
+site.data.lesson.handouts[3] }}.
 
 [View solution](#solution-2)
 {:.notes}
@@ -49,7 +49,7 @@ dite.handouts[2] }}.
 ### Exercise 4
 
 Notice the exact same code exists twice within the server function of the app
-you completed in {{ site.handouts[3] }}: once for `renderPlot()` and once for
+you completed in {{ site.data.lesson.handouts[3] }}: once for `renderPlot()` and once for
 `renderDataTable`. The server has no way to identify an intermediate result, the
 filtered data frame, which it could have reused. Replace `slider_months()` with
 a new `selection_animals()` function that returns the entire `data.frame` needed
@@ -114,7 +114,7 @@ server <- function(input, output) {
 # Create the Shiny App
 shinyApp(ui = ui, server = server)
 ~~~
-{:.text-document .no-eval title="{{ site.handouts[1] }}"}
+{:title="{{ site.data.lesson.handouts[1] }}" .no-eval .text-document}
 
 
 [Return](#exercise-1)
@@ -183,7 +183,7 @@ server <- function(input, output) {
 addResourcePath('images', 'www/images')
 shinyApp(ui = ui, server = server)
 ~~~
-{:.text-document .no-eval title="{{ site.handouts[2] }}"}
+{:title="{{ site.data.lesson.handouts[2] }}" .no-eval .text-document}
 
 
 Notice the many features of the data table output. There are many options that
@@ -262,7 +262,7 @@ server <- function(input, output) {
 addResourcePath('images', 'www/images')
 shinyApp(ui = ui, server = server)
 ~~~
-{:.text-document .no-eval title="{{ site.handouts[2] }}"}
+{:title="{{ site.data.lesson.handouts[2] }}" .no-eval .text-document}
 
 
 [Return](#exercise-3)
@@ -339,7 +339,7 @@ server <- function(input, output) {
 # Create the Shiny App
 shinyApp(ui = ui, server = server)
 ~~~
-{:.text-document .no-eval title="{{ site.handouts[3] }}"}
+{:title="{{ site.data.lesson.handouts[3] }}" .no-eval .text-document}
 
 
 [Return](#exercise-4)

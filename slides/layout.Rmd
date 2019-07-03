@@ -32,7 +32,7 @@ and parentheses between UI elements is one of the first things to look for when
 debugging a shiny app!
 {:.notes}
 
-![]({{ site.baseurl }}/images/layout3.png){:.nobox}
+![]({% include asset.html path="images/layout3.png" %}){:.nobox}
 {:.captioned}
 
 ===
@@ -40,7 +40,7 @@ debugging a shiny app!
 To re-organize the elements of the "Species" tab using a sidebar layout, we
 modify the UI to specify the sidebar and main elements.
 
-```{r, eval=FALSE, title='{{ site.handouts[2] }}'}
+```{r, eval=FALSE, handout = 2}
 side <- sidebarPanel('Options', in1)
 main <- mainPanel(out1, out2)
 tab1 <- tabPanel(

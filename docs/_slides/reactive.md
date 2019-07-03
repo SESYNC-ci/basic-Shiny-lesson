@@ -20,7 +20,7 @@ When any observer is re-rendered, the UI is notified that it has to update.
 ===
 
 Question
-: Which element is an **observer** in the app within `{{ site.handouts[2] }}`?
+: Which element is an **observer** in the app within `{{ site.data.lesson.handouts[2] }}`?
 
 Answer
 : {:.fragment} The object created by `renderPlot()` and stored with outputId
@@ -28,7 +28,7 @@ Answer
 
 ===
 
-The app in `{{ site.handouts[3] }}` will have a new input object in the sidebar
+The app in `{{ site.data.lesson.handouts[3] }}` will have a new input object in the sidebar
 panel, a slider that constrains the plotted data to a user defined range of
 months.
 
@@ -42,7 +42,7 @@ in2 <- sliderInput(
   value = c(1, 12))
 side <- sidebarPanel('Options', in1, in2)
 ~~~
-{:.text-document .no-eval title="{{ site.handouts[3] }}"}
+{:title="{{ site.data.lesson.handouts[3] }}" .no-eval .text-document}
 
 
 ===
@@ -55,7 +55,7 @@ filter within the `renderPlot()` function.
 ~~~r
 filter(month %in% ...)
 ~~~
-{:.text-document .no-eval title="{{ site.handouts[3] }}"}
+{:title="{{ site.data.lesson.handouts[3] }}" .no-eval .text-document}
 
 
 In order for `filter()` to dynamically respond to the slider, whatever replaces
@@ -75,7 +75,7 @@ slider_months <- reactive({
     ...
   })
 ~~~
-{:.text-document .no-eval title="{{ site.handouts[3] }}"}
+{:title="{{ site.data.lesson.handouts[3] }}" .no-eval .text-document}
 
 
 ===
@@ -91,7 +91,7 @@ slider_months <- reactive({
     input[['slider_months']][2])
 })
 ~~~
-{:.text-document .no-eval title="{{ site.handouts[3] }}"}
+{:title="{{ site.data.lesson.handouts[3] }}" .no-eval .text-document}
 
 
 ===
@@ -110,7 +110,7 @@ output[['species_plot']] <- renderPlot({
     geom_bar()
 })
 ~~~
-{:.text-document .no-eval title="{{ site.handouts[3] }}"}
+{:title="{{ site.data.lesson.handouts[3] }}" .no-eval .text-document}
 
 
 ===
@@ -129,7 +129,7 @@ output[['species_table']] <- renderDataTable({
   df
 })
 ~~~
-{:.text-document .no-eval title="{{ site.handouts[3] }}"}
+{:title="{{ site.data.lesson.handouts[3] }}" .no-eval .text-document}
 
 
 ===
@@ -142,5 +142,5 @@ Don't forget to add a corresponding `dataTableOutput()` to the user interface.
 out3 <- dataTableOutput('species_table')
 main <- mainPanel(out1, out2, out3)
 ~~~
-{:.text-document .no-eval title="{{ site.handouts[3] }}"}
+{:title="{{ site.data.lesson.handouts[3] }}" .no-eval .text-document}
 
