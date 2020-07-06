@@ -37,14 +37,14 @@ debugging a shiny app!
 
 ===
 
-To re-organize the elements of the "Species" tab using a sidebar layout, we
+To re-organize the elements of the "City Population" tab using a sidebar layout, we
 modify the UI to specify the sidebar and main elements.
 
 ```{r, eval=FALSE, handout = 2}
 side <- sidebarPanel('Options', in1)
 main <- mainPanel(out1, out2)
 tab1 <- tabPanel(
-  title = 'Species',
+  title = 'City Population',
   sidebarLayout(side, main))
 ```
 

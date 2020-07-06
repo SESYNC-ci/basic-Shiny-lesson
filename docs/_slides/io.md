@@ -52,16 +52,16 @@ The first two arguments for all input objects are:
 
 ===
 
-Create an input object to let users select a species ID from the species table.
+Create an input object to let users select a city name from the population data.
 
 
 
 ~~~r
 # User Interface
 in1 <- selectInput(
-  inputId = 'pick_species',
-  label = 'Pick a species',
-  choices = unique(species[['id']]))
+  inputId = 'selected_city',
+  label = 'Select a city',
+  choices = unique(popdata[['NAME']]))
 ~~~
 {:title="{{ site.data.lesson.handouts[1] }}" .no-eval .text-document}
 
@@ -75,18 +75,18 @@ Add the input to the `tabPanel()` in the `ui`. There's more to come for that pan
 ~~~r
 ...
 tab1 <- tabPanel(
-  title = 'Species',
+  title = 'City Population',
   in1, ...)
 ui <- navbarPage(
-  title = 'Portal Project',
+  title = 'Census Population Explorer',
   tab1)
 ~~~
 {:title="{{ site.data.lesson.handouts[1] }}" .no-eval .text-document}
 
 
 Use the `selectInput()` function to create an input object called
-`pick_species`. Use the `choices = ` argument to define a vector with the unique
-values in the species id column. Make the input object an argument to the
+`selected_city`. Use the `choices = ` argument to define a vector with the unique
+values in the NAME column. Make the input object an argument to the
 function `tabPanel()`, preceded by a title argument. We will learn about design
 and layout in a subsequent section.
 {:.notes}
@@ -123,15 +123,15 @@ result of each `render*()` function to a list of output objects.
 ## Text Output
 
 Render the species ID as text using `renderText()` in the server function,
-identifying the output as `species_label`.
+identifying the output as `city_label`.
 
 
 
 ~~~r
 # Server
 server <- function(input, output) {
-  output[['species_label']] <- renderText({
-    input[['pick_species']]
+  output[['city_label']] <- renderText({
+    input[['selected_city']]
   })
 }
 ~~~
@@ -146,9 +146,9 @@ Display the species ID as text in the user interface's `tabPanel` as a
 
 
 ~~~r
-out1 <- textOutput('species_label')
+out1 <- textOutput('city_label')
 tab1 <- tabPanel(
-  title = 'Species',
+  title = 'City Population',
   in1, out1)
 ~~~
 {:title="{{ site.data.lesson.handouts[1] }}" .no-eval .text-document}
@@ -182,11 +182,11 @@ exmaple, see "Creating controls on the fly"
 
 ## Graphical Output
 
-The app in `{{ site.data.lesson.handouts[2] }}`, will use the "animals" table to plot
-abundance of the selected species, rather than just printing its id.
+The app in `{{ site.data.lesson.handouts[2] }}`, will use the popdata table to plot
+population over time of the selected city, rather than just printing its name
 
-First, the server must filter the survey data based on the selected species, and
-then create a bar plot **within** the `renderPlot()` function. Don't forget to
+First, the server must filter the data based on the selected city, and
+then create a plot **within** the `renderPlot()` function. Don't forget to
 import the necessary libraries.
 {:.notes}
 
@@ -197,14 +197,14 @@ import the necessary libraries.
 ~~~r
 # Server
 server <- function(input, output) {
-  output[['species_label']] <- renderText({
-    input[['pick_species']]
+  output[['city_label']] <- renderText({
+    input[['selected_city']]
   })
-  output[['species_plot']] <- renderPlot({
-    df <- animals %>%
-      filter(species_id == input[['pick_species']])
-    ggplot(df, aes(year)) +
-      geom_bar()
+  output[['city_plot']] <- renderPlot({
+    df <- popdata %>% 
+      dplyr::filter(NAME == input[['selected_city']])
+    ggplot(df, aes(x = year, y = population)) +
+      geom_line()
   })
 }
 ~~~
@@ -219,13 +219,13 @@ plot in the app.
 
 
 ~~~r
-out1 <- textOutput('species_label')
-out2 <- plotOutput('species_plot')
+out1 <- textOutput('city_label')
+out2 <- plotOutput('city_plot')
 tab1 <- tabPanel(
-  title = 'Species',
+  title = 'City Population',
   in1, out1, out2)
 ui <- navbarPage(
-  title = 'Portal Project',
+  title = 'Census Population Explorer',
   tab1)
 ~~~
 {:title="{{ site.data.lesson.handouts[2] }}" .no-eval .text-document}

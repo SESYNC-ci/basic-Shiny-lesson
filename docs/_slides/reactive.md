@@ -24,22 +24,24 @@ Question
 
 Answer
 : {:.fragment} The object created by `renderPlot()` and stored with outputId
-  "species_plot".
+  "city_plot".
 
 ===
 
 The app in `{{ site.data.lesson.handouts[3] }}` will have a new input object in the sidebar
 panel, a slider that constrains the plotted data to a user defined range of
-months.
+years
 
 
 
 ~~~r
 in2 <- sliderInput(
-  inputId = 'slider_months',
-  label = 'Month Range',
-  min = 1, max = 12,
-  value = c(1, 12))
+  inputId = "my_xlims", 
+  label = "Set X axis limits",
+  min = 2010, 
+  max = 2018,
+  value = c(2010, 2018))
+
 side <- sidebarPanel('Options', in1, in2)
 ~~~
 {:title="{{ site.data.lesson.handouts[3] }}" .no-eval .text-document}
@@ -47,13 +49,13 @@ side <- sidebarPanel('Options', in1, in2)
 
 ===
 
-The goal is to limit animals records to the user's input by adding an additional
+The goal is to limit records to the user's input by adding an additional
 filter within the `renderPlot()` function.
 
 
 
 ~~~r
-filter(month %in% ...)
+filter(year %in% ...)
 ~~~
 {:title="{{ site.data.lesson.handouts[3] }}" .no-eval .text-document}
 
@@ -65,12 +67,12 @@ In order for `filter()` to dynamically respond to the slider, whatever replaces
 
 Shiny provides a function factory called `reactive()`. It returns a function
 that behaves like elements in the `input` list--they are reactive. We'll use it
-to create the function `slider_months()` to dynamically update the filter.
+to create the function `slider_years()` to dynamically update the filter.
 
 
 
 ~~~r
-slider_months <- reactive({
+slider_years <- reactive({
     ...
     ...
   })
@@ -86,9 +88,9 @@ The `%in%` test within `filter()` needs a sequence, so we wrap `seq` in
 
 
 ~~~r
-slider_months <- reactive({
-  seq(input[['slider_months']][1],
-    input[['slider_months']][2])
+slider_years <- reactive({
+  seq(input[['my_xlims']][1],
+    input[['my_xlims']][2])
 })
 ~~~
 {:title="{{ site.data.lesson.handouts[3] }}" .no-eval .text-document}
@@ -96,18 +98,18 @@ slider_months <- reactive({
 
 ===
 
-Make sure that `slider_months()` is "called", i.e. has parentheses, within the
+Make sure that `slider_years()` is "called", i.e. has parentheses, within the
 `renderPlot()` function.
 
 
 
 ~~~r
-output[['species_plot']] <- renderPlot({
-  df <- animals %>%
-    filter(species_id == input[['pick_species']]) %>%
-    filter(month %in% slider_months()) %>%
-  ggplot(df, aes(year)) +
-    geom_bar()
+output[['city_plot']] <- renderPlot({
+    df <- popdata %>% 
+      filter(NAME == input[['selected_city']]) %>%
+      filter(year %in% slider_years())
+    ggplot(df, aes(x = year, y = population)) + 
+      geom_line() 
 })
 ~~~
 {:title="{{ site.data.lesson.handouts[3] }}" .no-eval .text-document}
@@ -122,10 +124,10 @@ process.
 
 
 ~~~r
-output[['species_table']] <- renderDataTable({
-  df <- animals %>%
-    filter(species_id == input[['pick_species']]) %>%
-    filter(month %in% slider_months())
+output[['city_table']] <- renderDataTable({
+  df <- popdata %>% 
+      filter(NAME == input[['selected_city']]) %>%
+      filter(year %in% slider_years())
   df
 })
 ~~~
@@ -139,7 +141,7 @@ Don't forget to add a corresponding `dataTableOutput()` to the user interface.
 
 
 ~~~r
-out3 <- dataTableOutput('species_table')
+out3 <- dataTableOutput('city_table')
 main <- mainPanel(out1, out2, out3)
 ~~~
 {:title="{{ site.data.lesson.handouts[3] }}" .no-eval .text-document}

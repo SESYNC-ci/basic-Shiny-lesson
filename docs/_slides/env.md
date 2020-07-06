@@ -18,11 +18,7 @@ _relative_ file path.
 
 ~~~r
 # Data
-species <- read.csv('data/species.csv',
-  stringsAsFactors = FALSE)
-animals <- read.csv('data/animals.csv',
-  na.strings = '',
-  stringsAsFactors = FALSE)
+popdata <- read.csv('data/citypopdata.csv')
 ~~~
 {:title="{{ site.data.lesson.handouts[1] }}" .no-eval .text-document}
 

@@ -1,21 +1,17 @@
 # Data
-species <- ...('data/species.csv',
-  stringsAsFactors = FALSE)
-... <- read.csv(...,
-  na.strings = '',
-  stringsAsFactors = FALSE)
+popdata <- ...('data/citypopdata.csv')
 
 # User Interface
 in1 <- selectInput(
   ...,
-  label = 'Pick a species',
+  label = 'Select a city',
   choices = ...)
 ...
 tab1 <- ...(
   ...
   ...)
 ui <- navbarPage(
-  title = 'Portal Project',
+  title = 'Census Population Explorer',
   ...)
 
 # Server

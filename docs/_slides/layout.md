@@ -46,7 +46,7 @@ modify the UI to specify the sidebar and main elements.
 side <- sidebarPanel('Options', in1)
 main <- mainPanel(out1, out2)
 tab1 <- tabPanel(
-  title = 'Species',
+  title = 'City Population',
   sidebarLayout(side, main))
 ~~~
 {:title="{{ site.data.lesson.handouts[2] }}" .no-eval .text-document}

@@ -3,17 +3,14 @@ library(dplyr)
 library(ggplot2)
 
 # Data
-species <- read.csv('data/species.csv',
-  stringsAsFactors = FALSE)
-animals <- read.csv('data/animals.csv',
-  na.strings = '',
-  stringsAsFactors = FALSE)
+popdata <- read.csv('data/citypopdata.csv')
 
 # User Interface
 in1 <- selectInput(
-  inputId = 'pick_species',
-  label = 'Pick a Species',
-  choices = unique(species[['id']]))
+  inputId = 'selected_city',
+  label = 'Select a city',
+  choices = unique(popdata[['NAME']])
+)
 in2 <- ...(
   ... = 'slider_months',
   ...,
@@ -21,15 +18,15 @@ in2 <- ...(
   ...,
   ...)
 side <- sidebarPanel('Options', in1, ...)
-out1 <- textOutput('species_label')
+out1 <- textOutput('city_label')
 out2 <- plotOutput('species_plot')
 ...
 main <- mainPanel(out1, out2, ...)
 tab <- tabPanel(
-  title = 'Species',
+  title = 'City Population',
   sidebarLayout(side, main))
 ui <- navbarPage(
-  title = 'Portal Project',
+  title = 'Census Population Explorer',
   tab)
 
 # Server
@@ -40,20 +37,22 @@ server <- function(input, output) {
     ...
   })
   
-  output[['species_label']] <- renderText({
-    input[['pick_species']]
+  output[['city_label']] <- renderText({
+    input[['selected_city']]
   })
-  output[['species_plot']] <- renderPlot({
-    df <- animals %>%
-      filter(id == input[['pick_species']]) %>%
-      filter(month %in% ...)
-    ggplot(df, aes(year)) +
-      geom_bar()
+  
+  output[['city_plot']] <- renderPlot({
+    df <- popdata %>% 
+      dplyr::filter(NAME == input[['selected_city']])
+    ggplot(df, aes(x = year, y = population)) + 
+      geom_line() + 
+      coord_cartesian(xlim = c(input$my_xlims[1], input$my_xlims[2]))
   })
-  output[['species_table']] <- renderDataTable({
-    df <- animals %>%
-      filter(species_id == input[['pick_species']]) %>%
-      filter(month %in% slider_months())
+  
+  output[['city_table']] <- renderDataTable({
+    df <- popdata %>% 
+      dplyr::filter(NAME == input[['selected_city']]) %>%
+      filter(year %in% slider_months())
     df
   })
 }

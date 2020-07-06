@@ -16,8 +16,7 @@ package. It covers:
 ## Data
 
 This lesson makes use of several publicly available datasets that have been
-customized for teaching purposes, including the [Portal teaching
-database](https://github.com/weecology/portal-teachingdb).
+customized for teaching purposes, including the [Population estimates from the U.S. Census Bureau](https://www.census.gov/programs-surveys/popest.html).
 
 ===
 

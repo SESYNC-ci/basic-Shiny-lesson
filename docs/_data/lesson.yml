@@ -5,8 +5,7 @@ handouts:
  - worksheet-3.R
  - worksheet-4.R
  - www
- - data/species.csv
- - data/animals.csv
+ - data/citypopdata.csv
  - data/README.md
 tag: v0.5
 lesson: 8

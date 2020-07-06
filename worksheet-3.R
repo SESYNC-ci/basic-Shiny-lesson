@@ -3,32 +3,30 @@ library(...)
 library(...)
 
 # Data
-species <- read.csv('data/species.csv',
-  stringsAsFactors = FALSE)
-animals <- read.csv('data/animals.csv',
-  na.strings = '',
-  stringsAsFactors = FALSE)
+popdata <- read.csv('data/citypopdata.csv')
 
 # User Interface
 in1 <- selectInput(
-  inputId = 'pick_species',
-  label = 'Pick a species',
-  choices = unique(species[['id']]))
-out1 <- textOutput('species_label')
+  inputId = 'selected_city',
+  label = 'Select a city',
+  choices = unique(popdata[['NAME']])
+)
+
+out1 <- textOutput('city_label')
 ...
 tab1 <- tabPanel(
-  title = 'Species',
+  title = 'City Population',
   in1, out1, ...)
 ui <- navbarPage(
-  title = 'Portal Project',
+  title = 'Census Population Explorer',
   tab1)
 
 # Server
 server <- function(input, output) {
-  output[['species_label']] <- renderText({
-    input[['pick_species']]
+  output[['city_label']] <- renderText({
+    input[['selected_city']]
   })
-  output[['species_plot']] <- renderPlot({
+  output[['city_plot']] <- renderPlot({
     ...
     ...
     ...
@@ -37,5 +35,4 @@ server <- function(input, output) {
 }
 
 # Create the Shiny App
-addResourcePath('images', 'www/images')
 shinyApp(ui = ui, server = server)
