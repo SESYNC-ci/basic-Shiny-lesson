@@ -8,10 +8,9 @@
 ### Exercise 1
 
 Starting from {{ site.data.lesson.handouts[1] }}, modify the call to `renderText()` to
-create an `output[['species_label']]` with the genus and species name. You can
-find those data in the species table using the same "species_id". Hint: The
+create an `output[['city_label']]` with both the city name and its statistical area description. You can find those data in the "LSAD" column of popdata. Hint: The
 function `paste()` with argument `collapse = ' '` will convert a data frame row
-to a text string.
+to a text string. 
 
 [View solution](#solution-1)
 {:.notes}
@@ -51,8 +50,8 @@ dite.handouts[2] }}.
 Notice the exact same code exists twice within the server function of the app
 you completed in {{ site.data.lesson.handouts[3] }}: once for `renderPlot()` and once for
 `renderDataTable`. The server has no way to identify an intermediate result, the
-filtered data frame, which it could have reused. Replace `slider_months()` with
-a new `selection_animals()` function that returns the entire `data.frame` needed
+filtered data frame, which it could have reused. Replace `slider_years()` with
+a new `selection_years()` function that returns the entire `data.frame` needed
 by both outputs. Bask in the knowledge of the CPU time saved, and congratulate
 yourself for practicing DYR!
 
@@ -73,39 +72,36 @@ library(dplyr)
 library(ggplot2)
 
 # Data
-species <- read.csv('data/species.csv',
-  stringsAsFactors = FALSE)
-animals <- read.csv('data/animals.csv',
-  na.strings = '',
-  stringsAsFactors = FALSE)
+popdata <- read.csv('data/citypopdata.csv')
 
 # User Interface
 in1 <- selectInput(
-  inputId = 'pick_species',
-  label = 'Pick a species',
-  choices = unique(species[['id']]))
-out1 <- textOutput('species_label')
-out2 <- plotOutput('species_plot')
+  inputId = 'selected_city',
+  label = 'Select a city',
+  choices = unique(popdata[['NAME']])
+)
+out1 <- textOutput('city_label')
+out2 <- plotOutput('city_plot')
 tab <- tabPanel(
-  title = 'Species',
+  title = 'City Population',
   in1, out1, out2)
 ui <- navbarPage(
-  title = 'Portal Project',
+  title = 'Census Population Explorer',
   tab)
 
 # Server
 server <- function(input, output) {
-  output[['species_label']] <- renderText({
-    species %>%
-      filter(id == input[['pick_species']]) %>%
-      select(genus, species) %>%
-      paste(collapse = ' ')
+  output[['city_label']] <- renderText({
+    popdata %>% filter(NAME == input[['selected_city']]) %>%
+    slice(1) %>% 
+    dplyr::select(NAME, LSAD) %>%
+    paste(collapse = ' ')
   })
-  output[['species_plot']] <- renderPlot({
-    df <- animals %>%
-      filter(species_id == input[['pick_species']])
-    ggplot(df, aes(year)) +
-      geom_bar()
+  output[['city_plot']] <- renderPlot({
+    df <- popdata %>% 
+      dplyr::filter(NAME == input[['selected_city']])
+     ggplot(df, aes(x = year, y = population)) + 
+      geom_line() 
   })
 }
 
@@ -126,50 +122,46 @@ library(dplyr)
 library(ggplot2)
 
 # Data
-species <- read.csv('data/species.csv',
-  stringsAsFactors = FALSE)
-animals <- read.csv('data/animals.csv',
-  na.strings = '',
-  stringsAsFactors = FALSE)
+popdata <- read.csv('citypopdata.csv')
 
 # User Interface
 in1 <- selectInput(
-  inputId = 'pick_species',
-  label = 'Pick a species',
-  choices = unique(species[['id']]))
+  inputId = 'selected_city',
+  label = 'Select a city',
+  choices = unique(popdata[['NAME']]))
 side <- sidebarPanel('Options', in1)
-out1 <- textOutput('species_label')
+out1 <- textOutput('city_label')
 out2 <- tabPanel(
   title = 'Plot',
-  plotOutput('species_plot'))
+  plotOutput('city_plot'))
 out3 <- tabPanel(
   title = 'Data',
-  dataTableOutput('species_table'))                 
+  dataTableOutput('city_table'))                 
 main <- mainPanel(out1, tabsetPanel(out2, out3))
 tab <- tabPanel(
-  title = 'Species',
+  title = 'City Population',
   sidebarLayout(side, main))
 ui <- navbarPage(
-  title = 'Portal Project',
+  title = 'Census Population Explorer',
   tab)
 
 # Server
 server <- function(input, output) {
-  output[['species_label']] <- renderText({
-    species %>%
-      filter(id == input[['pick_species']]) %>%
-      select(genus, species) %>%
-      paste(collapse = ' ')
+  output[['city_label']] <- renderText({
+    popdata %>% filter(NAME == input[['selected_city']]) %>%
+    slice(1) %>% 
+    dplyr::select(NAME, LSAD) %>%
+    paste(collapse = ' ')
   })
-  output[['species_plot']] <- renderPlot({
-    df <- animals %>%
-      filter(species_id == input[['pick_species']])
-    ggplot(df, aes(year)) +
-      geom_bar()
+  output[['city_plot']] <- renderPlot({
+    df <- popdata %>% 
+      dplyr::filter(NAME == input[['selected_city']])
+     ggplot(df, aes(x = year, y = population)) + 
+      geom_line() 
   })
-  output[['species_table']] <- renderDataTable({
-    animals %>%
-      filter(species_id == input[['pick_species']])
+  output[['city_table']] <- renderDataTable({
+    popdata %>%
+      dplyr::filter(NAME == input[['selected_city']])
   })
 }
 
@@ -197,54 +189,50 @@ library(dplyr)
 library(ggplot2)
 
 # Data
-species <- read.csv('data/species.csv',
-  stringsAsFactors = FALSE)
-animals <- read.csv('data/animals.csv',
-  na.strings = '',
-  stringsAsFactors = FALSE)
+popdata <- read.csv('data/citypopdata.csv')
 
 # User Interface
 in1 <- selectInput(
-  inputId = 'pick_species',
-  label = 'Pick a species',
-  choices = unique(species[['id']]))
+  inputId = 'selected_city',
+  label = 'Select a city',
+  choices = unique(popdata[['NAME']]))
 img <- img(
-  src = 'images/gkr2.jpg',
-  alt = 'Portal Project research subject',
+  src = 'images/outreach.jpg',
+  alt = 'Census outreach flyer',
   width = '100%')
-side <- sidebarPanel(img, 'Options', in1)
-out1 <- textOutput('species_label')
+side <- sidebarPanel('Options', img, in1)
+out1 <- textOutput('city_label')
 out2 <- tabPanel(
   title = 'Plot',
-  plotOutput('species_plot'))
+  plotOutput('city_plot'))
 out3 <- tabPanel(
   title = 'Data',
-  dataTableOutput('species_table'))                 
+  dataTableOutput('city_table'))                 
 main <- mainPanel(out1, tabsetPanel(out2, out3))
 tab <- tabPanel(
-  title = 'Species',
+  title = 'City Population',
   sidebarLayout(side, main))
 ui <- navbarPage(
-  title = 'Portal Project',
+  title = 'Census Population Explorer',
   tab)
 
 # Server
 server <- function(input, output) {
-  output[['species_label']] <- renderText({
-    species %>%
-      filter(id == input[['pick_species']]) %>%
-      select(genus, species) %>%
+  output[['city_label']] <- renderText({
+    popdata %>% filter(NAME == input[['selected_city']]) %>%
+      slice(1) %>% 
+      dplyr::select(NAME, LSAD) %>%
       paste(collapse = ' ')
   })
-  output[['species_plot']] <- renderPlot({
-    df <- animals %>%
-      filter(species_id == input[['pick_species']])
-    ggplot(df, aes(year)) +
-      geom_bar()
+  output[['city_plot']] <- renderPlot({
+    df <- popdata %>% 
+      dplyr::filter(NAME == input[['selected_city']])
+    ggplot(df, aes(x = year, y = population)) + 
+      geom_line() 
   })
-  output[['species_table']] <- renderDataTable({
-    animals %>%
-      filter(species_id == input[['pick_species']])
+  output[['city_table']] <- renderDataTable({
+    popdata %>%
+      dplyr::filter(NAME == input[['selected_city']])
   })
 }
 
@@ -266,59 +254,57 @@ library(dplyr)
 library(ggplot2)
 
 # Data
-species <- read.csv('data/species.csv',
-  stringsAsFactors = FALSE)
-animals <- read.csv('data/animals.csv',
-  na.strings = '',
-  stringsAsFactors = FALSE)
+popdata <- read.csv('data/citypopdata.csv')
 
 # User Interface
 in1 <- selectInput(
-  inputId = 'pick_species',
-  label = 'Pick a species',
-  choices = unique(species[['id']]))
+  inputId = 'selected_city',
+  label = 'Select a city',
+  choices = unique(popdata[['NAME']])
 in2 <- sliderInput(
-  inputId = 'slider_months',
-  label = 'Month Range',
-  min = 1, max = 12,
-  value = c(1, 12))
+  "my_xlims", 
+  label = "Set X axis limits",
+  min = 2010, 
+  max = 2018,
+  value = c(2010, 2018))
 side <- sidebarPanel('Options', in1, in2)									    
-out1 <- textOutput('species_label')
+out1 <- textOutput('city_label')
 out2 <- tabPanel(
   title = 'Plot',
-  plotOutput('species_plot'))
+  plotOutput('city_plot'))
 out3 <- tabPanel(
   title = 'Data',
-  dataTableOutput('species_table'))                 
+  dataTableOutput('city_table'))                 
 main <- mainPanel(out1, tabsetPanel(out2, out3))
 tab1 <- tabPanel(
-  title = 'Species',
+  title = 'City Population',
   sidebarLayout(side, main))
 ui <- navbarPage(
-  title = 'Portal Project',
+  title = 'Census Population Explorer',
   tab1)
 
 # Server
 server <- function(input, output) {
-  selected_animals <- reactive({
-    animals %>%
-      filter(species_id == input[['pick_species']]) %>%
+  selected_years <- reactive({
+    popdata %>%
+      filter(NAME == input[['NAME']]) %>%
       filter(
-        month >= input[['slider_months']][1],
-        month <= input[['slider_months']][2])
+        year >= input[['slider_years']][1],
+        year <= input[['slider_years']][2])
   })
-  output[['species_label']] <- renderText({
-    species %>%
-      filter(id == input[['pick_species']]) %>%
-      select(genus, species) %>%
+  output[['city_label']] <- renderText({
+    popdata %>% 
+      filter(NAME == input[['selected_city']]) %>%
+      slice(1) %>% 
+      dplyr::select(NAME, LSAD) %>%
       paste(collapse = ' ')
   })
-  output[['species_plot']] <- renderPlot({
-    ggplot(selected_animals(), aes(year)) +
-      geom_bar()
+  output[['city_plot']] <- renderPlot({
+   ggplot(selected_years(), aes(x = year, y = population)) + 
+      geom_line() 
   })
-  output[['species_table']] <- renderDataTable({
-    selected_animals()
+  output[['city_table']] <- renderDataTable({
+    selected_years()
   })
 }
 
