@@ -37,7 +37,7 @@ debugging a shiny app!
 
 ===
 
-To re-organize the elements of the "Species" tab using a sidebar layout, we
+To re-organize the elements of the "City Population" tab using a sidebar layout, we
 modify the UI to specify the sidebar and main elements.
 
 
