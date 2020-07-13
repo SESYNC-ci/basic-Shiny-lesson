@@ -12,14 +12,14 @@ in1 <- selectInput(
   choices = unique(popdata[['NAME']])
 )
 in2 <- ...(
-  ... = 'slider_months',
-  ...,
+  ... = 'my_xlims',
+  ... = "Set X axis limits",
   ...,
   ...,
   ...)
 side <- sidebarPanel('Options', in1, ...)
 out1 <- textOutput('city_label')
-out2 <- plotOutput('species_plot')
+out2 <- plotOutput('city_plot')
 ...
 main <- mainPanel(out1, out2, ...)
 tab <- tabPanel(
@@ -32,7 +32,7 @@ ui <- navbarPage(
 # Server
 server <- function(input, output) {
 
-  slider_months <- reactive({
+  slider_years <- reactive({
     ...
     ...
   })
@@ -43,16 +43,16 @@ server <- function(input, output) {
   
   output[['city_plot']] <- renderPlot({
     df <- popdata %>% 
-      dplyr::filter(NAME == input[['selected_city']])
+      filter(NAME == input[['selected_city']]) %>%
+      filter(year %in% ...)
     ggplot(df, aes(x = year, y = population)) + 
-      geom_line() + 
-      coord_cartesian(xlim = c(input$my_xlims[1], input$my_xlims[2]))
+      geom_line()
   })
   
   output[['city_table']] <- renderDataTable({
     df <- popdata %>% 
       dplyr::filter(NAME == input[['selected_city']]) %>%
-      filter(year %in% slider_months())
+      filter(year %in% ...)
     df
   })
 }

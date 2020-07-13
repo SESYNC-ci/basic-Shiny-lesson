@@ -26,11 +26,11 @@ server <- function(input, output) {
   output[['city_label']] <- renderText({
     input[['selected_city']]
   })
-  output[['city_plot']] <- renderPlot({
-    ...
-    ...
-    ...
-    ...
+  output[['city_plot']] <- ...({
+    df <- popdata %>%
+      ...(NAME == ...)
+    ...(..., aes(x = year, y = population)) +
+      ...()
   })
 }
 

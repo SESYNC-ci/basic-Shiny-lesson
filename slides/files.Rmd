@@ -73,7 +73,7 @@ to the function `shinyApp()`. These are the essential components of a Shiny app.
 
 ```{r, eval=FALSE, handout = 0}
 # User Interface
-ui <- navbarPage(title = 'Hello, World!')
+ui <- navbarPage(title = 'Hello, Shiny World!')
 
 # Server
 server <- function(input, output) {}
@@ -88,7 +88,7 @@ The **Run App** button in the Editor allows you to control whether the app
 runs in a browser window, in the RStudio Viewer pane, or in an external RStudio
 window.
 
-![]({% include asset.html path="images/runapp.png" %}){:.nobox}
+![]({% include asset.html path="images/run-app.png" %}){:.nobox}
 {:.captioned}
 
 The `shiny` package must be installed for RStudio to identify files associated
