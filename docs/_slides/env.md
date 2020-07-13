@@ -9,10 +9,11 @@ won't however find variables in your current environment! Every dependency must
 be in the script run by the server.
 {:.notes}
 
-To Begin your own Shiny app, read in CSV files from the Portal Dataset, so the
-variables are available to definitions of both the `ui` and `server`. The app
-script is in the same folder as `data`, and you only need to specify the
-_relative_ file path.
+To begin building your own Shiny app, first read in a CSV file with data that
+we will explore in the app. These data are yearly population estimates for U.S. 
+cities between 2010-2019 from the [U.S. Census Bureau](https://www.census.gov/data/tables/time-series/demo/popest/2010s-total-metro-and-micro-statistical-areas.html). 
+Once the data is in your R environment, it will be available to use in
+both the `ui` and `server` objects.
 
 
 

@@ -29,7 +29,7 @@ Answer
 ===
 
 The app in `{{ site.data.lesson.handouts[3] }}` will have a new input object in the sidebar
-panel, a slider that constrains the plotted data to a user defined range of
+panel: a slider that constrains the plotted data to a user defined range of
 years
 
 
@@ -57,7 +57,7 @@ filter within the `renderPlot()` function.
 ~~~r
 filter(year %in% ...)
 ~~~
-{:title="{{ site.data.lesson.handouts[3] }}" .no-eval .text-document}
+{:title="" .no-eval .text-document}
 
 
 In order for `filter()` to dynamically respond to the slider, whatever replaces
@@ -67,7 +67,7 @@ In order for `filter()` to dynamically respond to the slider, whatever replaces
 
 Shiny provides a function factory called `reactive()`. It returns a function
 that behaves like elements in the `input` list--they are reactive. We'll use it
-to create the function `slider_years()` to dynamically update the filter.
+to create the function `slider_years()` to dynamically update and pass to the filter.
 
 
 
@@ -83,7 +83,8 @@ slider_years <- reactive({
 ===
 
 The `%in%` test within `filter()` needs a sequence, so we wrap `seq` in
-`reactive` to generate a function that responds to a user input.
+`reactive` to generate a function that creates a sequence based on the user
+selected values in the slider bar.
 
 
 
@@ -136,7 +137,8 @@ output[['city_table']] <- renderDataTable({
 
 ===
 
-Don't forget to add a corresponding `dataTableOutput()` to the user interface.
+Too see the data table output, add a corresponding `dataTableOutput()` to the 
+user interface and place it in the main panel.
 
 
 
@@ -146,3 +148,8 @@ main <- mainPanel(out1, out2, out3)
 ~~~
 {:title="{{ site.data.lesson.handouts[3] }}" .no-eval .text-document}
 
+
+===
+
+Now the `{{ site.data.lesson.handouts[3] }}` file is again a complete app, so go ahead and
+**runApp**!

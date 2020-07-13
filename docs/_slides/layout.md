@@ -4,7 +4,7 @@
 ## Design and Layout
 
 A suite of `*Layout()` functions make for a nicer user interface. You can
-organize elements using pre-defined high level layouts such as
+organize elements with a page using pre-defined high level layouts such as
 
 - `sidebarLayout()`
 - `splitLayout()`
@@ -38,7 +38,11 @@ debugging a shiny app!
 ===
 
 To re-organize the elements of the "City Population" tab using a sidebar layout, we
-modify the UI to specify the sidebar and main elements.
+modify the UI to specify the sidebar and main elements. Create objects `side` and
+`main` then redefine the layout of `tab1`.
+
+You may need to resize your app viewer window wider for the sidebar to appear on the left. 
+{:.notes}
 
 
 
@@ -50,35 +54,6 @@ tab1 <- tabPanel(
   sidebarLayout(side, main))
 ~~~
 {:title="{{ site.data.lesson.handouts[2] }}" .no-eval .text-document}
-
-
-===
-
-## General Layouts
-
-The `fluidPage()` layout design consists of rows which contain columns of
-elements.
-
-To use it, first define the width of an element relative to a 12-unit
-grid within each column using the function `fluidRow()` and listing columns in
-units of 12. The argument `offset` can be used to add extra spacing. For
-example:
-{:.notes}
-
-
-
-~~~r
-> fluidPage(
-+   fluidRow(
-+     column(4, '4'),
-+     column(4, offset = 4, '4 offset 4')      
-+   ),
-+   fluidRow(
-+     column(3, offset = 3, '3 offset 3'),
-+     column(3, offset = 3, '3 offset 3')  
-+   ))
-~~~
-{:title="Console" .no-eval .input}
 
 
 ===
@@ -121,7 +96,7 @@ functions produce HTML code.
 
 ===
 
-## Layout Tips
+## More Layout Tips and Options
 
 - In addition to titles for tabs, you can also use
   [icons](http://shiny.rstudio.com/reference/shiny/latest/icon.html).

@@ -68,7 +68,8 @@ in1 <- selectInput(
 
 ===
 
-Add the input to the `tabPanel()` in the `ui`. There's more to come for that panel!
+Add the input object to the `tabPanel()` and place the tab object
+in the `ui` page. There's more to come for that panel!
 
 
 
@@ -122,7 +123,7 @@ result of each `render*()` function to a list of output objects.
 
 ## Text Output
 
-Render the species ID as text using `renderText()` in the server function,
+Render the city name as text using `renderText()` in the server function,
 identifying the output as `city_label`.
 
 
@@ -140,7 +141,7 @@ server <- function(input, output) {
 
 ===
 
-Display the species ID as text in the user interface's `tabPanel` as a
+Display the city name as text in the user interface's `tabPanel` as a
 `textOutput` object.
 
 
@@ -183,7 +184,7 @@ exmaple, see "Creating controls on the fly"
 ## Graphical Output
 
 The app in `{{ site.data.lesson.handouts[2] }}`, will use the popdata table to plot
-population over time of the selected city, rather than just printing its name
+population over time of the selected city, rather than just printing its name.
 
 First, the server must filter the data based on the selected city, and
 then create a plot **within** the `renderPlot()` function. Don't forget to
@@ -195,6 +196,8 @@ import the necessary libraries.
 
 
 ~~~r
+library(ggplot2)
+library(dplyr)
 # Server
 server <- function(input, output) {
   output[['city_label']] <- renderText({
@@ -230,3 +233,8 @@ ui <- navbarPage(
 ~~~
 {:title="{{ site.data.lesson.handouts[2] }}" .no-eval .text-document}
 
+
+===
+
+Now the `{{ site.data.lesson.handouts[2] }}` file is again a complete app, so go ahead and
+**runApp**!
