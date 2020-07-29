@@ -1,0 +1,1005 @@
+---
+---
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interactive Web Applications with Shiny</title>
+<meta name="description" content="Get interactive with the Shiny R package.">
+<link rel="canonical"
+      href="https://SESYNC-ci.github.io/basic-Shiny-lesson/2020/07/21/index.html">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SESYNC-ci/lesson-style@3.0/docs/assets/css/default.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SESYNC-ci/lesson-style@3.0/docs/assets/css/syntax.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SESYNC-ci/lesson-style@3.0/docs/assets/css/static.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+      rel="stylesheet"
+      integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+      crossorigin="anonymous">
+
+    
+  </head>
+  <body>
+    <div class="page-content">
+      <div class="wrapper">
+        
+
+<h1 style="text-transform: none;" id="interactive-web-applications-with-shiny">Interactive Web Applications with Shiny</h1>
+
+<p>Lesson 8 with <em>Kelly Hondula</em></p>
+
+<nav id="ToC">
+
+  <ul>
+    <li><a href="#/slides/intro">Lesson Goals</a></li>
+    <li><a href="#/slides/files">Shiny Components</a></li>
+    <li><a href="#/slides/env">Accessing Data</a></li>
+    <li><a href="#/slides/io">Input/Output Objects</a></li>
+    <li><a href="#/slides/layout">Design and Layout</a></li>
+    <li><a href="#/slides/reactive">Reactivity</a></li>
+    <li><a href="#/slides/share">Share Your App</a></li>
+    <li><a href="#/slides/exercises">Exercises</a></li>
+  </ul>
+</nav>
+
+<hr />
+<p><a name="/slides/intro"></a></p>
+
+<h2 id="lesson-goals">Lesson Goals</h2>
+
+<p>This lesson presents an introduction to creating interactive web applications
+using the R <a href="https://cran.r-project.org/web/packages/shiny/index.html">Shiny</a>
+package. It covers:</p>
+
+<ul>
+  <li>basic building blocks of a Shiny app</li>
+  <li>how to display interactive elements &amp; plots</li>
+  <li>how to customize and arrange elements on a page</li>
+</ul>
+
+<h2 id="data">Data</h2>
+
+<p>This lesson makes use of several publicly available datasets that have been
+customized for teaching purposes, including the <a href="https://www.census.gov/programs-surveys/popest.html">Population estimates from the U.S. Census Bureau</a>.</p>
+
+<h2 id="what-is-shiny">What is Shiny?</h2>
+
+<p class="notes">Shiny is a web application framework for R that allows you to create interactive
+web apps without requiring knowledge of HTML, CSS, or JavaScript. These web apps
+can be used for exploratory data analysis and visualization, to facilitate
+remote collaboration, share results, and <a href="http://shiny.rstudio.com/gallery/">much
+more</a>. The example below, and many
+<a href="http://shiny.rstudio.com/tutorial/lesson1/#Go Further">additional examples</a>,
+will open in a new browser window (you may need to prevent your broswer from
+blocking pop-out windows in order to view the app).</p>
+
+<p>The <a href="" class="rlib">shiny</a> package includes some built-in examples to demonstrate
+some of its basic features. When applications are running, they are displayed in
+a separate browser window or the RStudio Viewer pane.</p>
+
+<div class="language-r no-eval input highlighter-rouge" title="Console"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span><span class="w"> </span><span class="n">library</span><span class="p">(</span><span class="n">shiny</span><span class="p">)</span><span class="w">
+</span><span class="o">&gt;</span><span class="w"> </span><span class="n">runExample</span><span class="p">(</span><span class="s1">'01_hello'</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext output message highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+Listening on http://127.0.0.1:4321
+</code></pre></div></div>
+
+<p>Notice back in RStudio that a stop sign appears in the Console window while your
+app is running. This is because the current R session is busy running your
+application.</p>
+
+<p class="notes">Closing the app window may not stop the app from using your R session. Force the
+app to close when necessary by clicking the stop sign in the header of the
+Console window. The Console window prompt <code class="language-plaintext highlighter-rouge">&gt;</code> should return.</p>
+
+<p class="ToS"><a href="#/slides/intro">Top of Section</a></p>
+
+<hr />
+<p><a name="/slides/files"></a></p>
+
+<h2 id="shiny-components">Shiny Components</h2>
+
+<p>Depending on the purpose and computing requirements of any Shiny app, you may
+set it up to run R code on your computer, a remote server, or in the cloud.
+However all Shiny apps consists of the same two main components:</p>
+
+<ul>
+  <li>The <strong>user interface (UI)</strong> defines what users will see in the app and
+its design.</li>
+  <li>The <strong>server</strong> defines the instructions for how to assemble components
+of the app like plots and input widgets.</li>
+</ul>
+
+<h2 id="who-is-listening-on-where">Who is “Listening” on Where?</h2>
+
+<p class="notes">The terms “client” and “server” show up a lot in discussing Shiny. The client is
+the web browser. The server is a running program that is waiting to process
+requests sent by the client. For development, one computer runs both the client
+and the server.</p>
+
+<ul>
+  <li>127.0.0.1 is the IP address your computer uses for itself (it’s the same as
+‘localhost’).</li>
+  <li>Your computer is hosting a web page (the UI) whose content is controlled by a
+running R session.</li>
+  <li>When you run an app through RStudio, that R session is also running the server
+on your computer.</li>
+  <li>The server responds when you interact with the web page, processing R commands
+and updating UI objects accordingly.</li>
+</ul>
+
+<p>For big projects, the UI and server components may be defined in separate files
+called <code class="language-plaintext highlighter-rouge">ui.R</code> and <code class="language-plaintext highlighter-rouge">server.R</code> and saved in a folder representing the app.</p>
+
+<div class="language-plaintext text-document no-eval highlighter-rouge" title="App Folder"><div class="highlight"><pre class="highlight"><code>my_app
+├── ui.R
+├── server.R
+├── www
+└── data
+</code></pre></div></div>
+
+<p>For ease of demonstration, we’ll use the alternative approach of defining UI and
+server objects in a R script representing the app.</p>
+
+<div class="language-r no-eval text-document highlighter-rouge" title="my_app.R"><div class="highlight"><pre class="highlight"><code><span class="c1"># User Interface</span><span class="w">
+</span><span class="n">ui</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">...</span><span class="w"> 
+
+</span><span class="c1"># Server</span><span class="w">
+</span><span class="n">server</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">...</span><span class="w">
+
+</span><span class="c1"># Create the Shiny App</span><span class="w">
+</span><span class="n">shinyApp</span><span class="p">(</span><span class="n">ui</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ui</span><span class="p">,</span><span class="w"> </span><span class="n">server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">server</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="hello-world">Hello, World!</h2>
+
+<p>Open <code class="language-plaintext highlighter-rouge">worksheet-8-1.R</code> in your handouts repository. In this file, define
+objects <code class="language-plaintext highlighter-rouge">ui</code> and <code class="language-plaintext highlighter-rouge">server</code> with the assignment operator <code class="language-plaintext highlighter-rouge">&lt;-</code> and then pass them
+to the function <code class="language-plaintext highlighter-rouge">shinyApp()</code>. These are the essential components of a Shiny app.</p>
+
+<div class="language-r no-eval text-document highlighter-rouge" title="worksheet-8-1.R"><div class="highlight"><pre class="highlight"><code><span class="c1"># User Interface</span><span class="w">
+</span><span class="n">ui</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">navbarPage</span><span class="p">(</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Hello, Shiny World!'</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># Server</span><span class="w">
+</span><span class="n">server</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span><span class="w">
+
+</span><span class="c1"># Create the Shiny App</span><span class="w">
+</span><span class="n">shinyApp</span><span class="p">(</span><span class="n">ui</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ui</span><span class="p">,</span><span class="w"> </span><span class="n">server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">server</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>The <strong>Run App</strong> button in the Editor allows you to control whether the app
+runs in a browser window, in the RStudio Viewer pane, or in an external RStudio
+window.</p>
+
+<p class="captioned"><img src="https://cdn.jsdelivr.net/gh/SESYNC-ci/basic-Shiny-lesson@v0.6/docs/assets/images/run-app.png" alt="" class="nobox" /></p>
+
+<p class="notes">The <code class="language-plaintext highlighter-rouge">shiny</code> package must be installed for RStudio to identify files associated
+with a Shiny App and provide a <strong>Run App</strong> button. Note that the file names must
+be <code class="language-plaintext highlighter-rouge">ui.R</code> and <code class="language-plaintext highlighter-rouge">server.R</code> if these components are scripted in separate files.</p>
+
+<p class="ToS"><a href="#/slides/files">Top of Section</a></p>
+
+<hr />
+<p><a name="/slides/env"></a></p>
+
+<h2 id="accessing-data">Accessing Data</h2>
+
+<p class="notes">Because the Shiny app is going to be using your local R session to run, it will
+be able to recognize anything that is loaded into your working environment. It
+won’t however find variables in your current environment! Every dependency must
+be in the script run by the server.</p>
+
+<p>To begin building your own Shiny app, first read in a CSV file with data that
+we will explore in the app. These data are yearly population estimates for U.S. 
+cities between 2010-2019 from the <a href="https://www.census.gov/data/tables/time-series/demo/popest/2010s-total-metro-and-micro-statistical-areas.html">U.S. Census Bureau</a>. 
+Once the data is in your R environment, it will be available to use in
+both the <code class="language-plaintext highlighter-rouge">ui</code> and <code class="language-plaintext highlighter-rouge">server</code> objects.</p>
+
+<div class="language-r no-eval text-document highlighter-rouge" title="worksheet-8-2.R"><div class="highlight"><pre class="highlight"><code><span class="c1"># Data</span><span class="w">
+</span><span class="n">popdata</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.csv</span><span class="p">(</span><span class="s1">'data/citypopdata.csv'</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p class="notes">Shiny apps can also be designed to interact with remote data or database servers.</p>
+
+<p class="ToS"><a href="#/slides/env">Top of Section</a></p>
+
+<hr />
+<p><a name="/slides/io"></a></p>
+
+<h2 id="inputoutput-objects">Input/Output Objects</h2>
+
+<p class="notes">The user interface and the server interact with each other through <strong>input</strong> and
+<strong>output</strong> objects. The user’s interaction with input objects alters parameters
+in the server’s instructions – instructions for creating output objects shown
+in the UI.</p>
+
+<p>Writing an app requires careful attention to how input and output objects
+relate to each other, i.e. knowing what actions will initiate what sections of
+code to run when.</p>
+
+<p>This diagrams input and output relationships within the UI and server objects:</p>
+
+<p class="captioned"><img src="https://cdn.jsdelivr.net/gh/SESYNC-ci/basic-Shiny-lesson@v0.6/docs/assets/images/arrows3.png" alt="" class="nobox" /></p>
+
+<ul>
+  <li>Input objects are created and named in the UI with <code class="language-plaintext highlighter-rouge">*Input()</code> functions like
+<code class="language-plaintext highlighter-rouge">selectInput()</code> or <code class="language-plaintext highlighter-rouge">radioButtons()</code>.</li>
+  <li>Data from input objects affects <code class="language-plaintext highlighter-rouge">render*()</code> functions, like <code class="language-plaintext highlighter-rouge">renderPlot()</code> or
+<code class="language-plaintext highlighter-rouge">renderText()</code>, in the server that create output objects.</li>
+  <li>Output objects are placed in the UI using <code class="language-plaintext highlighter-rouge">*Output()</code> functions like
+<code class="language-plaintext highlighter-rouge">plotOutput()</code> or <code class="language-plaintext highlighter-rouge">textOutput()</code>.</li>
+</ul>
+
+<h2 id="input-objects">Input Objects</h2>
+
+<p class="notes">Input objects collect information from the user, and are passed to the server as
+a list. Input values change when a user changes the input, and the server is
+immediately notified. Inputs can be many different things: single values, text,
+vectors, dates, or even files uploaded by the user.</p>
+
+<p>The best way to find the object you want is through Shiny’s <a href="http://shiny.rstudio.com/gallery/widget-gallery.html">gallery of input
+objects</a> with sample code.</p>
+
+<p>The first two arguments for all input objects are:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">inputId</code> (notice the capitalization here!), for giving the input
+object a name to refer to in the server</li>
+  <li><code class="language-plaintext highlighter-rouge">label</code> or the text to display for the user</li>
+</ul>
+
+<p>Create an input object to let users select a city name from the population data.</p>
+
+<div class="language-r no-eval text-document highlighter-rouge" title="worksheet-8-2.R"><div class="highlight"><pre class="highlight"><code><span class="c1"># User Interface</span><span class="w">
+</span><span class="n">in1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">selectInput</span><span class="p">(</span><span class="w">
+  </span><span class="n">inputId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'selected_city'</span><span class="p">,</span><span class="w">
+  </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Select a city'</span><span class="p">,</span><span class="w">
+  </span><span class="n">choices</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">unique</span><span class="p">(</span><span class="n">popdata</span><span class="p">[[</span><span class="s1">'NAME'</span><span class="p">]]))</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Add the input object to the <code class="language-plaintext highlighter-rouge">tabPanel()</code> and place the tab object
+in the <code class="language-plaintext highlighter-rouge">ui</code> page. There’s more to come for that panel!</p>
+
+<div class="language-r no-eval text-document highlighter-rouge" title="worksheet-8-2.R"><div class="highlight"><pre class="highlight"><code><span class="n">...</span><span class="w">
+</span><span class="n">tab1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tabPanel</span><span class="p">(</span><span class="w">
+  </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'City Population'</span><span class="p">,</span><span class="w">
+  </span><span class="n">in1</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p">)</span><span class="w">
+</span><span class="n">ui</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">navbarPage</span><span class="p">(</span><span class="w">
+  </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Census Population Explorer'</span><span class="p">,</span><span class="w">
+  </span><span class="n">tab1</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p class="notes">Use the <code class="language-plaintext highlighter-rouge">selectInput()</code> function to create an input object called
+<code class="language-plaintext highlighter-rouge">selected_city</code>. Use the <code class="language-plaintext highlighter-rouge">choices = </code> argument to define a vector with the unique
+values in the NAME column. Make the input object an argument to the
+function <code class="language-plaintext highlighter-rouge">tabPanel()</code>, preceded by a title argument. We will learn about design
+and layout in a subsequent section.</p>
+
+<h2 id="input-object-tips">Input Object Tips</h2>
+
+<ul>
+  <li>“choices”” for inputs can be named using a list matching a display name to its
+value, such as <code class="language-plaintext highlighter-rouge">list(Male = 'M', Female = 'F')</code>.</li>
+  <li><a href="http://shiny.rstudio.com/gallery/selectize-vs-select.html">Selectize</a> inputs
+are a useful option for long drop down lists.</li>
+  <li>Always be aware of what the default value is for input objects you create.</li>
+</ul>
+
+<h2 id="output-objects">Output Objects</h2>
+
+<p class="notes">Output objects are created by a <code class="language-plaintext highlighter-rouge">render*()</code> function in the server and displayed
+by a the paired <code class="language-plaintext highlighter-rouge">*Output()</code> function in the UI. The server function adds the
+result of each <code class="language-plaintext highlighter-rouge">render*()</code> function to a list of output objects.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Desired UI Object</th>
+      <th><code class="language-plaintext highlighter-rouge">render*()</code></th>
+      <th><code class="language-plaintext highlighter-rouge">*Output()</code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>plot</td>
+      <td>renderPlot()</td>
+      <td>plotOutput()</td>
+    </tr>
+    <tr>
+      <td>text</td>
+      <td>renderPrint()</td>
+      <td>verbatimTextOutput()</td>
+    </tr>
+    <tr>
+      <td>text</td>
+      <td>renderText()</td>
+      <td>textOutput()</td>
+    </tr>
+    <tr>
+      <td>static table</td>
+      <td>renderTable()</td>
+      <td>tableOutput()</td>
+    </tr>
+    <tr>
+      <td>interactive table</td>
+      <td>renderDataTable()</td>
+      <td>dataTableOutput()</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="text-output">Text Output</h2>
+
+<p>Render the city name as text using <code class="language-plaintext highlighter-rouge">renderText()</code> in the server function,
+identifying the output as <code class="language-plaintext highlighter-rouge">city_label</code>.</p>
+
+<div class="language-r no-eval text-document highlighter-rouge" title="worksheet-8-2.R"><div class="highlight"><pre class="highlight"><code><span class="c1"># Server</span><span class="w">
+</span><span class="n">server</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">output</span><span class="p">[[</span><span class="s1">'city_label'</span><span class="p">]]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">renderText</span><span class="p">({</span><span class="w">
+    </span><span class="n">input</span><span class="p">[[</span><span class="s1">'selected_city'</span><span class="p">]]</span><span class="w">
+  </span><span class="p">})</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Display the city name as text in the user interface’s <code class="language-plaintext highlighter-rouge">tabPanel</code> as a
+<code class="language-plaintext highlighter-rouge">textOutput</code> object.</p>
+
+<div class="language-r no-eval text-document highlighter-rouge" title="worksheet-8-2.R"><div class="highlight"><pre class="highlight"><code><span class="n">out1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">textOutput</span><span class="p">(</span><span class="s1">'city_label'</span><span class="p">)</span><span class="w">
+</span><span class="n">tab1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tabPanel</span><span class="p">(</span><span class="w">
+  </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'City Population'</span><span class="p">,</span><span class="w">
+  </span><span class="n">in1</span><span class="p">,</span><span class="w"> </span><span class="n">out1</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Now the <code class="language-plaintext highlighter-rouge">worksheet-8-2.R</code> file is a complete app, so go ahead and
+<strong>runApp</strong>!</p>
+
+<p class="notes">Render functions tell Shiny how to build an output object to display in the user
+interface. Output objects can be data frames, plots, images, text, or most
+anything you can create with R code to be visualized.</p>
+
+<p class="notes">Use <code class="language-plaintext highlighter-rouge">outputId</code> names in quotes to refer to output objects within <code class="language-plaintext highlighter-rouge">*Output()</code>
+functions. Other arguments to <code class="language-plaintext highlighter-rouge">*Output()</code> functions can control their size in
+the UI as well as add advanced interactivity such as <a href="http://shiny.rstudio.com/articles/selecting-rows-of-data.html">selecting observations to
+view data by clicking on a
+plot</a>.</p>
+
+<p class="notes">Note that it is also possible to render reactive input objects using the
+<code class="language-plaintext highlighter-rouge">renderUI()</code> and <code class="language-plaintext highlighter-rouge">uiOutput()</code> functions for situations where you want the type
+or parameters of an input object to change based on another input. For an
+exmaple, see “Creating controls on the fly”
+<a href="http://shiny.rstudio.com/articles/dynamic-ui.html">here</a>.</p>
+
+<h2 id="graphical-output">Graphical Output</h2>
+
+<p>The app in <code class="language-plaintext highlighter-rouge">worksheet-8-3.R</code>, will use the popdata table to plot
+population over time of the selected city, rather than just printing its name.</p>
+
+<p class="notes">First, the server must filter the data based on the selected city, and
+then create a plot <strong>within</strong> the <code class="language-plaintext highlighter-rouge">renderPlot()</code> function. Don’t forget to
+import the necessary libraries.</p>
+
+<div class="language-r no-eval text-document highlighter-rouge" title="worksheet-8-3.R"><div class="highlight"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">dplyr</span><span class="p">)</span><span class="w">
+</span><span class="c1"># Server</span><span class="w">
+</span><span class="n">server</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">output</span><span class="p">[[</span><span class="s1">'city_label'</span><span class="p">]]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">renderText</span><span class="p">({</span><span class="w">
+    </span><span class="n">input</span><span class="p">[[</span><span class="s1">'selected_city'</span><span class="p">]]</span><span class="w">
+  </span><span class="p">})</span><span class="w">
+  </span><span class="n">output</span><span class="p">[[</span><span class="s1">'city_plot'</span><span class="p">]]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">renderPlot</span><span class="p">({</span><span class="w">
+    </span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">popdata</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+      </span><span class="n">dplyr</span><span class="o">::</span><span class="n">filter</span><span class="p">(</span><span class="n">NAME</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">input</span><span class="p">[[</span><span class="s1">'selected_city'</span><span class="p">]])</span><span class="w">
+    </span><span class="n">ggplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">year</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">population</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+      </span><span class="n">geom_line</span><span class="p">()</span><span class="w">
+  </span><span class="p">})</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Second, use the corresponding <code class="language-plaintext highlighter-rouge">plotOutput()</code> function in the UI to display the
+plot in the app.</p>
+
+<div class="language-r no-eval text-document highlighter-rouge" title="worksheet-8-3.R"><div class="highlight"><pre class="highlight"><code><span class="n">out1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">textOutput</span><span class="p">(</span><span class="s1">'city_label'</span><span class="p">)</span><span class="w">
+</span><span class="n">out2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">plotOutput</span><span class="p">(</span><span class="s1">'city_plot'</span><span class="p">)</span><span class="w">
+</span><span class="n">tab1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tabPanel</span><span class="p">(</span><span class="w">
+  </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'City Population'</span><span class="p">,</span><span class="w">
+  </span><span class="n">in1</span><span class="p">,</span><span class="w"> </span><span class="n">out1</span><span class="p">,</span><span class="w"> </span><span class="n">out2</span><span class="p">)</span><span class="w">
+</span><span class="n">ui</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">navbarPage</span><span class="p">(</span><span class="w">
+  </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Census Population Explorer'</span><span class="p">,</span><span class="w">
+  </span><span class="n">tab1</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Now the <code class="language-plaintext highlighter-rouge">worksheet-8-3.R</code> file is again a complete app, so go ahead and
+<strong>runApp</strong>!</p>
+
+<p class="ToS"><a href="#/slides/io">Top of Section</a></p>
+
+<hr />
+<p><a name="/slides/layout"></a></p>
+
+<h2 id="design-and-layout">Design and Layout</h2>
+
+<p>A suite of <code class="language-plaintext highlighter-rouge">*Layout()</code> functions make for a nicer user interface. You can
+organize elements with a page using pre-defined high level layouts such as</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">sidebarLayout()</code></li>
+  <li><code class="language-plaintext highlighter-rouge">splitLayout()</code></li>
+  <li><code class="language-plaintext highlighter-rouge">verticalLayout()</code></li>
+</ul>
+
+<p>The more general <code class="language-plaintext highlighter-rouge">fluidRow()</code> allows any <a href="http://shiny.rstudio.com/articles/layout-guide.html#grid-layouts-in-depth">organization of elements within a
+grid</a>.
+The folowing UI elements, and more, can be layered on top of each other in
+either a fluid page or pre-defined layouts.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">tabsetPanel()</code></li>
+  <li><code class="language-plaintext highlighter-rouge">navlistPanel()</code></li>
+  <li><code class="language-plaintext highlighter-rouge">navbarPage()</code></li>
+</ul>
+
+<p class="notes">Here is a schematic of nested UI elements inside the <code class="language-plaintext highlighter-rouge">sidebarLayout()</code>. Red
+boxes represent input objects and blue boxes represent output objects. Each
+object is located within one or more nested <strong>panels</strong>, which are nested within
+a <strong>layout</strong>. Objects and panels that are at the same level of hierarchy need to
+be separated by commas in calls to parent functions. Mistakes in usage of commas
+and parentheses between UI elements is one of the first things to look for when
+debugging a shiny app!</p>
+
+<p class="captioned"><img src="https://cdn.jsdelivr.net/gh/SESYNC-ci/basic-Shiny-lesson@v0.6/docs/assets/images/layout3.png" alt="" class="nobox" /></p>
+
+<p>To re-organize the elements of the “City Population” tab using a sidebar layout, we
+modify the UI to specify the sidebar and main elements. Create objects <code class="language-plaintext highlighter-rouge">side</code> and
+<code class="language-plaintext highlighter-rouge">main</code> then redefine the layout of <code class="language-plaintext highlighter-rouge">tab1</code>.</p>
+
+<p class="notes">You may need to resize your app viewer window wider for the sidebar to appear on the left.</p>
+
+<div class="language-r no-eval text-document highlighter-rouge" title="worksheet-8-3.R"><div class="highlight"><pre class="highlight"><code><span class="n">side</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sidebarPanel</span><span class="p">(</span><span class="s1">'Options'</span><span class="p">,</span><span class="w"> </span><span class="n">in1</span><span class="p">)</span><span class="w">
+</span><span class="n">main</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mainPanel</span><span class="p">(</span><span class="n">out1</span><span class="p">,</span><span class="w"> </span><span class="n">out2</span><span class="p">)</span><span class="w">
+</span><span class="n">tab1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tabPanel</span><span class="p">(</span><span class="w">
+  </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'City Population'</span><span class="p">,</span><span class="w">
+  </span><span class="n">sidebarLayout</span><span class="p">(</span><span class="n">side</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="customization">Customization</h2>
+
+<p>Along with input and output objects, you can add headers, text, images, links,
+and other html objects to the user interface using “builder” functions. There
+are shiny function equivalents for many common html tags such as <code class="language-plaintext highlighter-rouge">h1()</code> through
+<code class="language-plaintext highlighter-rouge">h6()</code> for headers. You can use the console to see that the return from these
+functions produce HTML code.</p>
+
+<div class="language-r no-eval input highlighter-rouge" title="Console"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span><span class="w"> </span><span class="n">h5</span><span class="p">(</span><span class="s1">'This is a level 5 header.'</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;h5&gt;This is a level 5 header.&lt;/h5&gt;
+</code></pre></div></div>
+
+<div class="language-r no-eval input highlighter-rouge" title="Console"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span><span class="w"> </span><span class="n">a</span><span class="p">(</span><span class="n">href</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'https://www.sesync.org'</span><span class="p">,</span><span class="w">
+</span><span class="o">+</span><span class="w">   </span><span class="s1">'This renders a link'</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;a href="https://www.sesync.org"&gt;This renders a link&lt;/a&gt;
+</code></pre></div></div>
+
+<h2 id="more-layout-tips-and-options">More Layout Tips and Options</h2>
+
+<ul>
+  <li>In addition to titles for tabs, you can also use
+<a href="http://shiny.rstudio.com/reference/shiny/latest/icon.html">icons</a>.</li>
+  <li>Use the argument <code class="language-plaintext highlighter-rouge">position = 'right'</code> in the <code class="language-plaintext highlighter-rouge">sidebarLayout()</code> function if you
+prefer to have the side panel appear on the right.</li>
+  <li>See <a href="http://shiny.rstudio.com/articles/tag-glossary.html">here</a> for additional
+html tags you can use.</li>
+  <li>For large blocks of text consider saving the text in a separate markdown,
+html, or text file and use an <code class="language-plaintext highlighter-rouge">include*</code> function
+(<a href="http://shiny.rstudio.com/gallery/including-html-text-and-markdown-files.html">example</a>).</li>
+  <li>Add images by saving those files in a folder called <strong>www</strong>. Embed it with
+<code class="language-plaintext highlighter-rouge">img(src='&lt;FILENAME&gt;')</code></li>
+  <li>Use <a href="http://rstudio.github.io/shinythemes/">shinythemes</a>!</li>
+</ul>
+
+<p class="ToS"><a href="#/slides/layout">Top of Section</a></p>
+
+<hr />
+<p><a name="/slides/reactive"></a></p>
+
+<h2 id="reactivity">Reactivity</h2>
+
+<p>Input objects are <strong>reactive</strong> which means that an update to this value by a
+user will notify objects in the server that its value has been changed.</p>
+
+<p>The outputs of render functions are called <strong>observers</strong> because they observe
+all “upstream” reactive values for relevant changes.</p>
+
+<h2 id="reactive-objects">Reactive Objects</h2>
+
+<p>The code inside the body of <code class="language-plaintext highlighter-rouge">render*()</code> functions will re-run whenever a
+reactive value (e.g. an input objet) inside the code is changed by the user.
+When any observer is re-rendered, the UI is notified that it has to update.</p>
+
+<dl>
+  <dt>Question</dt>
+  <dd>Which element is an <strong>observer</strong> in the app within <code class="language-plaintext highlighter-rouge">worksheet-8-3.R</code>?</dd>
+  <dt>Answer</dt>
+  <dd class="fragment">The object created by <code class="language-plaintext highlighter-rouge">renderPlot()</code> and stored with outputId
+“city_plot”.</dd>
+</dl>
+
+<p>The app in <code class="language-plaintext highlighter-rouge">worksheet-8-4.R</code> will have a new input object in the sidebar
+panel: a slider that constrains the plotted data to a user defined range of
+years</p>
+
+<div class="language-r no-eval text-document highlighter-rouge" title="worksheet-8-4.R"><div class="highlight"><pre class="highlight"><code><span class="n">in2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sliderInput</span><span class="p">(</span><span class="w">
+  </span><span class="n">inputId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"my_xlims"</span><span class="p">,</span><span class="w"> 
+  </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Set X axis limits"</span><span class="p">,</span><span class="w">
+  </span><span class="n">min</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2010</span><span class="p">,</span><span class="w"> 
+  </span><span class="n">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2018</span><span class="p">,</span><span class="w">
+  </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">2010</span><span class="p">,</span><span class="w"> </span><span class="m">2018</span><span class="p">))</span><span class="w">
+
+</span><span class="n">side</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sidebarPanel</span><span class="p">(</span><span class="s1">'Options'</span><span class="p">,</span><span class="w"> </span><span class="n">in1</span><span class="p">,</span><span class="w"> </span><span class="n">in2</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>The goal is to limit records to the user’s input by adding an additional
+filter within the <code class="language-plaintext highlighter-rouge">renderPlot()</code> function.</p>
+
+<div class="language-r no-eval text-document highlighter-rouge" title=""><div class="highlight"><pre class="highlight"><code><span class="n">filter</span><span class="p">(</span><span class="n">year</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="n">...</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>In order for <code class="language-plaintext highlighter-rouge">filter()</code> to dynamically respond to the slider, whatever replaces
+<code class="language-plaintext highlighter-rouge">...</code> must react to the slider.</p>
+
+<p>Shiny provides a function factory called <code class="language-plaintext highlighter-rouge">reactive()</code>. It returns a function
+that behaves like elements in the <code class="language-plaintext highlighter-rouge">input</code> list–they are reactive. We’ll use it
+to create the function <code class="language-plaintext highlighter-rouge">slider_years()</code> to dynamically update and pass to the filter.</p>
+
+<div class="language-r no-eval text-document highlighter-rouge" title="worksheet-8-4.R"><div class="highlight"><pre class="highlight"><code><span class="n">slider_years</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">reactive</span><span class="p">({</span><span class="w">
+    </span><span class="n">...</span><span class="w">
+    </span><span class="n">...</span><span class="w">
+  </span><span class="p">})</span><span class="w">
+</span></code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">%in%</code> test within <code class="language-plaintext highlighter-rouge">filter()</code> needs a sequence, so we wrap <code class="language-plaintext highlighter-rouge">seq</code> in
+<code class="language-plaintext highlighter-rouge">reactive</code> to generate a function that creates a sequence based on the user
+selected values in the slider bar.</p>
+
+<div class="language-r no-eval text-document highlighter-rouge" title="worksheet-8-4.R"><div class="highlight"><pre class="highlight"><code><span class="n">slider_years</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">reactive</span><span class="p">({</span><span class="w">
+  </span><span class="n">seq</span><span class="p">(</span><span class="n">input</span><span class="p">[[</span><span class="s1">'my_xlims'</span><span class="p">]][</span><span class="m">1</span><span class="p">],</span><span class="w">
+    </span><span class="n">input</span><span class="p">[[</span><span class="s1">'my_xlims'</span><span class="p">]][</span><span class="m">2</span><span class="p">])</span><span class="w">
+</span><span class="p">})</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Make sure that <code class="language-plaintext highlighter-rouge">slider_years()</code> is “called”, i.e. has parentheses, within the
+<code class="language-plaintext highlighter-rouge">renderPlot()</code> function.</p>
+
+<div class="language-r no-eval text-document highlighter-rouge" title="worksheet-8-4.R"><div class="highlight"><pre class="highlight"><code><span class="n">output</span><span class="p">[[</span><span class="s1">'city_plot'</span><span class="p">]]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">renderPlot</span><span class="p">({</span><span class="w">
+    </span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">popdata</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+      </span><span class="n">filter</span><span class="p">(</span><span class="n">NAME</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">input</span><span class="p">[[</span><span class="s1">'selected_city'</span><span class="p">]])</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+      </span><span class="n">filter</span><span class="p">(</span><span class="n">year</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="n">slider_years</span><span class="p">())</span><span class="w">
+    </span><span class="n">ggplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">year</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">population</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+      </span><span class="n">geom_line</span><span class="p">()</span><span class="w"> 
+</span><span class="p">})</span><span class="w">
+</span></code></pre></div></div>
+
+<p>The new reactive can be used in multiple observers, which is easier than
+repeating the <code class="language-plaintext highlighter-rouge">seq</code> definition again, both for you to code and for the server to
+process.</p>
+
+<div class="language-r no-eval text-document highlighter-rouge" title="worksheet-8-4.R"><div class="highlight"><pre class="highlight"><code><span class="n">output</span><span class="p">[[</span><span class="s1">'city_table'</span><span class="p">]]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">renderDataTable</span><span class="p">({</span><span class="w">
+  </span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">popdata</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+      </span><span class="n">filter</span><span class="p">(</span><span class="n">NAME</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">input</span><span class="p">[[</span><span class="s1">'selected_city'</span><span class="p">]])</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+      </span><span class="n">filter</span><span class="p">(</span><span class="n">year</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="n">slider_years</span><span class="p">())</span><span class="w">
+  </span><span class="n">df</span><span class="w">
+</span><span class="p">})</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Too see the data table output, add a corresponding <code class="language-plaintext highlighter-rouge">dataTableOutput()</code> to the 
+user interface and place it in the main panel.</p>
+
+<div class="language-r no-eval text-document highlighter-rouge" title="worksheet-8-4.R"><div class="highlight"><pre class="highlight"><code><span class="n">out3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dataTableOutput</span><span class="p">(</span><span class="s1">'city_table'</span><span class="p">)</span><span class="w">
+</span><span class="n">main</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mainPanel</span><span class="p">(</span><span class="n">out1</span><span class="p">,</span><span class="w"> </span><span class="n">out2</span><span class="p">,</span><span class="w"> </span><span class="n">out3</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Now the <code class="language-plaintext highlighter-rouge">worksheet-8-4.R</code> file is again a complete app, so go ahead and
+<strong>runApp</strong>!</p>
+
+<p class="ToS"><a href="#/slides/reactive">Top of Section</a></p>
+
+<hr />
+<p><a name="/slides/share"></a></p>
+
+<h2 id="share-your-app">Share Your App</h2>
+
+<p>Once you have made an app, there are several ways to share it with others. It is
+important to make sure that everything the app needs to run (data and packages)
+will be loaded into the R session.</p>
+
+<p>There is a series of articles on the RStudio website <a href="http://shiny.rstudio.com/articles/#deployment">about deploying
+apps</a>.</p>
+
+<h2 id="sharing-as-files">Sharing as Files</h2>
+
+<ul>
+  <li>Directly share the source code (app.R, or ui.R and server.R) along with all
+required data files</li>
+  <li>Publish to a GitHub repository, and advertise that your app can be cloned
+and run with <code class="language-plaintext highlighter-rouge">runGitHub('&lt;USERNAME&gt;/&lt;REPO&gt;')</code></li>
+</ul>
+
+<h2 id="sharing-as-a-site">Sharing as a Site</h2>
+
+<p>To share just the UI (i.e. the web page), your app will need to be hosted by a
+server able to run the R code that powers the app while also acting as a public
+web server. There is limited free hosting available through RStudio with
+<a href="http://www.shinyapps.io/">shinapps.io</a>. SESYNC maintains a Shiny Apps server
+for our working group participants, and many other research centers are doing
+the same.</p>
+
+<p class="ToS"><a href="#/slides/share">Top of Section</a></p>
+
+<hr />
+<p><a name="/slides/exercises"></a></p>
+
+<h2 id="exercises">Exercises</h2>
+
+<h3 id="exercise-1">Exercise 1</h3>
+
+<p>Starting from worksheet-8-2.R, modify the call to <code class="language-plaintext highlighter-rouge">renderText()</code> to
+create an <code class="language-plaintext highlighter-rouge">output[['city_label']]</code> with both the city name and its statistical area description. You can find those data in the “LSAD” column of popdata. Hint: The
+function <code class="language-plaintext highlighter-rouge">paste()</code> with argument <code class="language-plaintext highlighter-rouge">collapse = ' '</code> will convert a data frame row
+to a text string.</p>
+
+<p class="notes"><a href="#solution-1">View solution</a></p>
+
+<h3 id="exercise-2">Exercise 2</h3>
+
+<p>Modify the app completed in worksheet-8-3.R to include a <code class="language-plaintext highlighter-rouge">tabsetPanel()</code>
+nested within the main panel. Title the first tab in the tabset “Plot” and show
+the current plot. Title the second tab in the tabset “Data” and show a
+<code class="language-plaintext highlighter-rouge">dataTableOutput()</code>, which you can borrow from the app completed in worksheet-8-4.R.</p>
+
+<p class="notes"><a href="#solution-2">View solution</a></p>
+
+<h3 id="exercise-3">Exercise 3</h3>
+
+<p>Use the <code class="language-plaintext highlighter-rouge">img</code> builder function to add a logo, photo, or other image to your app
+in . The help under <code class="language-plaintext highlighter-rouge">?img</code> states that HTML attributes
+come from named arguments to <code class="language-plaintext highlighter-rouge">img</code>, and the <a href="https://www.w3schools.com/tags/tag_img.asp">“img” HTML
+tag</a> requires two attributes, and
+you’ll probably also want to set a valide <code class="language-plaintext highlighter-rouge">width</code>. Hint: Use the <code class="language-plaintext highlighter-rouge">www/images</code>
+folder mentioned in the <code class="language-plaintext highlighter-rouge">addResourcesPath()</code> function at the bottom of .</p>
+
+<p class="notes"><a href="#solution-3">View solution</a></p>
+
+<h3 id="exercise-4">Exercise 4</h3>
+
+<p>Notice the exact same code exists twice within the server function of the app
+you completed in worksheet-8-4.R: once for <code class="language-plaintext highlighter-rouge">renderPlot()</code> and once for
+<code class="language-plaintext highlighter-rouge">renderDataTable</code>. The server has no way to identify an intermediate result, the
+filtered data frame, which it could have reused. Replace <code class="language-plaintext highlighter-rouge">slider_years()</code> with
+a new <code class="language-plaintext highlighter-rouge">selection_years()</code> function that returns the entire <code class="language-plaintext highlighter-rouge">data.frame</code> needed
+by both outputs. Bask in the knowledge of the CPU time saved, and congratulate
+yourself for practicing DYR!</p>
+
+<p class="notes"><a href="#solution-4">View solution</a></p>
+
+<h2 id="solutions">Solutions</h2>
+
+<h3 id="solution-1">Solution 1</h3>
+
+<div class="language-r no-eval text-document highlighter-rouge" title="worksheet-8-2.R"><div class="highlight"><pre class="highlight"><code><span class="c1"># Packages</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">dplyr</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># Data</span><span class="w">
+</span><span class="n">popdata</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.csv</span><span class="p">(</span><span class="s1">'data/citypopdata.csv'</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># User Interface</span><span class="w">
+</span><span class="n">in1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">selectInput</span><span class="p">(</span><span class="w">
+  </span><span class="n">inputId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'selected_city'</span><span class="p">,</span><span class="w">
+  </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Select a city'</span><span class="p">,</span><span class="w">
+  </span><span class="n">choices</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">unique</span><span class="p">(</span><span class="n">popdata</span><span class="p">[[</span><span class="s1">'NAME'</span><span class="p">]])</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><span class="n">out1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">textOutput</span><span class="p">(</span><span class="s1">'city_label'</span><span class="p">)</span><span class="w">
+</span><span class="n">out2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">plotOutput</span><span class="p">(</span><span class="s1">'city_plot'</span><span class="p">)</span><span class="w">
+</span><span class="n">tab</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tabPanel</span><span class="p">(</span><span class="w">
+  </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'City Population'</span><span class="p">,</span><span class="w">
+  </span><span class="n">in1</span><span class="p">,</span><span class="w"> </span><span class="n">out1</span><span class="p">,</span><span class="w"> </span><span class="n">out2</span><span class="p">)</span><span class="w">
+</span><span class="n">ui</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">navbarPage</span><span class="p">(</span><span class="w">
+  </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Census Population Explorer'</span><span class="p">,</span><span class="w">
+  </span><span class="n">tab</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># Server</span><span class="w">
+</span><span class="n">server</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">output</span><span class="p">[[</span><span class="s1">'city_label'</span><span class="p">]]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">renderText</span><span class="p">({</span><span class="w">
+    </span><span class="n">popdata</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">filter</span><span class="p">(</span><span class="n">NAME</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">input</span><span class="p">[[</span><span class="s1">'selected_city'</span><span class="p">]])</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">slice</span><span class="p">(</span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+    </span><span class="n">dplyr</span><span class="o">::</span><span class="n">select</span><span class="p">(</span><span class="n">NAME</span><span class="p">,</span><span class="w"> </span><span class="n">LSAD</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">paste</span><span class="p">(</span><span class="n">collapse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">' '</span><span class="p">)</span><span class="w">
+  </span><span class="p">})</span><span class="w">
+  </span><span class="n">output</span><span class="p">[[</span><span class="s1">'city_plot'</span><span class="p">]]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">renderPlot</span><span class="p">({</span><span class="w">
+    </span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">popdata</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+      </span><span class="n">dplyr</span><span class="o">::</span><span class="n">filter</span><span class="p">(</span><span class="n">NAME</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">input</span><span class="p">[[</span><span class="s1">'selected_city'</span><span class="p">]])</span><span class="w">
+     </span><span class="n">ggplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">year</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">population</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+      </span><span class="n">geom_line</span><span class="p">()</span><span class="w"> 
+  </span><span class="p">})</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="c1"># Create the Shiny App</span><span class="w">
+</span><span class="n">shinyApp</span><span class="p">(</span><span class="n">ui</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ui</span><span class="p">,</span><span class="w"> </span><span class="n">server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">server</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p class="notes"><a href="#exercise-1">Return</a></p>
+
+<h3 id="solution-2">Solution 2</h3>
+
+<div class="language-r no-eval text-document highlighter-rouge" title="worksheet-8-3.R"><div class="highlight"><pre class="highlight"><code><span class="c1"># Packages</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">dplyr</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># Data</span><span class="w">
+</span><span class="n">popdata</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.csv</span><span class="p">(</span><span class="s1">'citypopdata.csv'</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># User Interface</span><span class="w">
+</span><span class="n">in1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">selectInput</span><span class="p">(</span><span class="w">
+  </span><span class="n">inputId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'selected_city'</span><span class="p">,</span><span class="w">
+  </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Select a city'</span><span class="p">,</span><span class="w">
+  </span><span class="n">choices</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">unique</span><span class="p">(</span><span class="n">popdata</span><span class="p">[[</span><span class="s1">'NAME'</span><span class="p">]]))</span><span class="w">
+</span><span class="n">side</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sidebarPanel</span><span class="p">(</span><span class="s1">'Options'</span><span class="p">,</span><span class="w"> </span><span class="n">in1</span><span class="p">)</span><span class="w">
+</span><span class="n">out1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">textOutput</span><span class="p">(</span><span class="s1">'city_label'</span><span class="p">)</span><span class="w">
+</span><span class="n">out2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tabPanel</span><span class="p">(</span><span class="w">
+  </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Plot'</span><span class="p">,</span><span class="w">
+  </span><span class="n">plotOutput</span><span class="p">(</span><span class="s1">'city_plot'</span><span class="p">))</span><span class="w">
+</span><span class="n">out3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tabPanel</span><span class="p">(</span><span class="w">
+  </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Data'</span><span class="p">,</span><span class="w">
+  </span><span class="n">dataTableOutput</span><span class="p">(</span><span class="s1">'city_table'</span><span class="p">))</span><span class="w">                 
+</span><span class="n">main</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mainPanel</span><span class="p">(</span><span class="n">out1</span><span class="p">,</span><span class="w"> </span><span class="n">tabsetPanel</span><span class="p">(</span><span class="n">out2</span><span class="p">,</span><span class="w"> </span><span class="n">out3</span><span class="p">))</span><span class="w">
+</span><span class="n">tab</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tabPanel</span><span class="p">(</span><span class="w">
+  </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'City Population'</span><span class="p">,</span><span class="w">
+  </span><span class="n">sidebarLayout</span><span class="p">(</span><span class="n">side</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="p">))</span><span class="w">
+</span><span class="n">ui</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">navbarPage</span><span class="p">(</span><span class="w">
+  </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Census Population Explorer'</span><span class="p">,</span><span class="w">
+  </span><span class="n">tab</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># Server</span><span class="w">
+</span><span class="n">server</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">output</span><span class="p">[[</span><span class="s1">'city_label'</span><span class="p">]]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">renderText</span><span class="p">({</span><span class="w">
+    </span><span class="n">popdata</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">filter</span><span class="p">(</span><span class="n">NAME</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">input</span><span class="p">[[</span><span class="s1">'selected_city'</span><span class="p">]])</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">slice</span><span class="p">(</span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+    </span><span class="n">dplyr</span><span class="o">::</span><span class="n">select</span><span class="p">(</span><span class="n">NAME</span><span class="p">,</span><span class="w"> </span><span class="n">LSAD</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">paste</span><span class="p">(</span><span class="n">collapse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">' '</span><span class="p">)</span><span class="w">
+  </span><span class="p">})</span><span class="w">
+  </span><span class="n">output</span><span class="p">[[</span><span class="s1">'city_plot'</span><span class="p">]]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">renderPlot</span><span class="p">({</span><span class="w">
+    </span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">popdata</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+      </span><span class="n">dplyr</span><span class="o">::</span><span class="n">filter</span><span class="p">(</span><span class="n">NAME</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">input</span><span class="p">[[</span><span class="s1">'selected_city'</span><span class="p">]])</span><span class="w">
+     </span><span class="n">ggplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">year</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">population</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+      </span><span class="n">geom_line</span><span class="p">()</span><span class="w"> 
+  </span><span class="p">})</span><span class="w">
+  </span><span class="n">output</span><span class="p">[[</span><span class="s1">'city_table'</span><span class="p">]]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">renderDataTable</span><span class="p">({</span><span class="w">
+    </span><span class="n">popdata</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+      </span><span class="n">dplyr</span><span class="o">::</span><span class="n">filter</span><span class="p">(</span><span class="n">NAME</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">input</span><span class="p">[[</span><span class="s1">'selected_city'</span><span class="p">]])</span><span class="w">
+  </span><span class="p">})</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="c1"># Create the Shiny App</span><span class="w">
+</span><span class="n">addResourcePath</span><span class="p">(</span><span class="s1">'images'</span><span class="p">,</span><span class="w"> </span><span class="s1">'www/images'</span><span class="p">)</span><span class="w">
+</span><span class="n">shinyApp</span><span class="p">(</span><span class="n">ui</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ui</span><span class="p">,</span><span class="w"> </span><span class="n">server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">server</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p class="notes">Notice the many features of the data table output. There are many options that
+can be controlled within the render function such as pagination and default
+length. See <a href="http://shiny.rstudio.com/gallery/datatables-options.html">here</a> for
+examples and how to extend this functionality using JavaScript.</p>
+
+<p class="notes"><a href="#exercise-2">Return</a></p>
+
+<h3 id="solution-3">Solution 3</h3>
+
+<div class="language-r no-eval text-document highlighter-rouge" title="worksheet-8-3.R"><div class="highlight"><pre class="highlight"><code><span class="c1"># Packages</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">dplyr</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># Data</span><span class="w">
+</span><span class="n">popdata</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.csv</span><span class="p">(</span><span class="s1">'data/citypopdata.csv'</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># User Interface</span><span class="w">
+</span><span class="n">in1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">selectInput</span><span class="p">(</span><span class="w">
+  </span><span class="n">inputId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'selected_city'</span><span class="p">,</span><span class="w">
+  </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Select a city'</span><span class="p">,</span><span class="w">
+  </span><span class="n">choices</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">unique</span><span class="p">(</span><span class="n">popdata</span><span class="p">[[</span><span class="s1">'NAME'</span><span class="p">]]))</span><span class="w">
+</span><span class="n">img</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">img</span><span class="p">(</span><span class="w">
+  </span><span class="n">src</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'images/outreach.jpg'</span><span class="p">,</span><span class="w">
+  </span><span class="n">alt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Census outreach flyer'</span><span class="p">,</span><span class="w">
+  </span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'100%'</span><span class="p">)</span><span class="w">
+</span><span class="n">side</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sidebarPanel</span><span class="p">(</span><span class="s1">'Options'</span><span class="p">,</span><span class="w"> </span><span class="n">img</span><span class="p">,</span><span class="w"> </span><span class="n">in1</span><span class="p">)</span><span class="w">
+</span><span class="n">out1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">textOutput</span><span class="p">(</span><span class="s1">'city_label'</span><span class="p">)</span><span class="w">
+</span><span class="n">out2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tabPanel</span><span class="p">(</span><span class="w">
+  </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Plot'</span><span class="p">,</span><span class="w">
+  </span><span class="n">plotOutput</span><span class="p">(</span><span class="s1">'city_plot'</span><span class="p">))</span><span class="w">
+</span><span class="n">out3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tabPanel</span><span class="p">(</span><span class="w">
+  </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Data'</span><span class="p">,</span><span class="w">
+  </span><span class="n">dataTableOutput</span><span class="p">(</span><span class="s1">'city_table'</span><span class="p">))</span><span class="w">                 
+</span><span class="n">main</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mainPanel</span><span class="p">(</span><span class="n">out1</span><span class="p">,</span><span class="w"> </span><span class="n">tabsetPanel</span><span class="p">(</span><span class="n">out2</span><span class="p">,</span><span class="w"> </span><span class="n">out3</span><span class="p">))</span><span class="w">
+</span><span class="n">tab</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tabPanel</span><span class="p">(</span><span class="w">
+  </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'City Population'</span><span class="p">,</span><span class="w">
+  </span><span class="n">sidebarLayout</span><span class="p">(</span><span class="n">side</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="p">))</span><span class="w">
+</span><span class="n">ui</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">navbarPage</span><span class="p">(</span><span class="w">
+  </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Census Population Explorer'</span><span class="p">,</span><span class="w">
+  </span><span class="n">tab</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># Server</span><span class="w">
+</span><span class="n">server</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">output</span><span class="p">[[</span><span class="s1">'city_label'</span><span class="p">]]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">renderText</span><span class="p">({</span><span class="w">
+    </span><span class="n">popdata</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">filter</span><span class="p">(</span><span class="n">NAME</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">input</span><span class="p">[[</span><span class="s1">'selected_city'</span><span class="p">]])</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+      </span><span class="n">slice</span><span class="p">(</span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+      </span><span class="n">dplyr</span><span class="o">::</span><span class="n">select</span><span class="p">(</span><span class="n">NAME</span><span class="p">,</span><span class="w"> </span><span class="n">LSAD</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+      </span><span class="n">paste</span><span class="p">(</span><span class="n">collapse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">' '</span><span class="p">)</span><span class="w">
+  </span><span class="p">})</span><span class="w">
+  </span><span class="n">output</span><span class="p">[[</span><span class="s1">'city_plot'</span><span class="p">]]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">renderPlot</span><span class="p">({</span><span class="w">
+    </span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">popdata</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+      </span><span class="n">dplyr</span><span class="o">::</span><span class="n">filter</span><span class="p">(</span><span class="n">NAME</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">input</span><span class="p">[[</span><span class="s1">'selected_city'</span><span class="p">]])</span><span class="w">
+    </span><span class="n">ggplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">year</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">population</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+      </span><span class="n">geom_line</span><span class="p">()</span><span class="w"> 
+  </span><span class="p">})</span><span class="w">
+  </span><span class="n">output</span><span class="p">[[</span><span class="s1">'city_table'</span><span class="p">]]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">renderDataTable</span><span class="p">({</span><span class="w">
+    </span><span class="n">popdata</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+      </span><span class="n">dplyr</span><span class="o">::</span><span class="n">filter</span><span class="p">(</span><span class="n">NAME</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">input</span><span class="p">[[</span><span class="s1">'selected_city'</span><span class="p">]])</span><span class="w">
+  </span><span class="p">})</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="c1"># Create the Shiny App</span><span class="w">
+</span><span class="n">addResourcePath</span><span class="p">(</span><span class="s1">'images'</span><span class="p">,</span><span class="w"> </span><span class="s1">'www/images'</span><span class="p">)</span><span class="w">
+</span><span class="n">shinyApp</span><span class="p">(</span><span class="n">ui</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ui</span><span class="p">,</span><span class="w"> </span><span class="n">server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">server</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p class="notes"><a href="#exercise-3">Return</a></p>
+
+<h3 id="solution-4">Solution 4</h3>
+
+<div class="language-r no-eval text-document highlighter-rouge" title="worksheet-8-4.R"><div class="highlight"><pre class="highlight"><code><span class="c1"># Packages</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">dplyr</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># Data</span><span class="w">
+</span><span class="n">popdata</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.csv</span><span class="p">(</span><span class="s1">'data/citypopdata.csv'</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># User Interface</span><span class="w">
+</span><span class="n">in1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">selectInput</span><span class="p">(</span><span class="w">
+  </span><span class="n">inputId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'selected_city'</span><span class="p">,</span><span class="w">
+  </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Select a city'</span><span class="p">,</span><span class="w">
+  </span><span class="n">choices</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">unique</span><span class="p">(</span><span class="n">popdata</span><span class="p">[[</span><span class="s1">'NAME'</span><span class="p">]])</span><span class="w">
+</span><span class="n">in2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sliderInput</span><span class="p">(</span><span class="w">
+  </span><span class="s2">"my_xlims"</span><span class="p">,</span><span class="w"> 
+  </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Set X axis limits"</span><span class="p">,</span><span class="w">
+  </span><span class="n">min</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2010</span><span class="p">,</span><span class="w"> 
+  </span><span class="n">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2018</span><span class="p">,</span><span class="w">
+  </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">2010</span><span class="p">,</span><span class="w"> </span><span class="m">2018</span><span class="p">))</span><span class="w">
+</span><span class="n">side</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sidebarPanel</span><span class="p">(</span><span class="s1">'Options'</span><span class="p">,</span><span class="w"> </span><span class="n">in1</span><span class="p">,</span><span class="w"> </span><span class="n">in2</span><span class="p">)</span><span class="w">									    
+</span><span class="n">out1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">textOutput</span><span class="p">(</span><span class="s1">'city_label'</span><span class="p">)</span><span class="w">
+</span><span class="n">out2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tabPanel</span><span class="p">(</span><span class="w">
+  </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Plot'</span><span class="p">,</span><span class="w">
+  </span><span class="n">plotOutput</span><span class="p">(</span><span class="s1">'city_plot'</span><span class="p">))</span><span class="w">
+</span><span class="n">out3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tabPanel</span><span class="p">(</span><span class="w">
+  </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Data'</span><span class="p">,</span><span class="w">
+  </span><span class="n">dataTableOutput</span><span class="p">(</span><span class="s1">'city_table'</span><span class="p">))</span><span class="w">                 
+</span><span class="n">main</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mainPanel</span><span class="p">(</span><span class="n">out1</span><span class="p">,</span><span class="w"> </span><span class="n">tabsetPanel</span><span class="p">(</span><span class="n">out2</span><span class="p">,</span><span class="w"> </span><span class="n">out3</span><span class="p">))</span><span class="w">
+</span><span class="n">tab1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tabPanel</span><span class="p">(</span><span class="w">
+  </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'City Population'</span><span class="p">,</span><span class="w">
+  </span><span class="n">sidebarLayout</span><span class="p">(</span><span class="n">side</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="p">))</span><span class="w">
+</span><span class="n">ui</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">navbarPage</span><span class="p">(</span><span class="w">
+  </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Census Population Explorer'</span><span class="p">,</span><span class="w">
+  </span><span class="n">tab1</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># Server</span><span class="w">
+</span><span class="n">server</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">output</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">selected_years</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">reactive</span><span class="p">({</span><span class="w">
+    </span><span class="n">popdata</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+      </span><span class="n">filter</span><span class="p">(</span><span class="n">NAME</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">input</span><span class="p">[[</span><span class="s1">'NAME'</span><span class="p">]])</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+      </span><span class="n">filter</span><span class="p">(</span><span class="w">
+        </span><span class="n">year</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">input</span><span class="p">[[</span><span class="s1">'slider_years'</span><span class="p">]][</span><span class="m">1</span><span class="p">],</span><span class="w">
+        </span><span class="n">year</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">input</span><span class="p">[[</span><span class="s1">'slider_years'</span><span class="p">]][</span><span class="m">2</span><span class="p">])</span><span class="w">
+  </span><span class="p">})</span><span class="w">
+  </span><span class="n">output</span><span class="p">[[</span><span class="s1">'city_label'</span><span class="p">]]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">renderText</span><span class="p">({</span><span class="w">
+    </span><span class="n">popdata</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+      </span><span class="n">filter</span><span class="p">(</span><span class="n">NAME</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">input</span><span class="p">[[</span><span class="s1">'selected_city'</span><span class="p">]])</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+      </span><span class="n">slice</span><span class="p">(</span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+      </span><span class="n">dplyr</span><span class="o">::</span><span class="n">select</span><span class="p">(</span><span class="n">NAME</span><span class="p">,</span><span class="w"> </span><span class="n">LSAD</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+      </span><span class="n">paste</span><span class="p">(</span><span class="n">collapse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">' '</span><span class="p">)</span><span class="w">
+  </span><span class="p">})</span><span class="w">
+  </span><span class="n">output</span><span class="p">[[</span><span class="s1">'city_plot'</span><span class="p">]]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">renderPlot</span><span class="p">({</span><span class="w">
+   </span><span class="n">ggplot</span><span class="p">(</span><span class="n">selected_years</span><span class="p">(),</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">year</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">population</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+      </span><span class="n">geom_line</span><span class="p">()</span><span class="w"> 
+  </span><span class="p">})</span><span class="w">
+  </span><span class="n">output</span><span class="p">[[</span><span class="s1">'city_table'</span><span class="p">]]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">renderDataTable</span><span class="p">({</span><span class="w">
+    </span><span class="n">selected_years</span><span class="p">()</span><span class="w">
+  </span><span class="p">})</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="c1"># Create the Shiny App</span><span class="w">
+</span><span class="n">shinyApp</span><span class="p">(</span><span class="n">ui</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ui</span><span class="p">,</span><span class="w"> </span><span class="n">server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">server</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p class="notes"><a href="#exercise-4">Return</a></p>
+
+<p class="ToS"><a href="#/slides/exercises">Top of Section</a></p>
+
+
+
+        <hr>
+
+<p>If you need to catch-up before a section of code will work, just squish it's
+🍅 to copy code above it into your clipboard. Then paste into your interpreter's
+console, run, and you'll be ready to start in on that section. Code copied by
+both 🍅 and 📋 will also appear below, where you can edit first, and then copy,
+paste, and run again.</p>
+
+<div class="output">
+  <pre id="ketchup" contenteditable="true"><code># Nothing here yet!</code></pre>
+</div>
+
+<script>
+$(document).ready(function(){
+  
+  // Add code help icons to code blocks
+  $('.input, .text-document').append('<ul class="code-help">');
+  $('.code-help')
+    .append('<li class="clipboard">📋</li>');
+  $('.text-document:not(.no-eval) .code-help')
+    .append('<li class="ketchup">🍅</li>');
+
+  // Bind copy actions to mouse clicks on icons
+  var $ketchup = $('#ketchup');
+  var rng = document.createRange();
+  var sel = window.getSelection();
+  $('.ketchup').click(function(){
+    var $prev = $(this)
+      .parents('.text-document')
+      .prevAll('.text-document:has(.ketchup)');
+    $ketchup.find('code').text($prev.find('pre').text());
+    rng.selectNodeContents($ketchup[0]);
+    sel.removeAllRanges();
+    sel.addRange(rng);
+    document.execCommand("copy");
+    sel.removeAllRanges();
+  });
+  $('.text-document .clipboard').click(function(){
+    var pre = $(this).parents('.text-document').find('pre').text();
+    $ketchup.find('code').text(pre);
+    rng.selectNodeContents($ketchup[0]);
+    sel.removeAllRanges();
+    sel.addRange(rng);
+    document.execCommand("copy");
+    sel.removeAllRanges();
+  });
+  $('.input .clipboard').click(function(){
+    var pre = $(this).parents('.input').find('pre').text();
+    pre = pre.replace(/(^|\n)[>+] /g, '$1');
+    $ketchup.find('code').text(pre);
+    rng.selectNodeContents($ketchup[0]);
+    sel.removeAllRanges();
+    sel.addRange(rng);
+    document.execCommand("copy");
+    sel.removeAllRanges();
+  });
+});
+</script>
+      </div>
+    </div>
+    <script>
+$(document).ready(function(){
+  // Add links to R and Python package repositories
+  $('a.rlib').map(function(){
+    this.href = 'https://cran.r-project.org/package=' + this.innerText;
+  });
+  $('a.pylib').map(function(){
+    this.href = 'https://pypi.python.org/pypi/' + this.innerText;
+  });
+});
+</script>
+
+  </body>
+</html>
