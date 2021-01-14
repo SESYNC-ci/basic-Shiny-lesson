@@ -26,6 +26,6 @@ apps](http://shiny.rstudio.com/articles/#deployment).
 To share just the UI (i.e. the web page), your app will need to be hosted by a
 server able to run the R code that powers the app while also acting as a public
 web server. There is limited free hosting available through RStudio with
-[shinapps.io](http://www.shinyapps.io/). SESYNC maintains a Shiny Apps server
+[shinyapps.io](http://www.shinyapps.io/). SESYNC maintains a Shiny Apps server
 for our working group participants, and many other research centers are doing
 the same.

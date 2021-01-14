@@ -27,7 +27,7 @@ web apps without requiring knowledge of HTML, CSS, or JavaScript. These web apps
 can be used for exploratory data analysis and visualization, to facilitate
 remote collaboration, share results, and [much
 more](http://shiny.rstudio.com/gallery/). The example below, and many
-[additional examples](http://shiny.rstudio.com/tutorial/lesson1/#Go Further),
+[additional examples](https://shiny.rstudio.com/tutorial/written-tutorial/lesson1/#Go Further),
 will open in a new browser window (you may need to prevent your broswer from
 blocking pop-out windows in order to view the app).
 {:.notes}
