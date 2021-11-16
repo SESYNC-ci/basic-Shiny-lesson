@@ -3,7 +3,7 @@
 
 ## Basic Shiny Lesson
 
-Learn to use Get interactive with the Shiny R package.
+Learn to use the Shiny R package.
 
 ## Instructor Notes
 
